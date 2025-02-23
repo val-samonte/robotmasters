@@ -787,12 +787,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "835a3dc7d1ec9e75e2b5fb4ba75396837112d2060b03f7d43bc1897c7f7211da"
 
 [[package]]
-name = "foldhash"
-version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a0d2fde1f7b3d48b8395d5f2de76c18a528bd6a9cdde438df747bfcba3e05d6f"
-
-[[package]]
 name = "generic-array"
 version = "0.14.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -854,6 +848,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e5274423e17b7c9fc20b6e7e208532f9b19825d82dfd615708b70edd83df41f1"
 dependencies = [
  "ahash 0.8.11",
+ "allocator-api2",
 ]
 
 [[package]]
@@ -861,11 +856,6 @@ name = "hashbrown"
 version = "0.15.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bf151400ff0baff5465007dd2f3e717f3fe502074ca563069ce3a6629d07b289"
-dependencies = [
- "allocator-api2",
- "equivalent",
- "foldhash",
-]
 
 [[package]]
 name = "heck"
@@ -1372,9 +1362,9 @@ checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
 [[package]]
 name = "rmengine"
 version = "0.1.0"
-source = "git+ssh://git@github.com/val-samonte/rmengine.git?branch=main#607876d4138f0a47fcc5f44790c5aa908ce8fcb8"
+source = "git+ssh://git@github.com/val-samonte/rmengine.git?branch=main#024445c340dfdb0a271284b6cf6f0474a116fdc9"
 dependencies = [
- "hashbrown 0.15.2",
+ "hashbrown 0.14.5",
  "hecs",
 ]
 
@@ -1383,7 +1373,6 @@ name = "robot-masters"
 version = "0.1.0"
 dependencies = [
  "anchor-lang",
- "hashbrown 0.15.2",
  "rmengine",
 ]
 
