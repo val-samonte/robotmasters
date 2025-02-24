@@ -1,0 +1,15 @@
+{
+  "name": "wasm-bindgen-wrapper",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "wasm_bindgen_wrapper_bg.wasm",
+    "wasm_bindgen_wrapper.js",
+    "wasm_bindgen_wrapper.d.ts"
+  ],
+  "main": "wasm_bindgen_wrapper.js",
+  "types": "wasm_bindgen_wrapper.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
