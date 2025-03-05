@@ -23,7 +23,7 @@ export function StageScaler({ children }: { children: ReactNode }) {
   const offsetY = -(240 * scale) / 2
 
   return (
-    <div ref={containerRef} className='relative w-full h-full'>
+    <div ref={containerRef} className="relative w-full h-full">
       <div
         style={{
           imageRendering: 'pixelated',

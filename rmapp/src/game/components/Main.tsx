@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from 'react'
 import { GameObjectView } from './GameObject'
 import { GameState } from '../types/GameState'
 import init, { RmGameEngine } from '../../wasm/wasm_bindgen_wrapper'
+import { SpriteText } from './SpriteText'
+import { Slice9 } from './Slice9'
 
 const tiles = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -194,13 +196,18 @@ export function Main() {
   }, [gameState])
 
   return (
-    <div className='fixed inset-0 w-full h-full bg-stone-900'>
-      <div className='absolute top-0 left-0 p-4 text-white z-40 text-xs'>
+    <div className="fixed inset-0 w-full h-full bg-stone-900">
+      <div className="absolute top-0 left-0 p-4 text-white z-40 text-xs">
+        <Slice9 className="m-2">
+          <div className="p-2">
+            <SpriteText>{'ROBOT MASTERS\nv0.0.1'}</SpriteText>
+          </div>
+        </Slice9>
         {gameState && (
-          <div className='flex flex-col gap-1'>
+          <div className="flex flex-col gap-1">
             <div>{Math.floor(gameState.frame / 60)}</div>
             {(gameState.entities ?? []).map((obj) => (
-              <div key={obj.entity} className='flex gap-2'>
+              <div key={obj.entity} className="flex gap-2">
                 <span>{obj.entity}</span>
                 {typeof obj.health === 'number' && <span>❤️{obj.health}</span>}
                 {typeof obj.energy === 'number' && <span>⚡{obj.energy}</span>}
@@ -247,7 +254,7 @@ export function Main() {
         </Application>
       </StageScaler>
       {(gameState?.state === 2 || gameState?.state === 3) && (
-        <div className='text-sm text-white font-bold font-mono fixed inset-0 flex items-center justify-center z-50'>
+        <div className="text-sm text-white font-bold font-mono fixed inset-0 flex items-center justify-center z-50">
           Game Over
         </div>
       )}
