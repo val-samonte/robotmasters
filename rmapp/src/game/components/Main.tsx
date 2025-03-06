@@ -196,8 +196,18 @@ export function Main() {
   }, [gameState])
 
   return (
-    <div className="fixed inset-0 w-full h-full bg-stone-900">
+    <div
+      className="fixed inset-0 w-full h-full bg-stone-900"
+      style={{
+        background: `url('/bg-tile.png') repeat`,
+      }}
+    >
       <div className="absolute top-0 left-0 p-4 text-white z-40 text-xs">
+        <img
+          src="/logo.png"
+          alt="logo"
+          style={{ imageRendering: 'pixelated' }}
+        />
         <Slice9 className="m-2">
           <div className="p-2">
             <SpriteText>{'ROBOT MASTERS\nv0.0.1'}</SpriteText>

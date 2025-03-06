@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import React from 'react'
 
 interface Frame {
@@ -110,32 +111,39 @@ const spriteSheetData: SpriteSheetData = {
   },
 }
 
-export function SpriteText({ children }: { children: React.ReactNode }) {
+export function SpriteText({
+  children,
+  className,
+}: {
+  children: React.ReactNode
+  className?: string
+}) {
   const text = React.Children.toArray(children).join('')
   const lines = text.split(/\r\n|\n|\r/)
 
   return (
-    <div className="flex flex-col gap-y-1">
+    <div className={cn('flex flex-col gap-y-[0.25em]', className)}>
       {lines.map((line, lineIndex) => {
         const words = line.split(' ').filter((word) => word.length > 0)
 
         return (
-          <div key={`line-${lineIndex}`} className="flex flex-wrap gap-x-2">
+          <div key={`line-${lineIndex}`} className="flex flex-wrap gap-x-[1em]">
             {words.map((word, wordIndex) => (
               <div key={`word-${lineIndex}-${wordIndex}`} className="flex">
                 {word.split('').map((char, charIndex) => {
-                  // Get frame data for the character, default to '?' if not found
                   const frame =
                     spriteSheetData.frames[char] || spriteSheetData.frames['?']
 
                   return (
                     <div
                       key={`${char}-${lineIndex}-${wordIndex}-${charIndex}`}
-                      className="w-[8px] h-[8px] bg-no-repeat"
+                      className="w-[1em] h-[1em] bg-no-repeat" // 8px = 1em at 8px font-size
                       style={{
-                        imageRendering: 'pixelated',
                         backgroundImage: `url("/letters.png")`,
-                        backgroundPosition: `-${frame.x}px -${frame.y}px`,
+                        backgroundPosition: `-${frame.x / 8}em -${
+                          frame.y / 8
+                        }em`, // 8px = 1em
+                        backgroundSize: `${128 / 8}em ${64 / 8}em`, // 96px = 12em
                       }}
                       aria-label={char}
                     />

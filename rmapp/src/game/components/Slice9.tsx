@@ -76,29 +76,29 @@ export function Slice9({
   return (
     <div className={cn('flex flex-col', className)}>
       <div className="flex">
-        <canvas ref={canvasRefs.topLeft} className="w-[8px] h-[8px]" />
-        <canvas ref={canvasRefs.top} className="flex-1 h-[8px]" />
-        <canvas ref={canvasRefs.topRight} className="w-[8px] h-[8px]" />
+        <canvas ref={canvasRefs.topLeft} className="w-[1em] h-[1em]" />
+        <canvas ref={canvasRefs.top} className="flex-1 h-[1em]" />
+        <canvas ref={canvasRefs.topRight} className="w-[1em] h-[1em]" />
       </div>
       <div className="flex">
         <canvas
           ref={canvasRefs.left}
-          className="w-[8px]"
-          style={{ minHeight: '8px' }}
+          className="w-[1em]"
+          style={{ minHeight: '1em' }}
         />
         <div className="flex-1 bg-black" style={{ minWidth: 0, minHeight: 0 }}>
           {children}
         </div>
         <canvas
           ref={canvasRefs.right}
-          className="w-[8px]"
-          style={{ minHeight: '8px' }}
+          className="w-[1em]"
+          style={{ minHeight: '1em' }}
         />
       </div>
       <div className="flex">
-        <canvas ref={canvasRefs.bottomLeft} className="w-[8px] h-[8px]" />
-        <canvas ref={canvasRefs.bottom} className="flex-1 h-[8px]" />
-        <canvas ref={canvasRefs.bottomRight} className="w-[8px] h-[8px]" />
+        <canvas ref={canvasRefs.bottomLeft} className="w-[1em] h-[1em]" />
+        <canvas ref={canvasRefs.bottom} className="flex-1 h-[1em]" />
+        <canvas ref={canvasRefs.bottomRight} className="w-[1em] h-[1em]" />
       </div>
     </div>
   )
