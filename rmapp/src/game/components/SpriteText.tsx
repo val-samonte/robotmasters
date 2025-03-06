@@ -133,7 +133,7 @@ export function SpriteText({ children }: { children: React.ReactNode }) {
                       key={`${char}-${lineIndex}-${wordIndex}-${charIndex}`}
                       className="w-[8px] h-[8px] bg-no-repeat"
                       style={{
-                        // imageRendering: 'pixelated',
+                        imageRendering: 'pixelated',
                         backgroundImage: `url("/letters.png")`,
                         backgroundPosition: `-${frame.x}px -${frame.y}px`,
                       }}
