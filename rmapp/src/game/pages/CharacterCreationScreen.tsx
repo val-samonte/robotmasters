@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react'
 const heads = [
   {
     power: 0,
-    weight: 3,
+    weight: 2,
   },
   {
     power: 0,
@@ -16,11 +16,11 @@ const heads = [
 
 const bodies = [
   {
-    power: 16,
+    power: 14,
     weight: 8,
   },
   {
-    power: 20,
+    power: 22,
     weight: 12,
   },
 ]
@@ -28,7 +28,7 @@ const bodies = [
 const legss = [
   {
     power: 0,
-    weight: 5,
+    weight: 4,
   },
   {
     power: 0,
@@ -61,10 +61,10 @@ export function CharacterCreationScreen() {
         <div className="flex flex-col border-white border-[0.2em] bg-black p-4 gap-[0.5rem]">
           <SpriteText>HEAD</SpriteText>
           <div className="flex gap-[1rem]">
-            <div
+            <button
               onClick={() => setHead(1)}
               className={cn(
-                'flex gap-[0.5rem] items-center p-2',
+                'cursor-pointer flex gap-[0.5rem] items-center p-2',
                 head === 1 && 'bg-blue-400'
               )}
             >
@@ -76,11 +76,11 @@ export function CharacterCreationScreen() {
               <div className="flex flex-col gap-[0.5rem]">
                 <SpriteText>LIGHT</SpriteText>
               </div>
-            </div>
-            <div
+            </button>
+            <button
               onClick={() => setHead(2)}
               className={cn(
-                'flex gap-[0.5rem] items-center p-2',
+                'cursor-pointer flex gap-[0.5rem] items-center p-2',
                 head === 2 && 'bg-blue-400'
               )}
             >
@@ -92,16 +92,16 @@ export function CharacterCreationScreen() {
               <div className="flex flex-col gap-[0.5rem]">
                 <SpriteText>HEAVY</SpriteText>
               </div>
-            </div>
+            </button>
           </div>
         </div>
         <div className="flex flex-col border-white border-[0.2em] bg-black p-4 gap-[0.5rem]">
           <SpriteText>BODY</SpriteText>
           <div className="flex gap-[1rem]">
-            <div
+            <button
               onClick={() => setBody(1)}
               className={cn(
-                'flex gap-[0.5rem] items-center p-2',
+                'cursor-pointer flex gap-[0.5rem] items-center p-2',
                 body === 1 && 'bg-blue-400'
               )}
             >
@@ -113,11 +113,11 @@ export function CharacterCreationScreen() {
               <div className="flex flex-col gap-[0.5rem]">
                 <SpriteText>LIGHT</SpriteText>
               </div>
-            </div>
-            <div
+            </button>
+            <button
               onClick={() => setBody(2)}
               className={cn(
-                'flex gap-[0.5rem] items-center p-2',
+                'cursor-pointer flex gap-[0.5rem] items-center p-2',
                 body === 2 && 'bg-blue-400'
               )}
             >
@@ -129,16 +129,16 @@ export function CharacterCreationScreen() {
               <div className="flex flex-col gap-[0.5rem]">
                 <SpriteText>HEAVY</SpriteText>
               </div>
-            </div>
+            </button>
           </div>
         </div>
         <div className="flex flex-col border-white border-[0.2em] bg-black p-4 gap-[0.5rem]">
           <SpriteText>LEGS</SpriteText>
           <div className="flex gap-[1rem]">
-            <div
+            <button
               onClick={() => setLegs(1)}
               className={cn(
-                'flex gap-[0.5rem] items-center p-2',
+                'cursor-pointer flex gap-[0.5rem] items-center p-2',
                 legs === 1 && 'bg-blue-400'
               )}
             >
@@ -150,11 +150,11 @@ export function CharacterCreationScreen() {
               <div className="flex flex-col gap-[0.5rem]">
                 <SpriteText>LIGHT</SpriteText>
               </div>
-            </div>
-            <div
+            </button>
+            <button
               onClick={() => setLegs(2)}
               className={cn(
-                'flex gap-[0.5rem] items-center p-2',
+                'cursor-pointer flex gap-[0.5rem] items-center p-2',
                 legs === 2 && 'bg-blue-400'
               )}
             >
@@ -166,7 +166,7 @@ export function CharacterCreationScreen() {
               <div className="flex flex-col gap-[0.5rem]">
                 <SpriteText>HEAVY</SpriteText>
               </div>
-            </div>
+            </button>
           </div>
         </div>
       </div>
@@ -183,7 +183,9 @@ export function CharacterCreationScreen() {
           </div>
           <div className="flex justify-between">
             <SpriteText>GENERATOR</SpriteText>
-            <SpriteText>1.1</SpriteText>
+            <SpriteText>
+              {body === 0 ? '-' : body === 1 ? '1.1' : '1.2'}
+            </SpriteText>
           </div>
           <div className="flex justify-between">
             <SpriteText>POWER</SpriteText>
@@ -193,11 +195,33 @@ export function CharacterCreationScreen() {
             <SpriteText>WEIGHT</SpriteText>
             <SpriteText>{weight}</SpriteText>
           </div>
+          <div className="my-[0.5rem] flex justify-between">
+            <SpriteText>PROTECTION</SpriteText>
+          </div>
+          <div className="grid grid-cols-4 gap-x-[0.275rem] gap-y-[0.5rem]">
+            {[
+              'punct',
+              'blast',
+              'force',
+              'sever',
+              'heat',
+              'cryo',
+              'jolt',
+              'virus',
+            ].map((elem) => (
+              <div className="flex gap-[0.2rem]">
+                <img
+                  src={`/elem_${elem}.png`}
+                  alt={`elem_${elem}`}
+                  className="w-[1rem] h-[1rem]"
+                />
+                <SpriteText>00</SpriteText>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="flex flex-auto items-center justify-center">
-          <img src="/char.png" className="w-[4rem] h-[4rem]" />
-        </div>
-        <div>
+
+        <div className="mt-auto">
           <Link to="/custom_behavior" className="flex justify-center">
             <SpriteText>NEXT</SpriteText>
           </Link>

@@ -54,7 +54,7 @@ export function Stage() {
 
   return (
     <div
-      className="relative"
+      className="relative margin-x-auto"
       style={{
         width: stageDimension.width,
         height: stageDimension.height,
@@ -64,3 +64,12 @@ export function Stage() {
     </div>
   )
 }
+
+// Punct, // P - blue
+//     Blast, // B - green
+//     Force, // F - orange
+//     Sever, // S - silver
+//     Heat,  // H - red
+//     Cryo,  // C - cyan
+//     Jolt,  // J - yellow
+//     Virus, // V - magenta
