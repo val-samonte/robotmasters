@@ -169,7 +169,7 @@ export function Main() {
     initialized.current = true
     init()
       .then(() => {
-        game.current = new RmGameEngine(334, initialObjects, tiles, 0.5)
+        game.current = new RmGameEngine(333, initialObjects, tiles, 0.5)
         const snapshot = game.current.next_frame() as GameState
         setGameState(snapshot)
       })
@@ -196,23 +196,8 @@ export function Main() {
   }, [gameState])
 
   return (
-    <div
-      className="fixed inset-0 w-full h-full bg-stone-900"
-      style={{
-        background: `url('/bg-tile.png') repeat`,
-      }}
-    >
+    <div className="fixed inset-0 w-full h-full bg-stone-900">
       <div className="absolute top-0 left-0 p-4 text-white z-40 text-xs">
-        <img
-          src="/logo.png"
-          alt="logo"
-          style={{ imageRendering: 'pixelated' }}
-        />
-        <Slice9 className="m-2">
-          <div className="p-2">
-            <SpriteText>{'ROBOT MASTERS\nv0.0.1'}</SpriteText>
-          </div>
-        </Slice9>
         {gameState && (
           <div className="flex flex-col gap-1">
             <div>{Math.floor(gameState.frame / 60)}</div>

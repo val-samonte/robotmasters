@@ -1,17 +1,18 @@
-import cn from 'classnames'
 import { useEffect, useState } from 'react'
 import { viewModeAtom } from '../../atoms/viewModeAtom'
 import { useAtom } from 'jotai'
-import { SpriteText } from './SpriteText'
+import { Outlet } from 'react-router'
 
 export function Stage() {
   const [size, setSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   })
-  const [isPortrait, setIsPortrait] = useState(false)
-  const [counterSideSize, setCounterSideSize] = useState(0)
   const [mode, setMode] = useAtom(viewModeAtom)
+  const [stageDimension, setStageDimension] = useState({
+    width: '100%',
+    height: '100vh',
+  })
 
   useEffect(() => {
     const onResize = () => {
@@ -29,47 +30,37 @@ export function Stage() {
 
   useEffect(() => {
     const isPortrait = size.height >= size.width
-    setIsPortrait(isPortrait)
+    const width = Math.floor(size.width / 8) * 8
+    const height = Math.floor(size.height / 8) * 8
 
-    const rawBase = isPortrait ? size.width : size.height
-    const base = Math.max(320, Math.floor(rawBase / 2) * 2)
-
-    const amountToScale = base / 320
-    const fontSize = base <= 320 ? 8 : 8 * amountToScale
+    const smallestSize = 288
+    const base = Math.max(smallestSize, isPortrait ? width : height)
+    const amountToScale = base / smallestSize
+    const fontSize = 8 * Math.floor(amountToScale)
 
     document.documentElement.style.fontSize = `${fontSize}px`
 
-    const rawCounterSide = Math.min(
-      base * 2,
-      isPortrait ? size.height : size.width
-    )
-    const counterSide = Math.floor(rawCounterSide / 2) * 2
-    setCounterSideSize(counterSide)
+    setStageDimension({ width: width + 'px', height: height + 'px' })
 
     // check mode:
     // mode 1: if square / portrait
     // mode 2: if greater than square and less than 7/4 aspect ratio
     // mode 3: if greater than 7/4 aspect ratio and less than 2/1 aspect ratio
 
-    setMode(isPortrait ? 1 : size.width / size.height < 1.75 ? 2 : 3)
+    setMode(isPortrait ? 1 : width / height < 1.75 ? 2 : 3)
   }, [size])
 
   if (mode === 0) return null
 
   return (
     <div
-      className={cn(!isPortrait ? 'h-[40rem]' : 'h-screen')}
-      style={{ width: isPortrait ? '100%' : `${counterSideSize}px` }}
+      className="relative"
+      style={{
+        width: stageDimension.width,
+        height: stageDimension.height,
+      }}
     >
-      <div className="flex gap-[2rem] flex-col items-center justify-center h-full">
-        <img
-          src="/logo.png"
-          alt="logo"
-          style={{ imageRendering: 'pixelated' }}
-          className="h-[8rem] w-[28rem] flex-none"
-        />
-        <SpriteText>CONTINUE</SpriteText>
-      </div>
+      <Outlet />
     </div>
   )
 }

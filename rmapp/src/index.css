@@ -9,11 +9,11 @@
   }
 }
 
-canvas {
+canvas,
+img {
   image-rendering: pixelated;
 }
 
-html,
 body {
   image-rendering: pixelated;
   background: url('/bg-tile.png') repeat;
