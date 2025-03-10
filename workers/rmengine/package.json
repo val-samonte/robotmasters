@@ -11,9 +11,13 @@
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.7.5",
-		"@cloudflare/workers-types": "^4.20250303.0",
+		"@cloudflare/workers-types": "^4.20250310.0",
 		"typescript": "^5.5.2",
 		"vitest": "~3.0.7",
 		"wrangler": "^3.114.0"
+	},
+	"dependencies": {
+		"@solana/web3.js": "^2.0.0",
+		"bs58": "^6.0.0"
 	}
 }

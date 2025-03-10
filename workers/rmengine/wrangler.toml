@@ -1,4 +1,14 @@
-name = "rmengine"
-type = "javascript"
+name = "solana-auth-worker"
+main = "src/index.ts"
 account_id = "0728cdde052cbaae3e538f033055054b"
 compatibility_date = "2025-03-09"
+
+[durable_objects]
+bindings = [
+  { name = "SESSION_STORE", class_name = "SessionStore" },
+  { name = "MATCH_MAKER", class_name = "MatchMaker" }
+]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["SessionStore", "MatchMaker"]

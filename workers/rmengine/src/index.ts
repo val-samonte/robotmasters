@@ -1,172 +1,68 @@
-// Import the wasm-bindgen glue code and WASM
-import init, { RmGameEngine, InitOutput } from './wasm_bindgen_wrapper.js';
-import wasmModule from './wasm_bindgen_wrapper_bg.wasm'; // Direct WASM import
-import './wasm_bindgen_wrapper'; // Type definitions
+// src/index.ts
+import { SessionStore } from './sessionStore';
+import { MatchMaker } from './matchMaker';
+import { Request, Response, DurableObjectNamespace } from '@cloudflare/workers-types';
 
-// Cached WASM module and game engine instance
-let wasm: InitOutput | null = null;
-let gameEngine: RmGameEngine | null = null;
-
-interface Entity {
-	entity: number;
-	x: number;
-	y: number;
-	width: number;
-	height: number;
-	energy?: number;
-	health?: number;
+interface Env {
+	SESSION_STORE: DurableObjectNamespace;
+	MATCH_MAKER: DurableObjectNamespace;
 }
 
-interface GameState {
-	state: number;
-	frame: number;
-	gravity: number;
-	entities: Entity[];
-}
-
-const tiles = [
-	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1],
-	[1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-	[1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-];
-
-const initialObjects = [
-	{
-		id: 'bulletman1',
-		group: 0,
-		x: 16,
-		y: 192,
-		width: 16,
-		height: 32,
-		behaviors: [
-			[4, 5, 0],
-			// [9, 4, 20],
-			[2, 3, 6],
-			[8, 2, 3],
-			[7, 8, 0],
-			[8, 7, 0],
-			[1, 1, 1],
-			[10, 0, 0],
-		],
-		weapons: [
-			[
-				1, // firearm
-				1, // projectile lookup index
-				1, // projectile ejection method (single, tri45, tri90, shotgun90, up, down) todo: replace with ejection "script"
-				2, // attack energy cost
-				5, // reload energy cost
-				120, // reload cooldown
-				5, // ammo cap
-				15, // rate of fire
-				0, //   outputPosX = 0,
-				12, //   outputPosY = 12,
-				1, //   outputCount = 1, // note: loop, attackCounter still counts individually
-				0, //   recoil = 0,
-				0, //   requireGrounded,
-			],
-		],
-		protections: [
-			0, // Punct
-			0, // Blast
-			0, // Force
-			0, // Sever
-			0, // Heat
-			0, // Cryo
-			0, // Jolt
-			0, // Virus
-		],
-	},
-	{
-		id: 'bulletman2',
-		group: 1,
-		x: 32,
-		y: 192,
-		width: 16,
-		height: 32,
-		behaviors: [
-			[4, 5, 0],
-			// [9, 4, 20],
-			[2, 3, 6],
-			[8, 2, 3],
-			[7, 8, 0],
-			[8, 7, 0],
-			[1, 1, 1],
-			[10, 0, 0],
-		],
-		weapons: [
-			[
-				1, // firearm
-				1, // projectile lookup index
-				1, // projectile ejection method (single, tri45, tri90, shotgun90, up, down) todo: replace with ejection "script"
-				2, // attack energy cost
-				5, // reload energy cost
-				120, // reload cooldown
-				5, // ammo cap
-				15, // rate of fire
-				0, //   outputPosX = 0,
-				12, //   outputPosY = 12,
-				1, //   outputCount = 1, // note: loop, attackCounter still counts individually
-				0, //   recoil = 0,
-				0, //   requireGrounded,
-			],
-		],
-		protections: [
-			0, // Punct
-			0, // Blast
-			0, // Force
-			0, // Sever
-			0, // Heat
-			0, // Cryo
-			0, // Jolt
-			0, // Virus
-		],
-	},
-];
-
-async function initializeWasm(): Promise<void> {
-	if (!wasm) {
-		// Initialize the WASM module directly with the imported WASM
-		wasm = await init(wasmModule);
-
-		// Create an instance of RmGameEngine
-		gameEngine = new RmGameEngine(333, initialObjects, tiles, 0.5);
-	}
-}
+export { SessionStore, MatchMaker };
 
 export default {
-	async fetch(request: Request): Promise<Response> {
-		// Ensure WASM is initialized
-		await initializeWasm();
+	async fetch(request: Request, env: Env): Promise<Response> {
+		const url = new URL(request.url);
 
-		if (!gameEngine) {
-			return new Response('Failed to initialize game engine', { status: 500 });
-		}
-
-		// Call get_frame and return the result
-		let snapshot: GameState;
-
-		while (true) {
-			snapshot = gameEngine.next_frame() as GameState;
-			if (snapshot.state === 2) {
-				break;
+		// Authentication endpoint (no token required)
+		if (url.pathname === '/auth') {
+			if (!env.SESSION_STORE) {
+				return new Response('SESSION_STORE binding is undefined', { status: 500 });
 			}
+			const id = env.SESSION_STORE.idFromName('global');
+			const stub = env.SESSION_STORE.get(id);
+			return stub.fetch(request);
 		}
 
-		return new Response(JSON.stringify(snapshot), {
-			status: 200,
-			headers: { 'Content-Type': 'application/json' },
+		// All other routes require authentication
+		const token = request.headers.get('Authorization')?.replace('Bearer ', '');
+		const publicKey = url.searchParams.get('public_key');
+
+		if (!token || !publicKey) {
+			return new Response('Missing token or public_key', { status: 400 });
+		}
+
+		// Verify token
+		if (!env.SESSION_STORE) {
+			return new Response('SESSION_STORE binding is undefined', { status: 500 });
+		}
+		const sessionId = env.SESSION_STORE.idFromName('global');
+		const sessionStub = env.SESSION_STORE.get(sessionId);
+		const sessionUrl = new URL('/verify', url);
+		sessionUrl.searchParams.set('public_key', publicKey);
+		const sessionReq = new Request(sessionUrl.toString(), {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
 		});
+		const sessionRes = await sessionStub.fetch(sessionReq);
+
+		if (sessionRes.status !== 200) {
+			return new Response('Invalid token', { status: 401 });
+		}
+
+		// Matchmaking WebSocket endpoint
+		if (url.pathname === '/matchmaking') {
+			if (!env.MATCH_MAKER) {
+				return new Response('MATCH_MAKER binding is undefined', { status: 500 });
+			}
+			const id = env.MATCH_MAKER.idFromName('global');
+			const stub = env.MATCH_MAKER.get(id);
+			return stub.fetch(request);
+		}
+
+		return new Response('Not found', { status: 404 });
 	},
 };
