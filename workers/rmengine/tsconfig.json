@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "es2022",
-		"lib": ["es2022", "DOM"],
+		"lib": ["es2022"], // Remove "web"
 		"jsx": "react-jsx",
 		"module": "esnext",
 		"moduleResolution": "Bundler",
@@ -17,5 +17,5 @@
 		"skipLibCheck": true
 	},
 	"exclude": ["test"],
-	"include": ["src/**/*.ts"]
+	"include": ["worker-configuration.d.ts", "src/**/*.ts"]
 }
