@@ -8,13 +8,15 @@ export default defineWorkersConfig({
 			workers: {
 				wrangler: { configPath: './wrangler.toml' },
 				miniflare: {
-					compatibilityDate: '2025-02-24', // Match Wrangler 3.112.0
+					compatibilityDate: '2025-02-24',
 					durableObjects: {
 						SESSION_STORE: 'SessionStore',
 						MATCH_MAKER: 'MatchMaker',
 					},
+					durableObjectsPersist: true,
+					log: { level: 'debug' },
 				},
-				main: './src/index.ts', // Match wrangler.toml
+				main: './src/index.ts',
 			},
 		},
 	},

@@ -12,6 +12,7 @@ export class SessionStore extends DurableObject {
 	private state: DurableObjectState;
 	private initialized = false;
 
+	// src/sessionStore.ts (partial)
 	async initialize(): Promise<void> {
 		if (this.initialized) return;
 		try {
@@ -19,14 +20,14 @@ export class SessionStore extends DurableObject {
 				if (this.initialized) return;
 				console.log('Executing: CREATE TABLE sessions');
 				this.state.storage.sql.exec(`
-          CREATE TABLE IF NOT EXISTS sessions (
-            public_key TEXT PRIMARY KEY,
-            nonce TEXT NOT NULL,
-            token TEXT,
-            created_at INTEGER NOT NULL,
-            expires_at INTEGER
-          )
-        `);
+        CREATE TABLE IF NOT EXISTS sessions (
+          public_key TEXT PRIMARY KEY,
+          nonce TEXT NOT NULL,
+          token TEXT,
+          created_at INTEGER NOT NULL,
+          expires_at INTEGER
+        )
+      `);
 				this.initialized = true;
 				console.log('Sessions table initialized');
 			});
