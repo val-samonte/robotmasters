@@ -4,6 +4,7 @@ import { CharacterStats } from '../components/CharacterStats'
 import { cpuDesc, itemDetails } from '../itemList'
 import { useMemo, useState } from 'react'
 import cn from 'classnames'
+import { Main } from '../components/Main'
 
 export function CustomizeCPUScreen() {
   const [searchParams] = useSearchParams()
@@ -158,7 +159,9 @@ export function CustomizeCPUScreen() {
               </Link>
             </div>
           </div>
-          <div className="bg-black h-full aspect-[16/15] flex-none"></div>
+          <div className="bg-black h-full aspect-[16/15] flex-none">
+            <Main />
+          </div>
         </div>
         <div className="border-white border-[0.25em] bg-slate-800 p-[1rem] flex flex-col gap-[0.5rem] min-h-[120px]">
           {selected !== null ? (

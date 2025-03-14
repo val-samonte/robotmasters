@@ -196,63 +196,42 @@ export function Main() {
   }, [gameState])
 
   return (
-    <div className="fixed inset-0 w-full h-full bg-stone-900">
-      <div className="absolute top-0 left-0 p-4 text-white z-40 text-xs">
-        {gameState && (
-          <div className="flex flex-col gap-1">
-            <div>{Math.floor(gameState.frame / 60)}</div>
-            {(gameState.entities ?? []).map((obj) => (
-              <div key={obj.entity} className="flex gap-2">
-                <span>{obj.entity}</span>
-                {typeof obj.health === 'number' && <span>❤️{obj.health}</span>}
-                {typeof obj.energy === 'number' && <span>⚡{obj.energy}</span>}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      <StageScaler>
-        <Application
-          width={256}
-          height={240}
-          antialias={false}
-          resolution={1}
-          backgroundColor={0x000000}
-        >
-          {tiles.map((row, i) =>
-            row.map((tile, j) => {
-              if (tile === 0) return null
-              return (
-                <GameObjectView
-                  key={`${i}-${j}`}
-                  x={j * 16}
-                  y={i * 16}
-                  width={16}
-                  height={16}
-                  color={'gray'}
-                />
-              )
-            })
-          )}
-          {(gameState?.entities ?? []).map((obj) => {
+    <StageScaler>
+      <Application
+        width={256}
+        height={240}
+        antialias={false}
+        resolution={1}
+        backgroundColor={0x000000}
+      >
+        {tiles.map((row, i) =>
+          row.map((tile, j) => {
+            if (tile === 0) return null
             return (
               <GameObjectView
-                key={obj.entity}
-                x={obj.x}
-                y={obj.y}
-                width={obj.width}
-                height={obj.height}
-                color={colors[obj.entity]}
+                key={`${i}-${j}`}
+                x={j * 16}
+                y={i * 16}
+                width={16}
+                height={16}
+                color={'gray'}
               />
             )
-          })}
-        </Application>
-      </StageScaler>
-      {(gameState?.state === 2 || gameState?.state === 3) && (
-        <div className="text-sm text-white font-bold font-mono fixed inset-0 flex items-center justify-center z-50">
-          Game Over
-        </div>
-      )}
-    </div>
+          })
+        )}
+        {(gameState?.entities ?? []).map((obj) => {
+          return (
+            <GameObjectView
+              key={obj.entity}
+              x={obj.x}
+              y={obj.y}
+              width={obj.width}
+              height={obj.height}
+              color={colors[obj.entity]}
+            />
+          )
+        })}
+      </Application>
+    </StageScaler>
   )
 }
