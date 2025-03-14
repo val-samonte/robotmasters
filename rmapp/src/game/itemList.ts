@@ -1,3 +1,17 @@
+export const cpuDesc: any = {
+  ground: 'When grounded',
+  'w.lean': 'When leaning on wall',
+  'w.slip': 'When sliding on wall',
+  flip: 'When flipped',
+  'bat.10': 'When energy below 10 percent',
+  'bat.20': 'When energy below 20 percent',
+  'bat.50': ' When energy below 50 percent',
+  'no ammo': 'When no ammo',
+  'roll 20': '1 out of 5 chance',
+  'roll 10': '1 out of 10 chance',
+  always: 'Always',
+}
+
 export const itemDetails: any = {
   '': {
     name: ' ',
@@ -13,7 +27,7 @@ export const itemDetails: any = {
         'bat.10',
         'roll 10',
         'w.slip',
-        'grounded',
+        'ground',
         'no ammo',
         'w.lean',
         /*
@@ -74,7 +88,7 @@ export const itemDetails: any = {
         ['GEN', '1.1'],
         ['WGT', 8],
       ],
-      actions: [['recharge', 0]],
+      actions: [['charge', 0]],
       protection: [['punct', 10]],
     },
   },
@@ -88,7 +102,7 @@ export const itemDetails: any = {
         ['GEN', '1.2'],
         ['WGT', 12],
       ],
-      actions: [['recharge', 0]],
+      actions: [['charge', 0]],
       protection: [
         ['punct', 12],
         ['blast', 8],
