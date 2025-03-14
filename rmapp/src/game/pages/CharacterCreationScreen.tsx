@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import { itemDetails } from '../itemList'
 import { CharacterStats } from '../components/CharacterStats'
 import { Link, useSearchParams } from 'react-router'
+import { Slice9 } from '../components/Slice9'
 
 const weapons = ['hg_0', 'hg_1', 'hg_2', 'gl_0', 'gl_1', 'gl_2']
 
@@ -28,18 +29,23 @@ export function CharacterCreationScreen() {
   return (
     <div className="w-full h-full items-center justify-center p-[1rem]">
       <div className="flex flex-col gap-[0.5rem] h-full">
-        <div className="border-white border-[0.25em] bg-slate-800 p-[1rem] flex justify-center">
-          <SpriteText>CREATE ROBOT MASTER</SpriteText>
-        </div>
-        <div className="flex flex-auto gap-[0.5rem]">
-          <div className="border-white border-[0.25em] bg-slate-800 py-[1rem] flex-1">
-            <CharacterStats
-              head={head}
-              body={body}
-              legs={legs}
-              weapon={weapon}
-            />
+        <Slice9>
+          <div className="flex justify-center p-[1rem] bg-[#183858]">
+            <SpriteText>CREATE ROBOT MASTER</SpriteText>
           </div>
+        </Slice9>
+
+        <div className="flex flex-auto gap-[0.5rem]">
+          <Slice9 className="flex-1">
+            <div className="py-[1rem] bg-[#183858]">
+              <CharacterStats
+                head={head}
+                body={body}
+                legs={legs}
+                weapon={weapon}
+              />
+            </div>
+          </Slice9>
           <div className="border-white border-[0.25em] bg-slate-800 pt-[1rem] flex-2 flex flex-col">
             <div className="flex flex-col flex-auto gap-[1rem]">
               <div className="flex items-center justify-between px-[1rem]">

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { viewModeAtom } from '../../atoms/viewModeAtom'
-import { useAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import { Outlet } from 'react-router'
+import { rootFontSizeAtom } from '../../atoms/rootFontSizeAtom'
 
 export function Stage() {
+  const setFontSize = useSetAtom(rootFontSizeAtom)
   const [size, setSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -39,6 +41,7 @@ export function Stage() {
     const fontSize = 8 * Math.floor(amountToScale)
 
     document.documentElement.style.fontSize = `${fontSize}px`
+    setFontSize(fontSize)
 
     setStageDimension({ width: width + 'px', height: height + 'px' })
 
@@ -48,7 +51,7 @@ export function Stage() {
     // mode 3: if greater than 7/4 aspect ratio and less than 2/1 aspect ratio
 
     setMode(isPortrait ? 1 : width / height < 1.75 ? 2 : 3)
-  }, [size])
+  }, [size, setFontSize])
 
   if (mode === 0) return null
 
