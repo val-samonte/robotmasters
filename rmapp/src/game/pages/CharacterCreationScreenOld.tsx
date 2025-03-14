@@ -184,7 +184,7 @@ export function CharacterCreationScreen() {
           <div className="flex justify-between">
             <SpriteText>GENERATOR</SpriteText>
             <SpriteText>
-              {body === 0 ? '-' : body === 1 ? '1.1' : '1.2'}
+              {body === 0 ? '-' : body === 1 ? '1:1' : '1:2'}
             </SpriteText>
           </div>
           <div className="flex justify-between">

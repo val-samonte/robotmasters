@@ -3,14 +3,35 @@ export const cpuDesc: any = {
   'w.lean': 'When leaning on wall',
   'w.slip': 'When sliding on wall',
   flip: 'When flipped',
-  'bat.10': 'When energy below 10 percent',
-  'bat.20': 'When energy below 20 percent',
-  'bat.50': ' When energy below 50 percent',
+  'bat.10': 'When energy below 10%',
+  'bat.20': 'When energy below 20%',
+  'bat.50': ' When energy below 50%',
   'no ammo': 'When no ammo',
   'roll 20': '1 out of 5 chance',
   'roll 10': '1 out of 10 chance',
   always: 'Always',
 }
+
+// 0 is grounded
+// 1 wall leaning
+// 2 wall slipping
+// 3 is flipped
+// 4 bat 10
+// 5 bat 20
+// 6 bat 50
+// 7 no ammo
+// 8 roll 20
+// 9 roll 10
+// 19 always
+
+// 0 run
+// 1 turn
+// 2 jump
+// 3 w.jump
+// 4 flip gravity
+// 5 recharge
+// 7 shoot
+// 8 reload
 
 export const itemDetails: any = {
   '': {
@@ -23,45 +44,7 @@ export const itemDetails: any = {
     details: {
       img: '/head_light.png',
       stats: [['WGT', 2]],
-      cpu: [
-        'bat.10',
-        'roll 10',
-        'w.slip',
-        'ground',
-        'no ammo',
-        'w.lean',
-        /*
-        0 is grounded
-        1 wall leaning 
-        2 wall slipping
-        3 is flipped
-        4 bat 10
-        5 bat 20
-        6 bat 50
-        7 no ammo
-        8 roll 20
-        9 roll 10
-        19 always
-
-        0 run
-        1 turn
-        2 jump
-        3 w.jump
-        4 flip gravity
-        5 recharge
-        7 shoot
-        8 reload
-
-        [4, 5, 0],
-        // [9, 4, 20],
-        [2, 3, 6],
-        [8, 2, 3],
-        [7, 8, 0],
-        [8, 7, 0],
-        [1, 1, 1],
-        [10, 0, 0],
-        */
-      ],
+      cpu: ['bat.10', 'roll 10', 'w.slip', 'ground', 'no ammo', 'w.lean'],
       protection: [['punct', 3]],
     },
   },
@@ -73,7 +56,7 @@ export const itemDetails: any = {
       stats: [['WGT', 5]],
       cpu: ['bat.20', 'roll 20', 'no ammo', 'roll 20', 'w.lean', 'w.slip'],
       protection: [
-        ['punct', 6],
+        ['punct', 1],
         ['blast', 3],
       ],
     },
@@ -85,7 +68,7 @@ export const itemDetails: any = {
       img: '/body_light.png',
       stats: [
         ['POW', 18],
-        ['GEN', '1.1'],
+        ['GEN', '1:1'],
         ['WGT', 8],
       ],
       actions: [['charge', 0]],
@@ -99,12 +82,12 @@ export const itemDetails: any = {
       img: '/body_heavy.png',
       stats: [
         ['POW', 38],
-        ['GEN', '1.2'],
+        ['GEN', '1:2'],
         ['WGT', 12],
       ],
       actions: [['charge', 0]],
       protection: [
-        ['punct', 12],
+        ['punct', 4],
         ['blast', 8],
       ],
     },
@@ -136,7 +119,7 @@ export const itemDetails: any = {
         ['run', 0],
       ],
       protection: [
-        ['punct', 6],
+        ['punct', 1],
         ['blast', 3],
       ],
     },

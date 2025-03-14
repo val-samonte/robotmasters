@@ -1,3 +1,5 @@
+import { useProcessedImage } from '../../utils/useProcessedImage'
+
 export interface CharacterPreviewProps {
   body: string
   head: string
@@ -14,31 +16,22 @@ export function CharacterPreview({
   const weapon_type = weapon.split('_')[0]
   const arm = [weapon_type, body].join('_')
 
+  const layerUrls = [
+    `/skins/body_${body}.png`,
+    `/skins/legs_${legs}.png`,
+    `/skins/head_${head}.png`,
+    `/skins/${weapon}.png`,
+    `/skins/arms_${arm}.png`,
+  ]
+  const colorMap = { '#5B6EE1': '#FF00FF' }
+  const processedImage = useProcessedImage('player1', layerUrls, colorMap)
+
   return (
     <div className="relative w-[4rem] h-[4rem] overflow-hidden">
       <img
-        src={`/skins/body_${body}.png`}
         className="absolute w-[12rem] h-[12rem] max-w-none"
-        draggable="false"
-      />
-      <img
-        src={`/skins/legs_${legs}.png`}
-        className="absolute w-[12rem] h-[12rem] max-w-none"
-        draggable="false"
-      />
-      <img
-        src={`/skins/head_${head}.png`}
-        className="absolute w-[12rem] h-[12rem] max-w-none"
-        draggable="false"
-      />
-      <img
-        src={`/skins/${weapon}.png`}
-        className="absolute w-[12rem] h-[12rem] max-w-none"
-        draggable="false"
-      />
-      <img
-        src={`/skins/arms_${arm}.png`}
-        className="absolute w-[12rem] h-[12rem] max-w-none"
+        src={processedImage ?? undefined}
+        alt="Processed Spritesheet"
         draggable="false"
       />
     </div>

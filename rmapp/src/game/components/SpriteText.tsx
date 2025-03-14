@@ -82,32 +82,32 @@ const spriteSheetData: SpriteSheetData = {
     ',': { x: 24, y: 40 },
     '!': { x: 32, y: 40 },
     '?': { x: 40, y: 40 },
-    // ':': { x: 48, y: 40 },
-    // ';': { x: 56, y: 40 },
-    // '(': { x: 64, y: 40 },
-    // ')': { x: 72, y: 40 },
-    // '[': { x: 80, y: 40 },
-    // ']': { x: 88, y: 40 },
-    // '{': { x: 0, y: 48 },
-    // '}': { x: 8, y: 48 },
-    // '/': { x: 16, y: 48 },
-    // '\\': { x: 24, y: 48 },
-    // '|': { x: 32, y: 48 },
-    // '+': { x: 40, y: 48 },
-    // '-': { x: 48, y: 48 },
-    // '*': { x: 56, y: 48 },
-    // '=': { x: 64, y: 48 },
-    // '%': { x: 72, y: 48 },
-    // '@': { x: 80, y: 48 },
-    // '#': { x: 88, y: 48 },
-    // $: { x: 0, y: 56 },
-    // '&': { x: 8, y: 56 },
-    // '^': { x: 16, y: 56 },
-    // '~': { x: 24, y: 56 },
-    // _: { x: 32, y: 56 },
-    // '<': { x: 40, y: 56 },
-    // '>': { x: 48, y: 56 },
-    // '"': { x: 56, y: 56 },
+    ':': { x: 48, y: 40 },
+    ';': { x: 56, y: 40 },
+    '(': { x: 64, y: 40 },
+    ')': { x: 72, y: 40 },
+    '[': { x: 80, y: 40 },
+    ']': { x: 88, y: 40 },
+    '{': { x: 0, y: 48 },
+    '}': { x: 8, y: 48 },
+    '/': { x: 16, y: 48 },
+    '\\': { x: 24, y: 48 },
+    '|': { x: 32, y: 48 },
+    '+': { x: 40, y: 48 },
+    '-': { x: 48, y: 48 },
+    '*': { x: 56, y: 48 },
+    '=': { x: 64, y: 48 },
+    '%': { x: 72, y: 48 },
+    '@': { x: 80, y: 48 },
+    '#': { x: 88, y: 48 },
+    $: { x: 0, y: 56 },
+    '&': { x: 8, y: 56 },
+    '^': { x: 16, y: 56 },
+    '~': { x: 24, y: 56 },
+    _: { x: 32, y: 56 },
+    '<': { x: 40, y: 56 },
+    '>': { x: 48, y: 56 },
+    '"': { x: 56, y: 56 },
   },
 }
 
@@ -122,12 +122,15 @@ export function SpriteText({
   const lines = text.split(/\r\n|\n|\r/)
 
   return (
-    <div className={cn('flex flex-col gap-y-[0.25em]', className)}>
+    <div className={cn('flex flex-col', className)}>
       {lines.map((line, lineIndex) => {
         const words = line.split(' ').filter((word) => word.length > 0)
 
         return (
-          <div key={`line-${lineIndex}`} className="flex flex-wrap gap-x-[1em]">
+          <div
+            key={`line-${lineIndex}`}
+            className="flex flex-wrap gap-x-[1em] gap-y-[0.25em]"
+          >
             {words.map((word, wordIndex) => (
               <div key={`word-${lineIndex}-${wordIndex}`} className="flex">
                 {word.split('').map((char, charIndex) => {

@@ -20,7 +20,7 @@ export function CharacterStats({
     let generator =
       itemDetails['body_' + body].details?.stats?.find(
         ([key]: any) => key === 'GEN'
-      )[1] ?? '1.1'
+      )[1] ?? '1:1'
     let power =
       itemDetails['body_' + body].details?.stats?.find(
         ([key]: any) => key === 'POW'
@@ -88,7 +88,7 @@ export function CharacterStats({
 
   return (
     <div className="flex flex-col flex-auto gap-[1rem]">
-      <div className="flex items-center justify-center scale-200 p-[2em]">
+      <div className="flex items-center justify-center scale-200 p-[2em] pointer-events-none">
         <CharacterPreview head={head} body={body} legs={legs} weapon={weapon} />
       </div>
       <div className="w-full border-slate-700 border-b-[0.125em]" />
