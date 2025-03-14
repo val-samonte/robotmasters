@@ -23,7 +23,7 @@ export function CharacterPreview({
     `/skins/${weapon}.png`,
     `/skins/arms_${arm}.png`,
   ]
-  const colorMap = { '#5B6EE1': '#FF00FF' }
+  const colorMap = { '#5B6EE1': '#00FF99' }
   const processedImage = useProcessedImage('player1', layerUrls, colorMap)
 
   return (

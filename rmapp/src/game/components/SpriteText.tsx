@@ -1,5 +1,6 @@
 import cn from 'classnames'
 import React from 'react'
+import { useProcessedImage } from '../../utils/useProcessedImage'
 
 interface Frame {
   x: number
@@ -114,12 +115,22 @@ const spriteSheetData: SpriteSheetData = {
 export function SpriteText({
   children,
   className,
+  color = '#FFFFFF',
 }: {
   children: React.ReactNode
   className?: string
+  color?: string
 }) {
   const text = React.Children.toArray(children).join('')
   const lines = text.split(/\r\n|\n|\r/)
+
+  const layerUrls = ['/letters.png']
+  const colorMap = { '#FFFFFF': color }
+  const processedImage = useProcessedImage(
+    'letters_' + color,
+    layerUrls,
+    colorMap
+  )
 
   return (
     <div className={cn('flex flex-col', className)}>
@@ -142,7 +153,7 @@ export function SpriteText({
                       key={`${char}-${lineIndex}-${wordIndex}-${charIndex}`}
                       className="w-[1em] h-[1em] bg-no-repeat" // 8px = 1em at 8px font-size
                       style={{
-                        backgroundImage: `url("/letters.png")`,
+                        backgroundImage: `url("${processedImage}")`,
                         backgroundPosition: `-${frame.x / 8}em -${
                           frame.y / 8
                         }em`, // 8px = 1em
