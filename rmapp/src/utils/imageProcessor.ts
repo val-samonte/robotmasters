@@ -1,3 +1,4 @@
+// processImage.ts
 interface ColorMap {
   [key: string]: string
 }
@@ -5,16 +6,14 @@ interface ColorMap {
 export const processImage = async (
   layerUrls: string[],
   colorMap: ColorMap
-): Promise<string> => {
+): Promise<Blob> => {
   const images = await Promise.all(
     layerUrls.map((url) => {
       const img = new Image()
       img.crossOrigin = 'Anonymous'
       img.src = url
       return new Promise<HTMLImageElement>((resolve) => {
-        img.onload = () => {
-          resolve(img)
-        }
+        img.onload = () => resolve(img)
         img.onerror = () => console.error(`Failed to load: ${url}`)
       })
     })
@@ -37,7 +36,7 @@ export const processImage = async (
     const r = data[i]
     const g = data[i + 1]
     const b = data[i + 2]
-    const hex = rgbToHex(r, g, b)
+    const hex = rgbToHex(r, g, b).toUpperCase()
 
     if (hex in colorMap) {
       const newColor = hexToRgb(colorMap[hex])
@@ -48,10 +47,11 @@ export const processImage = async (
   }
 
   ctx.putImageData(imageData, 0, 0)
-  return canvas.toDataURL('image/png')
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => resolve(blob!), 'image/png')
+  })
 }
 
-// Helper functions
 const rgbToHex = (r: number, g: number, b: number): string => {
   return `#${((1 << 24) + (r << 16) + (g << 8) + b)
     .toString(16)

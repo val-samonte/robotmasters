@@ -1,6 +1,8 @@
+// cache.ts
 interface CacheEntry {
-  dataUrl: string | null
-  promise: Promise<string> | null
+  objectUrl: string | null // Now an Object URL
+  blob: Blob | null // Store Blob for reference
+  promise: Promise<string> | null // Promise resolves to Object URL
   layerUrls: string[]
   colorMap: { [key: string]: string }
 }
@@ -11,15 +13,24 @@ export const getCachedImage = (id: string) => imageCache.get(id)
 
 export const setCachedImage = (
   id: string,
-  dataUrl: string | null,
+  objectUrl: string | null,
+  blob: Blob | null,
   promise: Promise<string> | null,
   layerUrls: string[],
   colorMap: { [key: string]: string }
 ) => {
-  imageCache.set(id, { dataUrl, promise, layerUrls, colorMap })
+  const existing = imageCache.get(id)
+  if (existing?.objectUrl) {
+    URL.revokeObjectURL(existing.objectUrl) // Clean up old URL
+  }
+  imageCache.set(id, { objectUrl, blob, promise, layerUrls, colorMap })
 }
 
 export const clearCachedImage = (id: string) => {
+  const entry = imageCache.get(id)
+  if (entry?.objectUrl) {
+    URL.revokeObjectURL(entry.objectUrl)
+  }
   imageCache.delete(id)
 }
 

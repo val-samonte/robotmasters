@@ -1,3 +1,4 @@
+// useProcessedImage.ts
 import { getCachedImage, setCachedImage, areInputsEqual } from './imageCache'
 import { processImage } from './imageProcessor'
 
@@ -12,11 +13,15 @@ const createImageResource = (
 ) => {
   const cached = getCachedImage(id)
 
-  if (cached?.dataUrl && areInputsEqual(cached, layerUrls, colorMap)) {
-    return { read: () => cached.dataUrl }
+  console.log(`createImageResource for ${id}:`, cached)
+
+  if (cached?.objectUrl && areInputsEqual(cached, layerUrls, colorMap)) {
+    console.log(`Returning cached objectUrl for ${id}`)
+    return { read: () => cached.objectUrl }
   }
 
   if (cached?.promise && areInputsEqual(cached, layerUrls, colorMap)) {
+    console.log(`Suspending with existing promise for ${id}`)
     return {
       read: () => {
         throw cached.promise
@@ -24,14 +29,15 @@ const createImageResource = (
     }
   }
 
-  // Inputs differ or no cache: start new processing
-  const promise = processImage(layerUrls, colorMap).then((dataUrl) => {
-    setCachedImage(id, dataUrl, null, layerUrls, colorMap)
-    return dataUrl
+  const promise = processImage(layerUrls, colorMap).then((blob) => {
+    const objectUrl = URL.createObjectURL(blob)
+    setCachedImage(id, objectUrl, blob, null, layerUrls, colorMap)
+    console.log(`Promise resolved for ${id}, cached objectUrl`)
+    return objectUrl
   })
 
-  setCachedImage(id, null, promise, layerUrls, colorMap)
-
+  setCachedImage(id, null, null, promise, layerUrls, colorMap)
+  console.log(`Suspending with new promise for ${id}`)
   return {
     read: () => {
       throw promise
@@ -44,6 +50,7 @@ export const useProcessedImage = (
   layerUrls: string[],
   colorMap: ColorMap
 ) => {
+  console.log(`useProcessedImage called with id: ${id}`)
   const resource = createImageResource(id, layerUrls, colorMap)
   return resource.read()
 }
