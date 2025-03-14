@@ -30,14 +30,14 @@ export function CharacterCreationScreen() {
     <div className="w-full h-full items-center justify-center p-[1rem]">
       <div className="flex flex-col gap-[0.5rem] h-full">
         <Slice9>
-          <div className="flex justify-center p-[1rem] bg-[#183858]">
+          <div className="flex justify-center p-[1rem]">
             <SpriteText>CREATE ROBOT MASTER</SpriteText>
           </div>
         </Slice9>
 
         <div className="flex flex-auto gap-[0.5rem]">
           <Slice9 className="flex-1">
-            <div className="py-[1rem] bg-[#183858]">
+            <div className="py-[1rem]">
               <CharacterStats
                 head={head}
                 body={body}

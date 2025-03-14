@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import React, { useRef, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
 
 // Assuming rootFontSizeAtom is defined elsewhere
@@ -11,85 +11,105 @@ interface Slice9Props {
   frameUrl?: string
 }
 
+// Embedded image cache with Object URLs
+const imageCache: {
+  [url: string]: {
+    objectUrls: string[] // 9 slices as Object URLs
+    tileSize: number
+    loaded: boolean
+    listeners: (() => void)[]
+  }
+} = {}
+
 export function Slice9({
   children,
   className,
   frameUrl = '/frame.png',
 }: Slice9Props) {
-  const rootFontSize = useAtomValue(rootFontSizeAtom) // e.g., 8 or 16
-  const canvasRefs = {
-    topLeft: useRef<HTMLCanvasElement>(null),
-    top: useRef<HTMLCanvasElement>(null),
-    topRight: useRef<HTMLCanvasElement>(null),
-    left: useRef<HTMLCanvasElement>(null),
-    right: useRef<HTMLCanvasElement>(null),
-    bottomLeft: useRef<HTMLCanvasElement>(null),
-    bottom: useRef<HTMLCanvasElement>(null),
-    bottomRight: useRef<HTMLCanvasElement>(null),
-  }
+  const rootFontSize = useAtomValue(rootFontSizeAtom) // e.g., 16
+  const [sliceUrls, setSliceUrls] = useState<string[] | null>(null)
 
   useEffect(() => {
-    const img = new Image()
-    img.crossOrigin = 'Anonymous' // Still include CORS
-    img.src = frameUrl
+    let entry = imageCache[frameUrl]
+    if (!entry) {
+      const img = new Image()
+      img.crossOrigin = 'Anonymous'
+      img.src = frameUrl
+      entry = {
+        objectUrls: [],
+        tileSize: 0,
+        loaded: img.complete,
+        listeners: [],
+      }
+      imageCache[frameUrl] = entry
 
-    const drawCanvas = (
-      ref: React.RefObject<HTMLCanvasElement>,
-      x: number,
-      y: number,
-      tileSize: number
-    ) => {
-      const canvas = ref.current
-      if (canvas) {
-        const ctx = canvas.getContext('2d')
-        if (ctx) {
-          canvas.width = tileSize
-          canvas.height = tileSize
-          ctx.imageSmoothingEnabled = false
+      img.onload = () => {
+        const tileSize = Math.floor(Math.min(img.width, img.height) / 3)
+        entry.tileSize = tileSize % 2 === 0 ? tileSize : tileSize + 1
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')!
+        canvas.width = entry.tileSize
+        canvas.height = entry.tileSize
+
+        const slices = [
+          [0, 0],
+          [1, 0],
+          [2, 0], // Top row
+          [0, 1],
+          [1, 1],
+          [2, 1], // Middle row (including center)
+          [0, 2],
+          [1, 2],
+          [2, 2], // Bottom row
+        ]
+
+        const slicePromises = slices.map(([x, y]) => {
+          ctx.clearRect(0, 0, entry.tileSize, entry.tileSize)
           ctx.drawImage(
             img,
-            x * tileSize,
-            y * tileSize,
-            tileSize,
-            tileSize,
+            x * entry.tileSize,
+            y * entry.tileSize,
+            entry.tileSize,
+            entry.tileSize,
             0,
             0,
-            tileSize,
-            tileSize
+            entry.tileSize,
+            entry.tileSize
           )
-          console.log(`Drew ${x},${y} on ${canvas.className}`)
-        } else {
-          console.error(`No context for ${canvas.className}`)
-        }
+          return new Promise<string>((resolve) => {
+            canvas.toBlob((blob) => {
+              resolve(URL.createObjectURL(blob!))
+            }, 'image/png')
+          })
+        })
+
+        Promise.all(slicePromises).then((urls) => {
+          entry.objectUrls = urls
+          entry.loaded = true
+          entry.listeners.forEach((callback) => callback())
+          entry.listeners = []
+        })
+      }
+      img.onerror = () => {}
+    }
+
+    const updateSlices = () => {
+      if (entry.loaded && entry.objectUrls.length === 9) {
+        setSliceUrls(entry.objectUrls)
       }
     }
 
-    const drawAll = (tileSize: number) => {
-      console.log(
-        `Drawing for ${frameUrl} with tileSize ${tileSize}, wrapperFontSize ${
-          (rootFontSize / 8) * tileSize
-        }px`
-      )
-      drawCanvas(canvasRefs.topLeft, 0, 0, tileSize)
-      drawCanvas(canvasRefs.top, 1, 0, tileSize)
-      drawCanvas(canvasRefs.topRight, 2, 0, tileSize)
-      drawCanvas(canvasRefs.left, 0, 1, tileSize)
-      drawCanvas(canvasRefs.right, 2, 1, tileSize)
-      drawCanvas(canvasRefs.bottomLeft, 0, 2, tileSize)
-      drawCanvas(canvasRefs.bottom, 1, 2, tileSize)
-      drawCanvas(canvasRefs.bottomRight, 2, 2, tileSize)
+    if (entry.loaded && entry.objectUrls.length === 9) {
+      updateSlices()
+    } else {
+      entry.listeners.push(updateSlices)
+      return () => {
+        entry.listeners = entry.listeners.filter((cb) => cb !== updateSlices)
+      }
     }
+  }, [frameUrl])
 
-    img.onload = () => {
-      const tileSize = Math.floor(Math.min(img.width, img.height) / 3)
-      const adjustedTileSize = tileSize % 2 === 0 ? tileSize : tileSize + 1
-      console.log(`Loaded ${frameUrl}, tileSize: ${adjustedTileSize}`)
-      setTimeout(() => drawAll(adjustedTileSize), 0) // Ensure DOM readiness
-    }
-    img.onerror = () => console.error(`Failed to load image: ${frameUrl}`)
-  }, [frameUrl, rootFontSize]) // Redraw if frameUrl or rootFontSize changes
-
-  const adjustedTileSize = null // Not cached, computed on load
+  const adjustedTileSize = sliceUrls ? imageCache[frameUrl].tileSize : null
   const wrapperFontSize = adjustedTileSize
     ? (rootFontSize / 8) * adjustedTileSize
     : rootFontSize
@@ -100,55 +120,55 @@ export function Slice9({
       style={{ fontSize: `${wrapperFontSize}px` }}
     >
       <div className="flex">
-        <canvas
-          ref={canvasRefs.topLeft}
+        <img
+          src={sliceUrls?.[0]}
           className="w-[1em] h-[1em] flex-shrink-0"
-          style={{ border: '1px solid red' }}
+          alt="top-left"
         />
-        <canvas
-          ref={canvasRefs.top}
-          className="flex-1 h-[1em]"
-          style={{ border: '1px solid red' }}
-        />
-        <canvas
-          ref={canvasRefs.topRight}
+        <img src={sliceUrls?.[1]} className="flex-1 h-[1em]" alt="top" />
+        <img
+          src={sliceUrls?.[2]}
           className="w-[1em] h-[1em] flex-shrink-0"
-          style={{ border: '1px solid red' }}
+          alt="top-right"
         />
       </div>
       <div className="flex flex-1">
-        <canvas
-          ref={canvasRefs.left}
+        <img
+          src={sliceUrls?.[3]}
           className="w-[1em] flex-shrink-0"
-          style={{ minHeight: '1em', border: '1px solid red' }}
+          style={{ minHeight: '1em' }}
+          alt="left"
         />
         <div
           className="flex-1"
-          style={{ minWidth: 0, minHeight: 0, fontSize: '1rem' }}
+          style={{
+            minWidth: 0,
+            minHeight: 0,
+            fontSize: '1rem',
+            backgroundImage: `url(${sliceUrls?.[4]})`, // Center slice [1, 1]
+            backgroundRepeat: 'repeat', // Repeat x and y
+          }}
         >
           {children}
         </div>
-        <canvas
-          ref={canvasRefs.right}
+        <img
+          src={sliceUrls?.[5]}
           className="w-[1em] flex-shrink-0"
-          style={{ minHeight: '1em', border: '1px solid red' }}
+          style={{ minHeight: '1em' }}
+          alt="right"
         />
       </div>
       <div className="flex">
-        <canvas
-          ref={canvasRefs.bottomLeft}
+        <img
+          src={sliceUrls?.[6]}
           className="w-[1em] h-[1em] flex-shrink-0"
-          style={{ border: '1px solid red' }}
+          alt="bottom-left"
         />
-        <canvas
-          ref={canvasRefs.bottom}
-          className="flex-1 h-[1em]"
-          style={{ border: '1px solid red' }}
-        />
-        <canvas
-          ref={canvasRefs.bottomRight}
+        <img src={sliceUrls?.[7]} className="flex-1 h-[1em]" alt="bottom" />
+        <img
+          src={sliceUrls?.[8]}
           className="w-[1em] h-[1em] flex-shrink-0"
-          style={{ border: '1px solid red' }}
+          alt="bottom-right"
         />
       </div>
     </div>
