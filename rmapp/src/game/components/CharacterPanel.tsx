@@ -6,6 +6,7 @@ import cn from 'classnames'
 import { ElemLabel } from './ElemLabel'
 import { Slice9 } from './Slice9'
 import { Tab } from './Tab'
+import { Icon } from './Icon'
 
 export interface CharacterStatsProps {
   head: string
@@ -14,18 +15,18 @@ export interface CharacterStatsProps {
   weapon: string
 }
 
-export function CharacterStats(props: CharacterStatsProps) {
+export function CharacterPanel(props: CharacterStatsProps) {
   const [tab, setTab] = useState('s')
 
   return (
-    <div className="flex flex-col flex-auto -gap-[0.25rem]">
+    <div className="flex flex-col h-full -gap-[0.25rem]">
       <div className="relative h-[8rem]">
         <img src="/mug_bg.png" className="w-[24rem]" />
         <div className="flex items-center justify-center p-[1em] pointer-events-none absolute inset-0">
           <CharacterPreview {...props} />
         </div>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col flex-auto">
         <div className="flex px-[1rem] h-[2rem]">
           {['s', 'p', 'c', 'a', 'r'].map((t: string) => (
             <Tab
@@ -40,8 +41,8 @@ export function CharacterStats(props: CharacterStatsProps) {
             </Tab>
           ))}
         </div>
-        <Slice9 className="relative">
-          <div className="flex flex-col p-[0.5rem] gap-[1rem]">
+        <Slice9 className="relative flex-auto">
+          <div className="h-full flex flex-col gap-[1rem]">
             {tab === 's' && <OverallStats {...props} />}
             {tab === 'p' && <Parts {...props} />}
             {tab === 'c' && <CPU {...props} />}
@@ -165,10 +166,42 @@ function CPU(_: CharacterStatsProps) {
   )
 }
 
-function Actions(_: CharacterStatsProps) {
+function Actions({ head, body, legs, weapon }: CharacterStatsProps) {
+  const actions = useMemo(() => {
+    const actions: [string, number][] = [
+      ...(itemDetails['head_' + head].details.actions ?? []),
+      ...(itemDetails['body_' + body].details.actions ?? []),
+      ...(itemDetails['legs_' + legs].details.actions ?? []),
+      ...(itemDetails[weapon].details.actions ?? []),
+    ]
+
+    return actions
+  }, [head, body, legs, weapon])
   return (
-    <div className="flex flex-col gap-[1rem]">
-      <SpriteText color="#38B8F8">ACTIONS</SpriteText>
+    <div className="h-full flex flex-col">
+      <SpriteText color="#38B8F8" className="p-[0.5rem]">
+        ACTIONS
+      </SpriteText>
+      <div className="flex-auto relative">
+        <div className="inset-0 absolute flex flex-col py-[0.5rem] gap-[1rem] overflow-auto">
+          {actions.map(([action, cost]: any) => {
+            return (
+              <div
+                key={action}
+                className="flex items-center justify-between px-[0.5rem]"
+              >
+                <div className="">
+                  <SpriteText>{action.toUpperCase()}</SpriteText>
+                </div>
+                <div className="flex gap-[0.25rem]">
+                  <Icon>E</Icon>
+                  <SpriteText>{cost}</SpriteText>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }

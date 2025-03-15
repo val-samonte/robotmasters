@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from 'react-router'
 import { SpriteText } from '../components/SpriteText'
-import { CharacterStats } from '../components/CharacterStats'
+import { CharacterPanel } from '../components/CharacterPanel'
 import { cpuDesc, itemDetails } from '../itemList'
 import { useMemo, useState } from 'react'
 import cn from 'classnames'
@@ -40,7 +40,7 @@ export function CustomizeCPUScreen() {
         </div>
         <div className="flex flex-auto gap-[0.5rem]">
           <div className="border-white border-[0.25em] bg-slate-800 py-[1rem] flex-none min-w-[465px]">
-            <CharacterStats
+            <CharacterPanel
               head={head}
               body={body}
               legs={legs}

@@ -32,8 +32,12 @@ export function Stage() {
 
   useEffect(() => {
     const isPortrait = size.height >= size.width
-    const width = Math.floor(size.width / 8) * 8
-    const height = Math.floor(size.height / 8) * 8
+    let width = Math.floor(size.width / 8) * 8
+    let height = Math.floor(size.height / 8) * 8
+
+    if (!isPortrait) {
+      width = Math.min(height * 2, width)
+    }
 
     const smallestSize = 288
     const base = Math.max(smallestSize, isPortrait ? width : height)
@@ -57,7 +61,7 @@ export function Stage() {
 
   return (
     <div
-      className="relative margin-x-auto"
+      className="relative margin-x-auto overflow-hidden"
       style={{
         width: stageDimension.width,
         height: stageDimension.height,
@@ -67,12 +71,3 @@ export function Stage() {
     </div>
   )
 }
-
-// Punct, // P - blue
-//     Blast, // B - green
-//     Force, // F - orange
-//     Sever, // S - silver
-//     Heat,  // H - red
-//     Cryo,  // C - cyan
-//     Jolt,  // J - yellow
-//     Virus, // V - magenta
