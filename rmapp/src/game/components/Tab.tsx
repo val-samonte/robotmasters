@@ -18,25 +18,27 @@ export function Tab({ active, children, asIcon, onClick }: TabProps) {
   const processedImage = useProcessedImage('tab_' + active, layerUrls, colorMap)
 
   return (
-    <Slice9
-      frameUrl={processedImage ?? '/tab.png'}
-      className={cn('relative', !active && 'translate-y-[0.25rem]')}
+    <button
+      onClick={onClick}
+      className={cn(
+        !active && 'translate-y-[0.25rem]',
+        'flex items-center justify-center h-full cursor-pointer px-0'
+      )}
     >
-      <button
-        onClick={onClick}
-        className={cn(
-          asIcon ? 'pr-[0.25rem]' : 'px-[0.25rem]',
-          'flex items-center justify-center h-full cursor-pointer'
-        )}
+      <Slice9
+        frameUrl={processedImage ?? '/tab.png'}
+        className={cn('relative')}
       >
-        {asIcon ? (
-          <Icon color={active ? '#FFFFFF' : '#B8B8B8'}>{children}</Icon>
-        ) : (
-          <SpriteText color={active ? '#FFFFFF' : '#B8B8B8'}>
-            {children}
-          </SpriteText>
-        )}
-      </button>
-    </Slice9>
+        <div className={asIcon ? 'pr-[0.25rem]' : 'px-[0.25rem]'}>
+          {asIcon ? (
+            <Icon color={active ? '#FFFFFF' : '#B8B8B8'}>{children}</Icon>
+          ) : (
+            <SpriteText color={active ? '#FFFFFF' : '#B8B8B8'}>
+              {children}
+            </SpriteText>
+          )}
+        </div>
+      </Slice9>
+    </button>
   )
 }

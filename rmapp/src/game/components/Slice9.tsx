@@ -124,12 +124,19 @@ export function Slice9({
           src={sliceUrls?.[0]}
           className="w-[1em] h-[1em] flex-shrink-0"
           alt="top-left"
+          draggable="false"
         />
-        <img src={sliceUrls?.[1]} className="flex-1 h-[1em]" alt="top" />
+        <img
+          src={sliceUrls?.[1]}
+          className="flex-1 h-[1em]"
+          alt="top"
+          draggable="false"
+        />
         <img
           src={sliceUrls?.[2]}
           className="w-[1em] h-[1em] flex-shrink-0"
           alt="top-right"
+          draggable="false"
         />
       </div>
       <div className="flex flex-1">
@@ -138,6 +145,7 @@ export function Slice9({
           className="w-[1em] flex-shrink-0"
           style={{ minHeight: '1em' }}
           alt="left"
+          draggable="false"
         />
         <div
           className="flex-1"
@@ -156,6 +164,7 @@ export function Slice9({
           className="w-[1em] flex-shrink-0"
           style={{ minHeight: '1em' }}
           alt="right"
+          draggable="false"
         />
       </div>
       <div className="flex">
@@ -163,12 +172,19 @@ export function Slice9({
           src={sliceUrls?.[6]}
           className="w-[1em] h-[1em] flex-shrink-0"
           alt="bottom-left"
+          draggable="false"
         />
-        <img src={sliceUrls?.[7]} className="flex-1 h-[1em]" alt="bottom" />
+        <img
+          src={sliceUrls?.[7]}
+          className="flex-1 h-[1em]"
+          alt="bottom"
+          draggable="false"
+        />
         <img
           src={sliceUrls?.[8]}
           className="w-[1em] h-[1em] flex-shrink-0"
           alt="bottom-right"
+          draggable="false"
         />
       </div>
     </div>
