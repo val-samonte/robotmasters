@@ -39,6 +39,7 @@ export const itemDetails: any = {
     desc: 'Please select parts and press NEXT.',
   },
   head_0: {
+    type: 'head',
     name: 'HERMES HEAD',
     desc: 'Light head. Contains agile CPU.',
     details: {
@@ -49,6 +50,7 @@ export const itemDetails: any = {
     },
   },
   head_2: {
+    type: 'head',
     name: 'HERCULES HEAD',
     desc: 'Heavy head with all rounder CPU.',
     details: {
@@ -62,6 +64,7 @@ export const itemDetails: any = {
     },
   },
   body_0: {
+    type: 'body',
     name: 'HERMES BODY',
     desc: 'Light body capable of fast charging.',
     details: {
@@ -76,6 +79,7 @@ export const itemDetails: any = {
     },
   },
   body_2: {
+    type: 'body',
     name: 'HERCULES BODY',
     desc: 'More power output in exchange of slow generator.',
     details: {
@@ -93,6 +97,7 @@ export const itemDetails: any = {
     },
   },
   legs_0: {
+    type: 'legs',
     name: 'HERMES LEGS',
     desc: 'Unlocks wall jumping.',
     details: {
@@ -108,10 +113,11 @@ export const itemDetails: any = {
     },
   },
   legs_2: {
+    type: 'legs',
     name: 'HERCULES LEGS',
     desc: 'Heavy duty legs that offers better protection.',
     details: {
-      img: '/legs_light.png',
+      img: '/legs_heavy.png',
       stats: [['WGT', 8]],
       actions: [
         ['jump', 3],
@@ -125,6 +131,7 @@ export const itemDetails: any = {
     },
   },
   hg_0: {
+    type: 'weapon',
     name: 'P420',
     desc: 'All rounder weapon with high ROF.',
     details: {
@@ -144,6 +151,7 @@ export const itemDetails: any = {
     },
   },
   hg_1: {
+    type: 'weapon',
     name: 'MONGOOSE',
     desc: 'Powerful magnum with slow ROF.',
     details: {
@@ -163,6 +171,7 @@ export const itemDetails: any = {
     },
   },
   hg_2: {
+    type: 'weapon',
     name: 'Q2.BLSTR',
     desc: 'Shoots energy projectiles.',
     details: {
@@ -182,6 +191,7 @@ export const itemDetails: any = {
     },
   },
   gl_0: {
+    type: 'weapon',
     name: 'HKP',
     desc: '40mm grenade launcher. Explodes on impact.',
     details: {
@@ -200,6 +210,7 @@ export const itemDetails: any = {
     },
   },
   gl_1: {
+    type: 'weapon',
     name: 'Q2.GL',
     desc: 'High ROF GL. Bounces off walls.',
     details: {
@@ -219,6 +230,7 @@ export const itemDetails: any = {
     },
   },
   gl_2: {
+    type: 'weapon',
     name: 'MM1',
     desc: '40mm GL with large magazine.',
     details: {

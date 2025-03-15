@@ -114,6 +114,10 @@ export function Slice9({
     ? (rootFontSize / 8) * adjustedTileSize
     : rootFontSize
 
+  if (!sliceUrls) {
+    return null
+  }
+
   return (
     <div
       className={cn('flex flex-col pointer-events-none', className)}
@@ -121,19 +125,19 @@ export function Slice9({
     >
       <div className="flex">
         <img
-          src={sliceUrls?.[0]}
+          src={sliceUrls[0]}
           className="w-[1em] h-[1em] flex-shrink-0 select-none"
           alt="top-left"
           draggable="false"
         />
         <img
-          src={sliceUrls?.[1]}
+          src={sliceUrls[1]}
           className="flex-1 h-[1em] select-none"
           alt="top"
           draggable="false"
         />
         <img
-          src={sliceUrls?.[2]}
+          src={sliceUrls[2]}
           className="w-[1em] h-[1em] flex-shrink-0 select-none"
           alt="top-right"
           draggable="false"
@@ -141,7 +145,7 @@ export function Slice9({
       </div>
       <div className="flex flex-1">
         <img
-          src={sliceUrls?.[3]}
+          src={sliceUrls[3]}
           className="w-[1em] flex-shrink-0 select-none"
           style={{ minHeight: '1em' }}
           alt="left"
@@ -153,14 +157,14 @@ export function Slice9({
             minWidth: 0,
             minHeight: 0,
             fontSize: '1rem',
-            backgroundImage: `url(${sliceUrls?.[4]})`, // Center slice [1, 1]
+            backgroundImage: `url(${sliceUrls[4]})`, // Center slice [1, 1]
             backgroundRepeat: 'repeat', // Repeat x and y
           }}
         >
           {children}
         </div>
         <img
-          src={sliceUrls?.[5]}
+          src={sliceUrls[5]}
           className="w-[1em] flex-shrink-0 select-none"
           style={{ minHeight: '1em' }}
           alt="right"
@@ -169,19 +173,19 @@ export function Slice9({
       </div>
       <div className="flex">
         <img
-          src={sliceUrls?.[6]}
+          src={sliceUrls[6]}
           className="w-[1em] h-[1em] flex-shrink-0 select-none"
           alt="bottom-left"
           draggable="false"
         />
         <img
-          src={sliceUrls?.[7]}
+          src={sliceUrls[7]}
           className="flex-1 h-[1em] select-none"
           alt="bottom"
           draggable="false"
         />
         <img
-          src={sliceUrls?.[8]}
+          src={sliceUrls[8]}
           className="w-[1em] h-[1em] flex-shrink-0 select-none"
           alt="bottom-right"
           draggable="false"
