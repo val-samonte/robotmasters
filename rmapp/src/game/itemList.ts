@@ -45,7 +45,7 @@ export const itemDetails: any = {
       img: '/head_light.png',
       stats: [['WGT', 2]],
       cpu: ['bat.10', 'roll 10', 'w.slip', 'ground', 'no ammo', 'w.lean'],
-      protection: [['punct', 3]],
+      protection: [['P', 3]],
     },
   },
   head_2: {
@@ -56,8 +56,8 @@ export const itemDetails: any = {
       stats: [['WGT', 5]],
       cpu: ['bat.20', 'roll 20', 'no ammo', 'roll 20', 'w.lean', 'w.slip'],
       protection: [
-        ['punct', 1],
-        ['blast', 3],
+        ['P', 1],
+        ['B', 3],
       ],
     },
   },
@@ -72,7 +72,7 @@ export const itemDetails: any = {
         ['WGT', 8],
       ],
       actions: [['charge', 0]],
-      protection: [['punct', 10]],
+      protection: [['P', 10]],
     },
   },
   body_2: {
@@ -87,8 +87,8 @@ export const itemDetails: any = {
       ],
       actions: [['charge', 0]],
       protection: [
-        ['punct', 4],
-        ['blast', 8],
+        ['P', 4],
+        ['B', 8],
       ],
     },
   },
@@ -104,7 +104,7 @@ export const itemDetails: any = {
         ['turn', 1],
         ['run', 0],
       ],
-      protection: [['punct', 3]],
+      protection: [['P', 3]],
     },
   },
   legs_2: {
@@ -119,8 +119,8 @@ export const itemDetails: any = {
         ['run', 0],
       ],
       protection: [
-        ['punct', 1],
-        ['blast', 3],
+        ['P', 1],
+        ['B', 3],
       ],
     },
   },
@@ -130,7 +130,7 @@ export const itemDetails: any = {
     details: {
       img: '/hg_0.png',
       stats: [
-        ['ELEM', 'punct'],
+        ['ELEM', 'P'],
         ['DMG', 4],
         ['ROF', 15],
         ['AMMO', 12],
@@ -149,7 +149,7 @@ export const itemDetails: any = {
     details: {
       img: '/hg_1.png',
       stats: [
-        ['ELEM', 'punct'],
+        ['ELEM', 'P'],
         ['DMG', 10],
         ['ROF', 120],
         ['AMMO', 6],
@@ -168,7 +168,7 @@ export const itemDetails: any = {
     details: {
       img: '/hg_2.png',
       stats: [
-        ['ELEM', 'heat'],
+        ['ELEM', 'H'],
         ['DMG', 6],
         ['ROF', 30],
         ['AMMO', 3],
@@ -187,7 +187,7 @@ export const itemDetails: any = {
     details: {
       img: '/gl_0.png',
       stats: [
-        ['ELEM', 'blast'],
+        ['ELEM', 'B'],
         ['DMG', 24],
         ['AMMO', 1],
         ['RCD', 240],
@@ -205,7 +205,7 @@ export const itemDetails: any = {
     details: {
       img: '/gl_1.png',
       stats: [
-        ['ELEM', 'blast'],
+        ['ELEM', 'B'],
         ['DMG', 16],
         ['ROF', 60],
         ['AMMO', 3],
@@ -224,7 +224,7 @@ export const itemDetails: any = {
     details: {
       img: '/gl_2.png',
       stats: [
-        ['ELEM', 'blast'],
+        ['ELEM', 'B'],
         ['DMG', 8],
         ['ROF', 60],
         ['AMMO', 24],

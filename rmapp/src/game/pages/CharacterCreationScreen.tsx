@@ -6,6 +6,8 @@ import { CharacterStats } from '../components/CharacterStats'
 import { Link, useSearchParams } from 'react-router'
 import { Slice9 } from '../components/Slice9'
 import { Tab } from '../components/Tab'
+import { Icon } from '../components/Icon'
+import { ElemLabel } from '../components/ElemLabel'
 
 const weapons = ['hg_0', 'hg_1', 'hg_2', 'gl_0', 'gl_1', 'gl_2']
 
@@ -38,16 +40,15 @@ export function CharacterCreationScreen() {
         </Slice9>
 
         <div className="flex flex-auto gap-[0.5rem]">
-          <Slice9 className="w-[16rem]">
-            <div className="py-[0.5rem]">
-              <CharacterStats
-                head={head}
-                body={body}
-                legs={legs}
-                weapon={weapon}
-              />
-            </div>
-          </Slice9>
+          <div className="w-[16rem]">
+            <CharacterStats
+              head={head}
+              body={body}
+              legs={legs}
+              weapon={weapon}
+            />
+          </div>
+
           <div className="flex-2 flex flex-col">
             <div className="flex px-[0.5rem] h-[2rem]">
               <Tab active={tab === 'head'} onClick={() => setTab('head')}>
@@ -66,7 +67,7 @@ export function CharacterCreationScreen() {
                 COLR
               </Tab>
             </div>
-            <Slice9>
+            <Slice9 className="relative">
               <div className="pt-[1rem] flex flex-col h-full">
                 <div className="flex flex-col flex-auto gap-[1rem]">
                   <div className="flex items-center justify-between px-[0.5rem]">
@@ -244,16 +245,13 @@ export function CharacterCreationScreen() {
                             >
                               <SpriteText>{key}</SpriteText>
                               <div className="flex gap-[0.25rem]">
-                                {key === 'ELEM' && (
-                                  <img
-                                    src={`/elem_${val}.png`}
-                                    alt={`elem_${val}`}
-                                    className="w-[1rem] h-[1rem]"
-                                  />
+                                {key === 'ELEM' ? (
+                                  <ElemLabel value={val} />
+                                ) : (
+                                  <SpriteText>
+                                    {(val + '').toUpperCase()}
+                                  </SpriteText>
                                 )}
-                                <SpriteText>
-                                  {(val + '').toUpperCase()}
-                                </SpriteText>
                               </div>
                             </div>
                           )
@@ -270,17 +268,9 @@ export function CharacterCreationScreen() {
                         <div className="flex flex-wrap px-[0.5rem] gap-[1rem]">
                           {itemDetails[lastSelected].details.protection.map(
                             ([elem, pts]: any, i: number) => (
-                              <div
-                                key={`${elem}_${i}`}
-                                className="flex items-center gap-[0.25rem]"
-                              >
-                                <img
-                                  src={`/elem_${elem}.png`}
-                                  alt={`elem_${elem}`}
-                                  className="w-[1rem] h-[1rem]"
-                                />
-                                <SpriteText>{pts}</SpriteText>
-                              </div>
+                              <ElemLabel key={i} value={elem}>
+                                {pts}
+                              </ElemLabel>
                             )
                           )}
                         </div>
@@ -301,11 +291,7 @@ export function CharacterCreationScreen() {
                             >
                               <SpriteText>{action.toUpperCase()}</SpriteText>
                               <div className="flex gap-[0.25rem]">
-                                <img
-                                  src={`/energy.png`}
-                                  alt={`energy`}
-                                  className="w-[1rem] h-[1rem]"
-                                />
+                                <Icon>E</Icon>
                                 <SpriteText>{cost}</SpriteText>
                               </div>
                             </div>
@@ -340,7 +326,7 @@ export function CharacterCreationScreen() {
           </Slice9>
         </div>
         <Slice9>
-          <div className="p-[1rem] flex flex-col gap-[0.5rem] min-h-[120px]">
+          <div className="p-[0.5rem] flex flex-col gap-[0.5rem] landscape:h-[3.5rem] overflow-auto">
             {itemDetails[lastSelected]?.name && (
               <SpriteText>{itemDetails[lastSelected].name}</SpriteText>
             )}

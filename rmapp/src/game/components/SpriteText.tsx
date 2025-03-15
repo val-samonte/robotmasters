@@ -112,22 +112,26 @@ const spriteSheetData: SpriteSheetData = {
   },
 }
 
+export interface SpriteTextProps {
+  children: React.ReactNode
+  className?: string
+  color?: string
+  spriteUrl?: string
+}
+
 export function SpriteText({
   children,
   className,
   color = '#FFFFFF',
-}: {
-  children: React.ReactNode
-  className?: string
-  color?: string
-}) {
+  spriteUrl = '/letters.png',
+}: SpriteTextProps) {
   const text = React.Children.toArray(children).join('')
   const lines = text.split(/\r\n|\n|\r/)
 
-  const layerUrls = ['/letters.png']
+  const layerUrls = [spriteUrl]
   const colorMap = { '#FFFFFF': color }
   const processedImage = useProcessedImage(
-    'letters_' + color,
+    spriteUrl + '_' + color,
     layerUrls,
     colorMap
   )

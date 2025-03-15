@@ -31,7 +31,6 @@ export function CharacterPreview({
       <img
         className="absolute w-[12rem] h-[12rem] max-w-none"
         src={processedImage ?? undefined}
-        alt="Processed Spritesheet"
         draggable="false"
       />
     </div>

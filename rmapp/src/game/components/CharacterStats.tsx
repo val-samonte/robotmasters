@@ -1,8 +1,11 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { itemDetails } from '../itemList'
 import { SpriteText } from './SpriteText'
 import { CharacterPreview } from './CharacterPreview'
 import cn from 'classnames'
+import { ElemLabel } from './ElemLabel'
+import { Slice9 } from './Slice9'
+import { Tab } from './Tab'
 
 export interface CharacterStatsProps {
   head: string
@@ -11,12 +14,47 @@ export interface CharacterStatsProps {
   weapon: string
 }
 
-export function CharacterStats({
-  head,
-  body,
-  legs,
-  weapon,
-}: CharacterStatsProps) {
+export function CharacterStats(props: CharacterStatsProps) {
+  const [tab, setTab] = useState('s')
+
+  return (
+    <div className="flex flex-col flex-auto -gap-[0.25rem]">
+      <div className="relative h-[8rem]">
+        <img src="/mug_bg.png" className="w-[24rem]" />
+        <div className="flex items-center justify-center p-[1em] pointer-events-none absolute inset-0">
+          <CharacterPreview {...props} />
+        </div>
+      </div>
+      <div className="flex flex-col">
+        <div className="flex px-[1rem] h-[2rem]">
+          {['s', 'p', 'c', 'a', 'r'].map((t: string) => (
+            <Tab
+              key={t}
+              asIcon={true}
+              active={t === tab}
+              onClick={() => {
+                setTab(t)
+              }}
+            >
+              {t}
+            </Tab>
+          ))}
+        </div>
+        <Slice9 className="relative">
+          <div className="flex flex-col p-[0.5rem] gap-[1rem]">
+            {tab === 's' && <OverallStats {...props} />}
+            {tab === 'p' && <Parts {...props} />}
+            {tab === 'c' && <CPU {...props} />}
+            {tab === 'a' && <Actions {...props} />}
+            {tab === 'r' && <Armor {...props} />}
+          </div>
+        </Slice9>
+      </div>
+    </div>
+  )
+}
+
+function OverallStats({ head, body, legs, weapon }: CharacterStatsProps) {
   const overallStats = useMemo(() => {
     let generator =
       itemDetails['body_' + body].details?.stats?.find(
@@ -40,7 +78,7 @@ export function CharacterStats({
         ([key]: any) => key === 'WGT'
       )[1] ?? 0)
 
-    let overweight = power / weight
+    let weightRatio = power / weight
 
     const armor: number[] = [
       0, // punct
@@ -48,27 +86,27 @@ export function CharacterStats({
     ]
     itemDetails['head_' + head].details.protection.forEach(
       ([elem, val]: any) => {
-        if (elem === 'punct') {
+        if (elem === 'P') {
           armor[0] += val
-        } else if (elem === 'blast') {
+        } else if (elem === 'B') {
           armor[1] += val
         }
       }
     )
     itemDetails['body_' + body].details.protection.forEach(
       ([elem, val]: any) => {
-        if (elem === 'punct') {
+        if (elem === 'P') {
           armor[0] += val
-        } else if (elem === 'blast') {
+        } else if (elem === 'B') {
           armor[1] += val
         }
       }
     )
     itemDetails['legs_' + legs].details.protection.forEach(
       ([elem, val]: any) => {
-        if (elem === 'punct') {
+        if (elem === 'P') {
           armor[0] += val
-        } else if (elem === 'blast') {
+        } else if (elem === 'B') {
           armor[1] += val
         }
       }
@@ -77,64 +115,98 @@ export function CharacterStats({
     return {
       stats: [
         ['HP', 100],
-        ['ENRG', 100],
-        ['POW', power],
+        ['ENG', 100],
         ['GEN', generator],
+        ['POW', power],
         ['WGT', weight],
       ],
-      overweight,
+      weightRatio,
       armor,
     }
   }, [head, body, legs, weapon])
 
   return (
-    <div className="flex flex-col flex-auto gap-[1rem]">
-      <div className="flex items-center justify-center p-[1em] pointer-events-none">
-        <CharacterPreview head={head} body={body} legs={legs} weapon={weapon} />
-      </div>
-      <div
+    <div className="flex flex-col gap-[1rem]">
+      <SpriteText color="#38B8F8">STATS</SpriteText>
+      {overallStats.stats.map(([key, val]: any, i: number) => {
+        const overweight =
+          (key === 'POW' || key === 'WGT') && overallStats.weightRatio < 1
+        return (
+          <div
+            key={`${key}_${i}`}
+            className="flex items-center justify-between"
+          >
+            <SpriteText color={overweight ? '#F89838' : '#FFFFFF'}>
+              {key.toUpperCase()}
+            </SpriteText>
+            <SpriteText color={overweight ? '#F89838' : '#FFFFFF'}>
+              {val + ''}
+            </SpriteText>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function Parts(_: CharacterStatsProps) {
+  return (
+    <div className="flex flex-col gap-[1rem]">
+      <SpriteText color="#38B8F8">PARTS</SpriteText>
+    </div>
+  )
+}
+
+function CPU(_: CharacterStatsProps) {
+  return (
+    <div className="flex flex-col gap-[1rem]">
+      <SpriteText color="#38B8F8">CPU</SpriteText>
+    </div>
+  )
+}
+
+function Actions(_: CharacterStatsProps) {
+  return (
+    <div className="flex flex-col gap-[1rem]">
+      <SpriteText color="#38B8F8">ACTIONS</SpriteText>
+    </div>
+  )
+}
+
+function Armor(_: CharacterStatsProps) {
+  return (
+    <div className="flex flex-col gap-[1rem]">
+      <SpriteText color="#38B8F8">PROTECTION</SpriteText>
+    </div>
+  )
+}
+
+{
+  {
+    /* <div
         className={cn(
           'flex p-[0.5rem] justify-center items-center',
           overallStats.overweight >= 1 && 'opacity-0'
         )}
       >
         <SpriteText color="#D82800">OVERWEIGHT</SpriteText>
-      </div>
-      <div className="flex flex-col px-[0.5rem] gap-[1rem]">
-        {overallStats.stats.map(([key, val]: any, i: number) => (
-          <div
-            key={`${key}_${i}`}
-            className="flex items-center justify-between"
-          >
-            <SpriteText>{key.toUpperCase()}</SpriteText>
-            <SpriteText>{val + ''}</SpriteText>
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-between items-center">
-        <div className="px-[0.5rem]">
-          <SpriteText>ARMOR</SpriteText>
-        </div>
-        <div className="flex flex-wrap px-[0.5rem] gap-[1rem]">
-          {overallStats.armor.map((val: number, i: number) => {
-            if (val === 0) return null
-            const key = ['punct', 'blast'][i]
-            return (
-              <div
-                key={`armor_${i}`}
-                className="flex items-center gap-[0.25rem]"
-              >
-                <img
-                  src={`/elem_${key}.png`}
-                  alt={`elem_${key}`}
-                  className="w-[1rem] h-[1rem]"
-                />
-                <SpriteText>{val}</SpriteText>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-    </div>
-  )
+      </div> */
+  }
 }
+
+// <div className="flex justify-between items-center">
+//         <div className="px-[0.5rem]">
+//           <SpriteText>ARMOR</SpriteText>
+//         </div>
+//         <div className="flex flex-wrap px-[0.5rem] gap-[1rem]">
+//           {overallStats.armor.map((val: number, i: number) => {
+//             if (val === 0) return null
+//             const elem = ['P', 'B'][i]
+//             return (
+//               <ElemLabel key={i} value={elem}>
+//                 {val}
+//               </ElemLabel>
+//             )
+//           })}
+//         </div>
+//       </div>
