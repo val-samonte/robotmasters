@@ -23,11 +23,11 @@ export function CharacterPreview({
     `/skins/${weapon}.png`,
     `/skins/arms_${arm}.png`,
   ]
-  const colorMap = { '#5B6EE1': '#00FF99' }
+  const colorMap = { '#5B6EE1': '#FF6699' }
   const processedImage = useProcessedImage('player1', layerUrls, colorMap)
 
   return (
-    <div className="relative w-[4rem] h-[4rem] overflow-hidden">
+    <div className="relative w-[4rem] h-[4rem] overflow-hidden scale-200">
       <img
         className="absolute w-[12rem] h-[12rem] max-w-none"
         src={processedImage ?? undefined}

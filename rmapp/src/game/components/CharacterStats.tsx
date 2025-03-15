@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { itemDetails } from '../itemList'
 import { SpriteText } from './SpriteText'
 import { CharacterPreview } from './CharacterPreview'
+import cn from 'classnames'
 
 export interface CharacterStatsProps {
   head: string
@@ -88,11 +89,18 @@ export function CharacterStats({
 
   return (
     <div className="flex flex-col flex-auto gap-[1rem]">
-      <div className="flex items-center justify-center scale-200 p-[2em] pointer-events-none">
+      <div className="flex items-center justify-center p-[1em] pointer-events-none">
         <CharacterPreview head={head} body={body} legs={legs} weapon={weapon} />
       </div>
-      <div className="w-full border-slate-700 border-b-[0.125em]" />
-      <div className="flex flex-col px-[1rem] gap-[1rem]">
+      <div
+        className={cn(
+          'flex p-[0.5rem] justify-center items-center',
+          overallStats.overweight >= 1 && 'opacity-0'
+        )}
+      >
+        <SpriteText color="#D82800">OVERWEIGHT</SpriteText>
+      </div>
+      <div className="flex flex-col px-[0.5rem] gap-[1rem]">
         {overallStats.stats.map(([key, val]: any, i: number) => (
           <div
             key={`${key}_${i}`}
@@ -104,10 +112,10 @@ export function CharacterStats({
         ))}
       </div>
       <div className="flex justify-between items-center">
-        <div className="px-[1rem]">
+        <div className="px-[0.5rem]">
           <SpriteText>ARMOR</SpriteText>
         </div>
-        <div className="flex flex-wrap px-[1rem] gap-[1rem]">
+        <div className="flex flex-wrap px-[0.5rem] gap-[1rem]">
           {overallStats.armor.map((val: number, i: number) => {
             if (val === 0) return null
             const key = ['punct', 'blast'][i]
@@ -127,11 +135,6 @@ export function CharacterStats({
           })}
         </div>
       </div>
-      {overallStats.overweight < 1 && (
-        <div className="flex px-[1rem] justify-between opacity-50">
-          <SpriteText>OVERWEIGHT</SpriteText>
-        </div>
-      )}
     </div>
   )
 }
