@@ -34,8 +34,27 @@ export function CharacterCreationScreen() {
     <div className="w-full h-full items-center justify-center p-[1rem]">
       <div className="flex flex-col gap-[0.5rem] h-full">
         <Slice9>
-          <div className="flex justify-center p-[0.5rem]">
+          <div className="flex justify-between items-center">
+            <Link to={`/`} className="-translate-y-[0.125rem]">
+              <Slice9 frameUrl="/button.png">
+                <div className="flex gap-[0.125rem] px-[0.125rem]">
+                  <Icon>{'<'}</Icon>
+                  <SpriteText>PREV</SpriteText>
+                </div>
+              </Slice9>
+            </Link>
             <SpriteText>CREATE ROBOT MASTER</SpriteText>
+            <Link
+              to={`/custom_cpu?${params}`}
+              className="-translate-y-[0.125rem]"
+            >
+              <Slice9 frameUrl="/button.png">
+                <div className="flex gap-[0.125rem] px-[0.125rem]">
+                  <SpriteText>NEXT</SpriteText>
+                  <Icon>{'>'}</Icon>
+                </div>
+              </Slice9>
+            </Link>
           </div>
         </Slice9>
 
@@ -50,7 +69,7 @@ export function CharacterCreationScreen() {
               />
             </div>
 
-            <div className="flex-2 flex flex-col">
+            <div className="flex-auto flex flex-col">
               <div className="flex px-[0.5rem] h-[2rem]">
                 <Tab active={tab === 'head'} onClick={() => setTab('head')}>
                   HEAD
@@ -68,7 +87,10 @@ export function CharacterCreationScreen() {
                   COLR
                 </Tab>
               </div>
-              <Slice9 className="relative">
+              <Slice9 className="relative flex-auto">
+                {' '}
+                <div className="flex flex-wrap">{tab === 'head' && <></>}</div>
+                {/* 
                 <div className="pt-[1rem] flex flex-col h-full">
                   <div className="flex flex-col flex-auto gap-[1rem]">
                     <div className="flex items-center justify-between px-[0.5rem]">
@@ -223,110 +245,115 @@ export function CharacterCreationScreen() {
                     </Link>
                   </div>
                 </div>
+                 */}
               </Slice9>
             </div>
-            <Slice9 className="flex-1">
-              <div className="py-[0.5rem]">
-                {itemDetails[lastSelected]?.details && (
-                  <div className="flex flex-col gap-[1rem]">
-                    <div className="flex px-[0.5rem] justify-between items-center">
-                      {itemDetails[lastSelected]?.name && (
-                        <SpriteText>
-                          {itemDetails[lastSelected].name}
-                        </SpriteText>
-                      )}
-                    </div>
+            {lastSelected && (
+              <Slice9 className="w-[16rem] h-full">
+                <div className="py-[0.5rem]">
+                  {itemDetails[lastSelected]?.details && (
+                    <div className="flex flex-col gap-[1rem]">
+                      <div className="flex px-[0.5rem] justify-between items-center">
+                        {itemDetails[lastSelected]?.name && (
+                          <SpriteText>
+                            {itemDetails[lastSelected].name}
+                          </SpriteText>
+                        )}
+                      </div>
 
-                    {itemDetails[lastSelected].details?.stats && (
-                      <>
-                        <div className="flex flex-col px-[0.5rem] gap-[1rem]">
-                          {itemDetails[lastSelected].details.stats.map(
-                            ([key, val]: any) => (
-                              <div
-                                key={key}
-                                className="flex items-center justify-between"
-                              >
-                                <SpriteText>{key}</SpriteText>
-                                <div className="flex gap-[0.25rem]">
-                                  {key === 'ELEM' ? (
-                                    <ElemLabel value={val} />
-                                  ) : (
-                                    <SpriteText>
-                                      {(val + '').toUpperCase()}
-                                    </SpriteText>
-                                  )}
+                      {itemDetails[lastSelected].details?.stats && (
+                        <>
+                          <div className="flex flex-col px-[0.5rem] gap-[1rem]">
+                            {itemDetails[lastSelected].details.stats.map(
+                              ([key, val]: any) => (
+                                <div
+                                  key={key}
+                                  className="flex items-center justify-between"
+                                >
+                                  <SpriteText>{key}</SpriteText>
+                                  <div className="flex gap-[0.25rem]">
+                                    {key === 'ELEM' ? (
+                                      <ElemLabel value={val} />
+                                    ) : (
+                                      <SpriteText>
+                                        {(val + '').toUpperCase()}
+                                      </SpriteText>
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </>
-                    )}
-                    {itemDetails[lastSelected].details?.protection && (
-                      <>
-                        <div className="flex justify-between items-center">
-                          <div className=" px-[0.5rem]">
-                            <SpriteText>ARMOR</SpriteText>
-                          </div>
-                          <div className="flex flex-wrap px-[0.5rem] gap-[1rem]">
-                            {itemDetails[lastSelected].details.protection.map(
-                              ([elem, pts]: any, i: number) => (
-                                <ElemLabel key={i} value={elem}>
-                                  {pts}
-                                </ElemLabel>
                               )
                             )}
                           </div>
-                        </div>
-                      </>
-                    )}
-                    {itemDetails[lastSelected].details?.actions && (
-                      <>
-                        <div className=" px-[0.5rem]">
-                          <SpriteText>ACTIONS</SpriteText>
-                        </div>
-                        <div className="flex flex-col px-[0.5rem] gap-[1rem]">
-                          {itemDetails[lastSelected].details.actions.map(
-                            ([action, cost]: any) => (
-                              <div
-                                key={action}
-                                className="flex items-center justify-between"
-                              >
-                                <SpriteText>{action.toUpperCase()}</SpriteText>
-                                <div className="flex gap-[0.25rem]">
-                                  <Icon>E</Icon>
-                                  <SpriteText>{cost}</SpriteText>
+                        </>
+                      )}
+                      {itemDetails[lastSelected].details?.protection && (
+                        <>
+                          <div className="flex justify-between items-center">
+                            <div className=" px-[0.5rem]">
+                              <SpriteText>ARMOR</SpriteText>
+                            </div>
+                            <div className="flex flex-wrap px-[0.5rem] gap-[1rem]">
+                              {itemDetails[lastSelected].details.protection.map(
+                                ([elem, pts]: any, i: number) => (
+                                  <ElemLabel key={i} value={elem}>
+                                    {pts}
+                                  </ElemLabel>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        </>
+                      )}
+                      {itemDetails[lastSelected].details?.actions && (
+                        <>
+                          <div className=" px-[0.5rem]">
+                            <SpriteText>ACTIONS</SpriteText>
+                          </div>
+                          <div className="flex flex-col px-[0.5rem] gap-[1rem]">
+                            {itemDetails[lastSelected].details.actions.map(
+                              ([action, cost]: any) => (
+                                <div
+                                  key={action}
+                                  className="flex items-center justify-between"
+                                >
+                                  <SpriteText>
+                                    {action.toUpperCase()}
+                                  </SpriteText>
+                                  <div className="flex gap-[0.25rem]">
+                                    <Icon>E</Icon>
+                                    <SpriteText>{cost}</SpriteText>
+                                  </div>
                                 </div>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </>
-                    )}
-                    {itemDetails[lastSelected].details?.cpu && (
-                      <>
-                        <div className=" px-[0.5rem]">
-                          <SpriteText>CPU</SpriteText>
-                        </div>
-                        <div className="flex flex-col px-[0.5rem] gap-[1rem]">
-                          {itemDetails[lastSelected].details.cpu.map(
-                            (cpu: string, i: number) => (
-                              <div
-                                key={`${cpu}_${i}`}
-                                className="flex items-center justify-between"
-                              >
-                                <SpriteText>{i + 1}</SpriteText>
-                                <SpriteText>{cpu.toUpperCase()}</SpriteText>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
-            </Slice9>
+                              )
+                            )}
+                          </div>
+                        </>
+                      )}
+                      {itemDetails[lastSelected].details?.cpu && (
+                        <>
+                          <div className=" px-[0.5rem]">
+                            <SpriteText>CPU</SpriteText>
+                          </div>
+                          <div className="flex flex-col px-[0.5rem] gap-[1rem]">
+                            {itemDetails[lastSelected].details.cpu.map(
+                              (cpu: string, i: number) => (
+                                <div
+                                  key={`${cpu}_${i}`}
+                                  className="flex items-center justify-between"
+                                >
+                                  <SpriteText>{i + 1}</SpriteText>
+                                  <SpriteText>{cpu.toUpperCase()}</SpriteText>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </Slice9>
+            )}
           </div>
         </div>
 

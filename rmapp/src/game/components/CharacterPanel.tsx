@@ -6,6 +6,7 @@ import { ElemLabel } from './ElemLabel'
 import { Slice9 } from './Slice9'
 import { Tab } from './Tab'
 import { Icon } from './Icon'
+import { Panel } from './Panel'
 
 export interface CharacterStatsProps {
   head: string
@@ -41,29 +42,12 @@ export function CharacterPanel(props: CharacterStatsProps) {
           ))}
         </div>
         <Slice9 className="relative flex-auto">
-          <div className="h-full flex flex-col gap-[1rem]">
-            {tab === 's' && <OverallStats {...props} />}
-            {tab === 'p' && <Parts {...props} />}
-            {tab === 'c' && <CPU {...props} />}
-            {tab === 'a' && <Actions {...props} />}
-            {tab === 'r' && <Armor {...props} />}
-          </div>
+          {tab === 's' && <OverallStats {...props} />}
+          {tab === 'p' && <Parts {...props} />}
+          {tab === 'c' && <CPU {...props} />}
+          {tab === 'a' && <Actions {...props} />}
+          {tab === 'r' && <Armor {...props} />}
         </Slice9>
-      </div>
-    </div>
-  )
-}
-
-function Panel({ children, title }: { children: ReactNode; title: string }) {
-  return (
-    <div className="h-full flex flex-col">
-      <SpriteText color="#38B8F8" className="p-[0.5rem]">
-        {title.toUpperCase()}
-      </SpriteText>
-      <div className="flex-auto relative">
-        <div className="inset-0 absolute flex flex-col py-[0.5rem] gap-[1rem] overflow-auto custom-scroll">
-          {children}
-        </div>
       </div>
     </div>
   )
