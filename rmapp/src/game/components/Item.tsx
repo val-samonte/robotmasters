@@ -40,7 +40,7 @@ export function Item({
   if (!processedImage) return null
 
   return (
-    <Slice9 frameUrl={processedImage}>
+    <Slice9 frameUrl={processedImage} className="w-full">
       <div className="flex items-center gap-[0.5rem] justify-between">
         <SpriteText>{name}</SpriteText>
         <div className="w-[4rem] h-[1rem] flex items-center justify-center relative overflow-visible">

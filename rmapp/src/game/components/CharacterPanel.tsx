@@ -5,11 +5,11 @@ import { CharacterPreview } from './CharacterPreview'
 import { ElemLabel } from './ElemLabel'
 import { Slice9 } from './Slice9'
 import { Tab } from './Tab'
-import { Icon } from './Icon'
 import { Panel } from './Panel'
 import { Item } from './Item'
 import { CpuChip } from './CpuChip'
 import { HelpTip } from './HelpTip'
+import { ActionChip } from './ActionChip'
 
 export interface CharacterStatsProps {
   head: string
@@ -123,26 +123,46 @@ function Parts({ head, body, legs, weapon }: CharacterStatsProps) {
   return (
     <Panel title="PARTS">
       <div className="flex flex-col gap-[0.25rem]">
-        <Item
-          name={itemDetails[weapon].name}
-          src={itemDetails[weapon].details.img}
-          className="w-[4rem] h-[2rem]"
-        />
-        <Item
-          name={itemDetails['head_' + head].name.replace('HEAD', '')}
-          src={itemDetails['head_' + head].details.img}
-          className="w-[4rem] h-[2rem]"
-        />
-        <Item
-          name={itemDetails['body_' + body].name.replace('BODY', '')}
-          src={itemDetails['body_' + body].details.img}
-          className="w-[4rem] h-[2rem]"
-        />
-        <Item
-          name={itemDetails['legs_' + legs].name.replace('LEGS', '')}
-          src={itemDetails['legs_' + legs].details.img}
-          className="w-[4rem] h-[2rem]"
-        />
+        <HelpTip
+          title={itemDetails[weapon].name}
+          message={itemDetails[weapon].desc}
+        >
+          <Item
+            name={itemDetails[weapon].name}
+            src={itemDetails[weapon].details.img}
+            className="w-[4rem] h-[2rem]"
+          />
+        </HelpTip>
+        <HelpTip
+          title={itemDetails['head_' + head].name}
+          message={itemDetails['head_' + head].desc}
+        >
+          <Item
+            name={itemDetails['head_' + head].name.replace('HEAD', '')}
+            src={itemDetails['head_' + head].details.img}
+            className="w-[4rem] h-[2rem]"
+          />
+        </HelpTip>
+        <HelpTip
+          title={itemDetails['body_' + body].name}
+          message={itemDetails['body_' + body].desc}
+        >
+          <Item
+            name={itemDetails['body_' + body].name.replace('BODY', '')}
+            src={itemDetails['body_' + body].details.img}
+            className="w-[4rem] h-[2rem]"
+          />
+        </HelpTip>
+        <HelpTip
+          title={itemDetails['legs_' + legs].name}
+          message={itemDetails['legs_' + legs].desc}
+        >
+          <Item
+            name={itemDetails['legs_' + legs].name.replace('LEGS', '')}
+            src={itemDetails['legs_' + legs].details.img}
+            className="w-[4rem] h-[2rem]"
+          />
+        </HelpTip>
       </div>
     </Panel>
   )
@@ -175,25 +195,10 @@ function Actions({ head, body, legs, weapon }: CharacterStatsProps) {
   }, [head, body, legs, weapon])
   return (
     <Panel title="ACTIONS">
-      <div className="flex flex-col gap-[0.25rem]">
-        {actions.map(([action, cost]: any) => {
-          return (
-            <div
-              key={action}
-              className="flex items-center justify-between px-[0.5rem]"
-            >
-              <Slice9 frameUrl="/action_frame.png">
-                <div className="pl-[0.25rem] flex gap-[0.5rem]">
-                  <SpriteText>{action.toUpperCase()}</SpriteText>
-                </div>
-              </Slice9>
-              <div className="flex gap-[0.25rem]">
-                <Icon>E</Icon>
-                <SpriteText>{cost}</SpriteText>
-              </div>
-            </div>
-          )
-        })}
+      <div className="flex flex-col gap-[0.25rem] px-[0.5rem]">
+        {actions.map(([action, cost]: any, i: number) => (
+          <ActionChip key={i} name={action} cost={cost} />
+        ))}
       </div>
     </Panel>
   )
@@ -204,6 +209,7 @@ function Armor({ head, body, legs }: CharacterStatsProps) {
     const armor: number[] = [
       0, // punct
       0, // blast
+      0, // heat
     ]
     itemDetails['head_' + head].details.protection.forEach(
       ([elem, val]: any) => {
@@ -211,6 +217,8 @@ function Armor({ head, body, legs }: CharacterStatsProps) {
           armor[0] += val
         } else if (elem === 'B') {
           armor[1] += val
+        } else if (elem === 'H') {
+          armor[2] += val
         }
       }
     )
@@ -220,6 +228,8 @@ function Armor({ head, body, legs }: CharacterStatsProps) {
           armor[0] += val
         } else if (elem === 'B') {
           armor[1] += val
+        } else if (elem === 'H') {
+          armor[2] += val
         }
       }
     )
@@ -229,6 +239,8 @@ function Armor({ head, body, legs }: CharacterStatsProps) {
           armor[0] += val
         } else if (elem === 'B') {
           armor[1] += val
+        } else if (elem === 'H') {
+          armor[2] += val
         }
       }
     )
@@ -239,7 +251,7 @@ function Armor({ head, body, legs }: CharacterStatsProps) {
     <Panel title="ARMOR">
       {armor.map((val: number, i: number) => {
         if (val === 0) return null
-        const elem = ['P', 'B'][i]
+        const elem = ['P', 'B', 'H'][i]
         return (
           <div
             key={val}

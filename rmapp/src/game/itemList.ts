@@ -1,5 +1,6 @@
 export const cpuDesc: any = {
   ground: 'When grounded',
+  air: 'When on air',
   'w.lean': 'When leaning on wall',
   'w.slip': 'When sliding on wall',
   flip: 'When flipped',
@@ -131,8 +132,22 @@ export const itemDetails: any = {
     details: {
       img: '/icons/head_0.png',
       stats: [['WGT', 2]],
-      cpu: ['bat.10', 'roll 10', 'w.slip', 'ground', 'no ammo', 'w.lean'],
+      cpu: ['bat.10', 'roll 10', 'air', 'ground', 'no ammo', 'w.lean'],
       protection: [['P', 3]],
+    },
+  },
+  head_1: {
+    type: 'head',
+    name: 'APOLLO HEAD',
+    desc: 'Basic head. Contains standard CPU.',
+    details: {
+      img: '/icons/head_1.png',
+      stats: [['WGT', 4]],
+      cpu: ['bat.10', 'roll 20', 'w.slip', 'roll 10', 'no ammo', 'w.lean'],
+      protection: [
+        ['P', 2],
+        ['H', 2],
+      ],
     },
   },
   head_2: {
@@ -145,7 +160,8 @@ export const itemDetails: any = {
       cpu: ['bat.20', 'roll 20', 'no ammo', 'roll 20', 'w.lean', 'w.slip'],
       protection: [
         ['P', 1],
-        ['B', 3],
+        ['B', 4],
+        ['H', 1],
       ],
     },
   },
@@ -164,6 +180,24 @@ export const itemDetails: any = {
       protection: [['P', 10]],
     },
   },
+  body_1: {
+    type: 'body',
+    name: 'APOLLO BODY',
+    desc: 'Standard body with decent generator.',
+    details: {
+      img: '/icons/body_1.png',
+      stats: [
+        ['GEN', '2:2'],
+        ['POW', 28],
+        ['WGT', 10],
+      ],
+      actions: [['charge', 0]],
+      protection: [
+        ['P', 6],
+        ['H', 6],
+      ],
+    },
+  },
   body_2: {
     type: 'body',
     name: 'HERCULES BODY',
@@ -178,24 +212,44 @@ export const itemDetails: any = {
       actions: [['charge', 0]],
       protection: [
         ['P', 4],
-        ['B', 8],
+        ['B', 9],
+        ['H', 4],
       ],
     },
   },
   legs_0: {
     type: 'legs',
     name: 'HERMES LEGS',
-    desc: 'Unlocks wall jumping.',
+    desc: 'Unlocks double jumping.',
     details: {
       img: '/icons/legs_0.png',
       stats: [['WGT', 4]],
+      actions: [
+        ['d.jump', 6],
+        ['jump', 3],
+        ['turn', 1],
+        ['run', 0],
+      ],
+      protection: [['P', 3]],
+    },
+  },
+  legs_1: {
+    type: 'legs',
+    name: 'APOLLO LEGS',
+    desc: 'Unlocks wall jumping.',
+    details: {
+      img: '/icons/legs_1.png',
+      stats: [['WGT', 6]],
       actions: [
         ['w.jump', 6],
         ['jump', 3],
         ['turn', 1],
         ['run', 0],
       ],
-      protection: [['P', 3]],
+      protection: [
+        ['P', 2],
+        ['H', 2],
+      ],
     },
   },
   legs_2: {
@@ -212,7 +266,8 @@ export const itemDetails: any = {
       ],
       protection: [
         ['P', 1],
-        ['B', 3],
+        ['B', 4],
+        ['H', 1],
       ],
     },
   },
@@ -224,7 +279,7 @@ export const itemDetails: any = {
       img: '/icons/hg_0.png',
       stats: [
         ['ELEM', 'P'],
-        ['DMG', 4],
+        ['DMG', 8],
         ['ROF', 15],
         ['AMMO', 12],
         ['RCD', 60],
@@ -244,7 +299,7 @@ export const itemDetails: any = {
       img: '/icons/hg_1.png',
       stats: [
         ['ELEM', 'P'],
-        ['DMG', 10],
+        ['DMG', 14],
         ['ROF', 120],
         ['AMMO', 6],
         ['RCD', 90],
@@ -264,7 +319,7 @@ export const itemDetails: any = {
       img: '/icons/hg_2.png',
       stats: [
         ['ELEM', 'H'],
-        ['DMG', 6],
+        ['DMG', 8],
         ['ROF', 30],
         ['AMMO', 3],
         ['RCD', 60],
@@ -302,7 +357,7 @@ export const itemDetails: any = {
     details: {
       img: '/icons/gl_1.png',
       stats: [
-        ['ELEM', 'B'],
+        ['ELEM', 'H'],
         ['DMG', 16],
         ['ROF', 60],
         ['AMMO', 3],

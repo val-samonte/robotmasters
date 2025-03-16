@@ -15,6 +15,7 @@ import { paintAtom } from '../../atoms/paintAtom'
 import { helpTipAtom } from '../../atoms/helpTipAtom'
 import { HelpTip } from '../components/HelpTip'
 import { CpuChip } from '../components/CpuChip'
+import { ActionChip } from '../components/ActionChip'
 
 export function CharacterCreationScreen() {
   const [tab, setTab] = useState('head')
@@ -25,7 +26,7 @@ export function CharacterCreationScreen() {
   const [weapon, setWeapon] = useState(searchParams.get('weapon') ?? 'hg_0')
   const [paint, setPaint] = useAtom(paintAtom)
   const [lastSelected, setLastSelected] = useState('')
-  const [helpTip, setHelpTip] = useAtom(helpTipAtom)
+  const [helpTip] = useAtom(helpTipAtom)
 
   useEffect(() => {
     if (tab === 'color') {
@@ -243,25 +244,10 @@ export function CharacterCreationScreen() {
                         <div className="px-[0.5rem]">
                           <SpriteText color="#38B8F8">ACTIONS</SpriteText>
                         </div>
-                        <div className="flex flex-col gap-[0.25rem]">
+                        <div className="flex flex-col gap-[0.25rem] px-[0.5rem]">
                           {itemDetails[lastSelected].details.actions.map(
-                            ([action, cost]: any) => (
-                              <div
-                                key={action}
-                                className="flex items-center justify-between px-[0.5rem]"
-                              >
-                                <Slice9 frameUrl="/action_frame.png">
-                                  <div className="pl-[0.25rem] flex gap-[0.5rem]">
-                                    <SpriteText>
-                                      {action.toUpperCase()}
-                                    </SpriteText>
-                                  </div>
-                                </Slice9>
-                                <div className="flex gap-[0.25rem]">
-                                  <Icon>E</Icon>
-                                  <SpriteText>{cost}</SpriteText>
-                                </div>
-                              </div>
+                            ([action, cost]: any, i: number) => (
+                              <ActionChip key={i} name={action} cost={cost} />
                             )
                           )}
                         </div>
