@@ -12,6 +12,49 @@ export const cpuDesc: any = {
   always: 'Always',
 }
 
+export const statTips: any = {
+  HP: {
+    title: 'Hit Points (HP)',
+    message: 'The "life" of the Robot Master.',
+  },
+  ENG: {
+    title: 'Energy (ENG)',
+    message: 'Required for some actions.',
+  },
+  GEN: {
+    title: 'Generator (GEN)',
+    message: 'Energy regen rate : Per frame.',
+  },
+  POW: {
+    title: 'Power (POW)',
+    message: 'Robot carrying capacity.',
+  },
+  WGT: {
+    title: 'Weight (WGT)',
+    message: 'Overweight if POW < WGT.',
+  },
+  ELEM: {
+    title: 'Element (ELEM)',
+    message: 'Weapon elemental property.',
+  },
+  DMG: {
+    title: 'Damage (DMG)',
+    message: 'Weapon damage.',
+  },
+  ROF: {
+    title: 'Rate of Fire (ROF)',
+    message: 'Frames per shot.',
+  },
+  AMMO: {
+    title: 'Ammunition (AMMO)',
+    message: 'Shots before reload.',
+  },
+  RCD: {
+    title: 'Reload Cooldown (RCD)',
+    message: 'Frames to reload.',
+  },
+}
+
 // 0 is grounded
 // 1 wall leaning
 // 2 wall slipping
@@ -36,8 +79,8 @@ export const cpuDesc: any = {
 export const paints = [
   {
     id: 'default',
-    primary: '#0078FF',
-    secondary: '#00ECDC',
+    primary: '#5B6EE1',
+    secondary: '#FFFFFF',
   },
   {
     id: 'cut',
@@ -69,6 +112,11 @@ export const paints = [
     primary: '#E45C10',
     secondary: '#F8F8F8',
   },
+  {
+    id: 'rock',
+    primary: '#0078FF',
+    secondary: '#00ECDC',
+  },
 ]
 
 export const itemDetails: any = {
@@ -81,7 +129,7 @@ export const itemDetails: any = {
     name: 'HERMES HEAD',
     desc: 'Light head. Contains agile CPU.',
     details: {
-      img: '/head_light.png',
+      img: '/icons/head_0.png',
       stats: [['WGT', 2]],
       cpu: ['bat.10', 'roll 10', 'w.slip', 'ground', 'no ammo', 'w.lean'],
       protection: [['P', 3]],
@@ -92,7 +140,7 @@ export const itemDetails: any = {
     name: 'HERCULES HEAD',
     desc: 'Heavy head with all rounder CPU.',
     details: {
-      img: '/head_heavy.png',
+      img: '/icons/head_2.png',
       stats: [['WGT', 5]],
       cpu: ['bat.20', 'roll 20', 'no ammo', 'roll 20', 'w.lean', 'w.slip'],
       protection: [
@@ -106,10 +154,10 @@ export const itemDetails: any = {
     name: 'HERMES BODY',
     desc: 'Light body capable of fast charging.',
     details: {
-      img: '/body_light.png',
+      img: '/icons/body_0.png',
       stats: [
-        ['POW', 18],
         ['GEN', '1:1'],
+        ['POW', 18],
         ['WGT', 8],
       ],
       actions: [['charge', 0]],
@@ -121,10 +169,10 @@ export const itemDetails: any = {
     name: 'HERCULES BODY',
     desc: 'More power output in exchange of slow generator.',
     details: {
-      img: '/body_heavy.png',
+      img: '/icons/body_2.png',
       stats: [
-        ['POW', 38],
         ['GEN', '1:2'],
+        ['POW', 38],
         ['WGT', 12],
       ],
       actions: [['charge', 0]],
@@ -139,7 +187,7 @@ export const itemDetails: any = {
     name: 'HERMES LEGS',
     desc: 'Unlocks wall jumping.',
     details: {
-      img: '/legs_light.png',
+      img: '/icons/legs_0.png',
       stats: [['WGT', 4]],
       actions: [
         ['w.jump', 6],
@@ -155,7 +203,7 @@ export const itemDetails: any = {
     name: 'HERCULES LEGS',
     desc: 'Heavy duty legs that offers better protection.',
     details: {
-      img: '/legs_heavy.png',
+      img: '/icons/legs_2.png',
       stats: [['WGT', 8]],
       actions: [
         ['jump', 3],
@@ -173,7 +221,7 @@ export const itemDetails: any = {
     name: 'P420',
     desc: 'All rounder weapon with high ROF.',
     details: {
-      img: '/hg_0.png',
+      img: '/icons/hg_0.png',
       stats: [
         ['ELEM', 'P'],
         ['DMG', 4],
@@ -193,7 +241,7 @@ export const itemDetails: any = {
     name: 'MONGOOSE',
     desc: 'Powerful magnum with slow ROF.',
     details: {
-      img: '/hg_1.png',
+      img: '/icons/hg_1.png',
       stats: [
         ['ELEM', 'P'],
         ['DMG', 10],
@@ -213,7 +261,7 @@ export const itemDetails: any = {
     name: 'Q2.BLSTR',
     desc: 'Shoots energy projectiles.',
     details: {
-      img: '/hg_2.png',
+      img: '/icons/hg_2.png',
       stats: [
         ['ELEM', 'H'],
         ['DMG', 6],
@@ -233,7 +281,7 @@ export const itemDetails: any = {
     name: 'HKP',
     desc: '40mm grenade launcher. Explodes on impact.',
     details: {
-      img: '/gl_0.png',
+      img: '/icons/gl_0.png',
       stats: [
         ['ELEM', 'B'],
         ['DMG', 24],
@@ -252,7 +300,7 @@ export const itemDetails: any = {
     name: 'Q2.GL',
     desc: 'High ROF GL. Bounces off walls.',
     details: {
-      img: '/gl_1.png',
+      img: '/icons/gl_1.png',
       stats: [
         ['ELEM', 'B'],
         ['DMG', 16],
@@ -272,7 +320,7 @@ export const itemDetails: any = {
     name: 'MM1',
     desc: '40mm GL with large magazine.',
     details: {
-      img: '/gl_2.png',
+      img: '/icons/gl_2.png',
       stats: [
         ['ELEM', 'B'],
         ['DMG', 8],

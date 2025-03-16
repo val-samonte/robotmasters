@@ -12,6 +12,7 @@
 canvas,
 img {
   image-rendering: pixelated;
+  user-select: none;
 }
 
 body {

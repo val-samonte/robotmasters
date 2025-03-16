@@ -1,6 +1,6 @@
 import { SpriteText } from '../components/SpriteText'
 import { useEffect, useMemo, useState } from 'react'
-import { itemDetails, paints } from '../itemList'
+import { itemDetails, paints, statTips } from '../itemList'
 import { CharacterPanel } from '../components/CharacterPanel'
 import { Link, useSearchParams } from 'react-router'
 import { Slice9 } from '../components/Slice9'
@@ -10,9 +10,11 @@ import { ElemLabel } from '../components/ElemLabel'
 import { Selectable } from '../components/Selectable'
 import { Panel } from '../components/Panel'
 import { Item } from '../components/Item'
-import { PaintItem } from '../components/PaintItem'
 import { useAtom } from 'jotai'
 import { paintAtom } from '../../atoms/paintAtom'
+import { helpTipAtom } from '../../atoms/helpTipAtom'
+import { HelpTip } from '../components/HelpTip'
+import { CpuChip } from '../components/CpuChip'
 
 export function CharacterCreationScreen() {
   const [tab, setTab] = useState('head')
@@ -23,6 +25,7 @@ export function CharacterCreationScreen() {
   const [weapon, setWeapon] = useState(searchParams.get('weapon') ?? 'hg_0')
   const [paint, setPaint] = useAtom(paintAtom)
   const [lastSelected, setLastSelected] = useState('')
+  const [helpTip, setHelpTip] = useAtom(helpTipAtom)
 
   useEffect(() => {
     if (tab === 'color') {
@@ -144,21 +147,20 @@ export function CharacterCreationScreen() {
                               : i.name
 
                           return (
-                            <Selectable
-                              key={id}
-                              selected={selected}
-                              onClick={onClick}
-                            >
-                              <Item
-                                name={name}
-                                src={i.details.img}
-                                className={
-                                  i.type === 'weapon'
-                                    ? 'w-[4rem] h-[2rem]'
-                                    : 'w-[2rem] h-[2rem]'
-                                }
-                              />
-                            </Selectable>
+                            <HelpTip title={name} message={i.desc}>
+                              <Selectable
+                                key={id}
+                                selected={selected}
+                                onClick={onClick}
+                                className="w-full"
+                              >
+                                <Item
+                                  name={name}
+                                  src={i.details.img}
+                                  className={'w-[4rem] h-[2rem]'}
+                                />
+                              </Selectable>
+                            </HelpTip>
                           )
                         })}
                     </div>
@@ -193,9 +195,10 @@ export function CharacterCreationScreen() {
                         <div className="flex flex-col px-[0.5rem] gap-[1rem]">
                           {itemDetails[lastSelected].details.stats.map(
                             ([key, val]: any) => (
-                              <div
+                              <HelpTip
+                                title={statTips[key].title}
+                                message={statTips[key].message}
                                 key={key}
-                                className="flex items-center justify-between"
                               >
                                 <SpriteText>{key}</SpriteText>
                                 <div className="flex gap-[0.25rem]">
@@ -207,7 +210,7 @@ export function CharacterCreationScreen() {
                                     </SpriteText>
                                   )}
                                 </div>
-                              </div>
+                              </HelpTip>
                             )
                           )}
                         </div>
@@ -269,24 +272,12 @@ export function CharacterCreationScreen() {
                         <div className=" px-[0.5rem]">
                           <SpriteText color="#38B8F8">CPU</SpriteText>
                         </div>
-                        <div className="flex flex-col gap-[0.25rem]">
+                        <div className="flex flex-col gap-[0.25rem] px-[0.5rem]">
                           {[
                             ...itemDetails[lastSelected].details.cpu,
                             'always',
                           ].map((cpu: string, i: number) => (
-                            <div
-                              key={cpu + '_' + i}
-                              className="flex items-center justify-between px-[0.5rem]"
-                            >
-                              <Slice9 frameUrl="/cpu_frame.png">
-                                <div className="pr-[0.25rem] flex gap-[0.5rem]">
-                                  <SpriteText color="#F8E0A0">
-                                    {i + 1}
-                                  </SpriteText>
-                                  <SpriteText>{cpu.toUpperCase()}</SpriteText>
-                                </div>
-                              </Slice9>
-                            </div>
+                            <CpuChip key={i} name={cpu} index={i} />
                           ))}
                         </div>
                       </>
@@ -300,11 +291,15 @@ export function CharacterCreationScreen() {
 
         <Slice9>
           <div className="p-[0.5rem] flex flex-col gap-[0.5rem] landscape:h-[3.5rem] overflow-auto">
-            {itemDetails[lastSelected]?.name && (
-              <SpriteText>{itemDetails[lastSelected].name}</SpriteText>
-            )}
-            {itemDetails[lastSelected]?.desc && (
-              <SpriteText>{itemDetails[lastSelected].desc}</SpriteText>
+            {helpTip ? (
+              <>
+                {helpTip.title && (
+                  <SpriteText color="#38B8F8">{helpTip.title}</SpriteText>
+                )}
+                <SpriteText>{helpTip.message}</SpriteText>
+              </>
+            ) : (
+              <SpriteText>Please select parts and press NEXT.</SpriteText>
             )}
           </div>
         </Slice9>

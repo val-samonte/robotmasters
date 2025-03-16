@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { itemDetails } from '../itemList'
+import { itemDetails, statTips } from '../itemList'
 import { SpriteText } from './SpriteText'
 import { CharacterPreview } from './CharacterPreview'
 import { ElemLabel } from './ElemLabel'
@@ -8,6 +8,8 @@ import { Tab } from './Tab'
 import { Icon } from './Icon'
 import { Panel } from './Panel'
 import { Item } from './Item'
+import { CpuChip } from './CpuChip'
+import { HelpTip } from './HelpTip'
 
 export interface CharacterStatsProps {
   head: string
@@ -98,9 +100,11 @@ function OverallStats({ head, body, legs, weapon }: CharacterStatsProps) {
         const overweight =
           (key === 'POW' || key === 'WGT') && overallStats.weightRatio < 1
         return (
-          <div
+          <HelpTip
+            title={statTips[key].title}
+            message={statTips[key].message}
             key={`${key}_${i}`}
-            className="flex items-center justify-between px-[0.5rem]"
+            className="flex px-[0.5rem]"
           >
             <SpriteText color={overweight ? '#F89838' : '#FFFFFF'}>
               {key.toUpperCase()}
@@ -108,7 +112,7 @@ function OverallStats({ head, body, legs, weapon }: CharacterStatsProps) {
             <SpriteText color={overweight ? '#F89838' : '#FFFFFF'}>
               {val + ''}
             </SpriteText>
-          </div>
+          </HelpTip>
         )
       })}
     </Panel>
@@ -127,17 +131,17 @@ function Parts({ head, body, legs, weapon }: CharacterStatsProps) {
         <Item
           name={itemDetails['head_' + head].name.replace('HEAD', '')}
           src={itemDetails['head_' + head].details.img}
-          className="w-[2rem] h-[2rem]"
+          className="w-[4rem] h-[2rem]"
         />
         <Item
           name={itemDetails['body_' + body].name.replace('BODY', '')}
           src={itemDetails['body_' + body].details.img}
-          className="w-[2rem] h-[2rem]"
+          className="w-[4rem] h-[2rem]"
         />
         <Item
           name={itemDetails['legs_' + legs].name.replace('LEGS', '')}
           src={itemDetails['legs_' + legs].details.img}
-          className="w-[2rem] h-[2rem]"
+          className="w-[4rem] h-[2rem]"
         />
       </div>
     </Panel>
@@ -147,23 +151,11 @@ function Parts({ head, body, legs, weapon }: CharacterStatsProps) {
 function CPU({ head }: CharacterStatsProps) {
   return (
     <Panel title={`CPU`}>
-      <div className="flex flex-col gap-[0.25rem]">
+      <div className="flex flex-col gap-[0.25rem] px-[0.5rem]">
         {[...itemDetails['head_' + head].details.cpu, 'always'].map(
-          (name: string, i: number) => {
-            return (
-              <div
-                key={name + '_' + i}
-                className="flex items-center justify-between px-[0.5rem]"
-              >
-                <Slice9 frameUrl="/cpu_frame.png">
-                  <div className="pr-[0.25rem] flex gap-[0.5rem]">
-                    <SpriteText color="#F8E0A0">{i + 1}</SpriteText>
-                    <SpriteText>{name.toUpperCase()}</SpriteText>
-                  </div>
-                </Slice9>
-              </div>
-            )
-          }
+          (name: string, i: number) => (
+            <CpuChip key={i} name={name} index={i} />
+          )
         )}
       </div>
     </Panel>
