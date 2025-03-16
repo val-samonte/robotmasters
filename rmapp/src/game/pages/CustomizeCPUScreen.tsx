@@ -1,11 +1,10 @@
 import { Link, useSearchParams } from 'react-router'
 import { SpriteText } from '../components/SpriteText'
 import { CharacterPanel } from '../components/CharacterPanel'
-import { cpuDesc, itemDetails } from '../itemList'
+import { itemDetails } from '../itemList'
 import { useEffect, useMemo, useState } from 'react'
 import cn from 'classnames'
-import { Main } from '../components/Main'
-import { useAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import { paintAtom } from '../../atoms/paintAtom'
 import { Slice9 } from '../components/Slice9'
 import { Icon } from '../components/Icon'
@@ -20,7 +19,7 @@ export function CustomizeCPUScreen() {
   const [searchParams] = useSearchParams()
   const [selected, setSelected] = useState<number | null>(null)
   const [mapping, setMapping] = useState<(number | undefined)[]>([])
-  const [paint, setPaint] = useAtom(paintAtom)
+  const setPaint = useSetAtom(paintAtom)
   const [helpTip] = useAtom(helpTipAtom)
 
   const head = searchParams.get('head') ?? '0'
@@ -92,7 +91,7 @@ export function CustomizeCPUScreen() {
               />
             </div>
 
-            <Slice9 className="flex-auto relative">
+            <Slice9 className="flex-auto min-w-[24rem] relative">
               <Panel title="CPU">
                 <div className="flex">
                   <div className="flex-1 flex flex-col items-end gap-[0.25rem]">
