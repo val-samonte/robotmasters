@@ -24,7 +24,7 @@ export const statTips: any = {
   },
   GEN: {
     title: 'Generator (GEN)',
-    message: 'Energy regen rate : Per frame.',
+    message: 'Energy regen : per frame.',
   },
   POW: {
     title: 'Power (POW)',
@@ -132,7 +132,7 @@ export const itemDetails: any = {
     details: {
       img: '/icons/head_0.png',
       stats: [['WGT', 2]],
-      cpu: ['bat.10', 'roll 10', 'air', 'ground', 'no ammo', 'w.lean'],
+      cpu: ['bat.10', 'roll 10', 'w.slip', 'ground', 'no ammo', 'w.lean'],
       protection: [['P', 3]],
     },
   },
@@ -220,12 +220,12 @@ export const itemDetails: any = {
   legs_0: {
     type: 'legs',
     name: 'HERMES LEGS',
-    desc: 'Unlocks double jumping.',
+    desc: 'Unlocks wall jumping.',
     details: {
       img: '/icons/legs_0.png',
       stats: [['WGT', 4]],
       actions: [
-        ['d.jump', 6],
+        ['w.jump', 6],
         ['jump', 3],
         ['turn', 1],
         ['run', 0],

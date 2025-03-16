@@ -15,7 +15,7 @@ export function Panel({ children, title }: PanelProps) {
         </SpriteText>
       )}
       <div className="flex-auto relative">
-        <div className="inset-0 absolute flex flex-col py-[0.5rem] gap-[1rem] overflow-auto custom-scroll">
+        <div className="inset-0 absolute flex flex-col py-[0.5rem] gap-[1rem] overflow-x-hidden overflow-y-auto custom-scroll">
           {children}
         </div>
       </div>

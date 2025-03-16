@@ -29,6 +29,12 @@ export function CharacterCreationScreen() {
   const [helpTip] = useAtom(helpTipAtom)
 
   useEffect(() => {
+    if (searchParams.has('paint')) {
+      setPaint(searchParams.get('paint')!)
+    }
+  }, [searchParams])
+
+  useEffect(() => {
     if (tab === 'color') {
       setLastSelected('')
       return
@@ -43,14 +49,15 @@ export function CharacterCreationScreen() {
       body,
       legs,
       weapon,
+      paint,
     })
     return p.toString()
-  }, [head, body, legs, weapon])
+  }, [head, body, legs, weapon, paint])
 
   return (
     <div className="w-full h-full items-center justify-center p-[1rem]">
       <div className="flex flex-col gap-[0.5rem] h-full">
-        <Slice9>
+        <Slice9 className="h-[4rem]">
           <div className="flex justify-between items-center">
             <Link to={`/`} className="-translate-y-[0.125rem]">
               <Slice9 frameUrl="/button.png">

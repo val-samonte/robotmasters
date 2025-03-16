@@ -1,8 +1,6 @@
 import cn from 'classnames'
 import React, { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai'
-
-// Assuming rootFontSizeAtom is defined elsewhere
 import { rootFontSizeAtom } from '../../atoms/rootFontSizeAtom'
 
 interface Slice9Props {
@@ -11,10 +9,9 @@ interface Slice9Props {
   frameUrl?: string
 }
 
-// Embedded image cache with Object URLs
 const imageCache: {
   [url: string]: {
-    objectUrls: string[] // 9 slices as Object URLs
+    objectUrls: string[]
     tileSize: number
     loaded: boolean
     listeners: (() => void)[]
@@ -121,7 +118,10 @@ export function Slice9({
   return (
     <div
       className={cn('flex flex-col pointer-events-none', className)}
-      style={{ fontSize: `${wrapperFontSize}px` }}
+      style={{
+        fontSize: `${wrapperFontSize}px`,
+        animationFillMode: 'forwards',
+      }}
     >
       <div className="flex">
         <img
@@ -152,13 +152,13 @@ export function Slice9({
           draggable="false"
         />
         <div
-          className="flex-1 pointer-events-auto"
+          className="flex-1 pointer-events-auto relative"
           style={{
             minWidth: 0,
             minHeight: 0,
             fontSize: '1rem',
-            backgroundImage: `url(${sliceUrls[4]})`, // Center slice [1, 1]
-            backgroundRepeat: 'repeat', // Repeat x and y
+            backgroundImage: `url(${sliceUrls[4]})`,
+            backgroundRepeat: 'repeat',
           }}
         >
           {children}

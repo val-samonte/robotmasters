@@ -9,6 +9,15 @@
   }
 }
 
+@keyframes snap {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-0.5rem);
+  }
+}
+
 canvas,
 img {
   image-rendering: pixelated;

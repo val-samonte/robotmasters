@@ -108,7 +108,8 @@ const spriteSheetData: SpriteSheetData = {
     _: { x: 32, y: 56 },
     '<': { x: 40, y: 56 },
     '>': { x: 48, y: 56 },
-    '"': { x: 56, y: 56 },
+    "'": { x: 56, y: 56 },
+    '"': { x: 64, y: 56 },
   },
 }
 
