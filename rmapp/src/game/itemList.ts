@@ -47,7 +47,7 @@ export const statTips: any = {
     message: 'Frames per shot.',
   },
   AMMO: {
-    title: 'Ammunition (AMMO)',
+    title: 'Ammo Capacity (AMMO)',
     message: 'Shots before reload.',
   },
   RCD: {
@@ -173,7 +173,7 @@ export const itemDetails: any = {
       img: '/icons/body_0.png',
       stats: [
         ['GEN', '1:1'],
-        ['POW', 18],
+        ['POW', 20],
         ['WGT', 8],
       ],
       actions: [['charge', 0]],
@@ -323,7 +323,7 @@ export const itemDetails: any = {
         ['ROF', 30],
         ['AMMO', 3],
         ['RCD', 60],
-        ['WGT', 3],
+        ['WGT', 6],
       ],
       actions: [
         ['shoot', 2],
@@ -362,7 +362,7 @@ export const itemDetails: any = {
         ['ROF', 60],
         ['AMMO', 3],
         ['RCD', 240],
-        ['WGT', 16],
+        ['WGT', 18],
       ],
       actions: [
         ['shoot', 2],

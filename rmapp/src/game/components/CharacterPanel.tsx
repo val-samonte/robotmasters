@@ -10,6 +10,7 @@ import { Item } from './Item'
 import { CpuChip } from './CpuChip'
 import { HelpTip } from './HelpTip'
 import { ActionChip } from './ActionChip'
+import { Icon } from './Icon'
 
 export interface CharacterStatsProps {
   head: string
@@ -19,44 +20,9 @@ export interface CharacterStatsProps {
 }
 
 export function CharacterPanel(props: CharacterStatsProps) {
+  const { head, body, legs, weapon } = props
   const [tab, setTab] = useState('s')
 
-  return (
-    <div className="flex flex-col h-full -gap-[0.25rem]">
-      <div className="relative h-[8rem]">
-        <img src="/mug_bg.png" className="w-[24rem]" draggable="false" />
-        <div className="flex items-center justify-center p-[1em] pointer-events-none absolute inset-0">
-          <CharacterPreview {...props} />
-        </div>
-      </div>
-      <div className="flex flex-col flex-auto">
-        <div className="flex px-[1rem] h-[2rem]">
-          {['s', 'p', 'c', 'a', 'r'].map((t: string) => (
-            <Tab
-              key={t}
-              asIcon={true}
-              active={t === tab}
-              onClick={() => {
-                setTab(t)
-              }}
-            >
-              {t}
-            </Tab>
-          ))}
-        </div>
-        <Slice9 className="relative flex-auto">
-          {tab === 's' && <OverallStats {...props} />}
-          {tab === 'p' && <Parts {...props} />}
-          {tab === 'c' && <CPU {...props} />}
-          {tab === 'a' && <Actions {...props} />}
-          {tab === 'r' && <Armor {...props} />}
-        </Slice9>
-      </div>
-    </div>
-  )
-}
-
-function OverallStats({ head, body, legs, weapon }: CharacterStatsProps) {
   const overallStats = useMemo(() => {
     let generator =
       itemDetails['body_' + body].details?.stats?.find(
@@ -95,10 +61,63 @@ function OverallStats({ head, body, legs, weapon }: CharacterStatsProps) {
   }, [head, body, legs, weapon])
 
   return (
+    <div className="flex flex-col h-full -gap-[0.25rem]">
+      <div className="relative h-[8rem]">
+        <img src="/mug_bg.png" className="w-[24rem]" draggable="false" />
+        <div className="flex items-center justify-center p-[1em] pointer-events-none absolute inset-0">
+          <CharacterPreview {...props} />
+        </div>
+        <div className="absolute top-[1rem] left-[1rem]">
+          {overallStats.weightRatio < 1 && (
+            <HelpTip title="OVERWEIGHT!" message="Will move slower than usual.">
+              <Icon>w</Icon>
+            </HelpTip>
+          )}
+        </div>
+      </div>
+      <div className="flex flex-col flex-auto">
+        <div className="flex px-[1rem] h-[2rem]">
+          {['s', 'p', 'c', 'a', 'r'].map((t: string) => (
+            <Tab
+              key={t}
+              asIcon={true}
+              active={t === tab}
+              onClick={() => {
+                setTab(t)
+              }}
+            >
+              {t}
+            </Tab>
+          ))}
+        </div>
+        <Slice9 className="relative flex-auto">
+          {tab === 's' && (
+            <OverallStats
+              overallStats={overallStats.stats}
+              overweight={overallStats.weightRatio < 1}
+            />
+          )}
+          {tab === 'p' && <Parts {...props} />}
+          {tab === 'c' && <CPU {...props} />}
+          {tab === 'a' && <Actions {...props} />}
+          {tab === 'r' && <Armor {...props} />}
+        </Slice9>
+      </div>
+    </div>
+  )
+}
+
+function OverallStats({
+  overallStats,
+  overweight,
+}: {
+  overallStats: any[]
+  overweight: boolean
+}) {
+  return (
     <Panel title="STATS">
-      {overallStats.stats.map(([key, val]: any, i: number) => {
-        const overweight =
-          (key === 'POW' || key === 'WGT') && overallStats.weightRatio < 1
+      {overallStats.map(([key, val]: any, i: number) => {
+        const isOverweight = (key === 'POW' || key === 'WGT') && overweight
         return (
           <HelpTip
             title={statTips[key].title}
@@ -106,10 +125,10 @@ function OverallStats({ head, body, legs, weapon }: CharacterStatsProps) {
             key={`${key}_${i}`}
             className="flex px-[0.5rem]"
           >
-            <SpriteText color={overweight ? '#F89838' : '#FFFFFF'}>
+            <SpriteText color={isOverweight ? '#F89838' : '#FFFFFF'}>
               {key.toUpperCase()}
             </SpriteText>
-            <SpriteText color={overweight ? '#F89838' : '#FFFFFF'}>
+            <SpriteText color={isOverweight ? '#F89838' : '#FFFFFF'}>
               {val + ''}
             </SpriteText>
           </HelpTip>
