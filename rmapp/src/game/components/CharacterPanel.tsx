@@ -254,7 +254,7 @@ function Armor({ head, body, legs }: CharacterStatsProps) {
         const elem = ['P', 'B', 'H'][i]
         return (
           <div
-            key={val}
+            key={i}
             className="flex items-center justify-between px-[0.5rem]"
           >
             <ElemLabel key={i} value={elem} />
