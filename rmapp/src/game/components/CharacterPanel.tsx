@@ -7,6 +7,7 @@ import { Slice9 } from './Slice9'
 import { Tab } from './Tab'
 import { Icon } from './Icon'
 import { Panel } from './Panel'
+import { Item } from './Item'
 
 export interface CharacterStatsProps {
   head: string
@@ -117,49 +118,27 @@ function OverallStats({ head, body, legs, weapon }: CharacterStatsProps) {
 function Parts({ head, body, legs, weapon }: CharacterStatsProps) {
   return (
     <Panel title="PARTS">
-      <div className="px-[0.5rem] flex flex-col gap-[0.25rem]">
-        <div className="flex items-center gap-[0.5rem] justify-between">
-          <SpriteText>{itemDetails[weapon].name}</SpriteText>
-          <img
-            src={`${itemDetails[weapon].details.img}`}
-            alt={itemDetails[weapon].name}
-            className="w-[4rem] h-[2rem]"
-            draggable={false}
-          />
-        </div>
-        <div className="flex items-center gap-[0.5rem] justify-between">
-          <SpriteText>
-            {itemDetails['head_' + head].name.replace('HEAD', '')}
-          </SpriteText>
-          <img
-            src={`${itemDetails['head_' + head].details.img}`}
-            alt={itemDetails['head_' + head].name}
-            className="w-[2rem] h-[2rem]"
-            draggable={false}
-          />
-        </div>
-        <div className="flex items-center gap-[0.5rem] justify-between">
-          <SpriteText>
-            {itemDetails['body_' + body].name.replace('BODY', '')}
-          </SpriteText>
-          <img
-            src={`${itemDetails['body_' + body].details.img}`}
-            alt={itemDetails['body_' + body].name}
-            className="w-[2rem] h-[2rem]"
-            draggable={false}
-          />
-        </div>
-        <div className="flex items-center gap-[0.5rem] justify-between">
-          <SpriteText>
-            {itemDetails['legs_' + legs].name.replace('LEGS', '')}
-          </SpriteText>
-          <img
-            src={`${itemDetails['legs_' + legs].details.img}`}
-            alt={itemDetails['legs_' + legs].name}
-            className="w-[2rem] h-[2rem]"
-            draggable={false}
-          />
-        </div>
+      <div className="flex flex-col gap-[0.25rem]">
+        <Item
+          name={itemDetails[weapon].name}
+          src={itemDetails[weapon].details.img}
+          className="w-[4rem] h-[2rem]"
+        />
+        <Item
+          name={itemDetails['head_' + head].name.replace('HEAD', '')}
+          src={itemDetails['head_' + head].details.img}
+          className="w-[2rem] h-[2rem]"
+        />
+        <Item
+          name={itemDetails['body_' + body].name.replace('BODY', '')}
+          src={itemDetails['body_' + body].details.img}
+          className="w-[2rem] h-[2rem]"
+        />
+        <Item
+          name={itemDetails['legs_' + legs].name.replace('LEGS', '')}
+          src={itemDetails['legs_' + legs].details.img}
+          className="w-[2rem] h-[2rem]"
+        />
       </div>
     </Panel>
   )

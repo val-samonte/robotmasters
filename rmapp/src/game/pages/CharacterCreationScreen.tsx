@@ -7,8 +7,9 @@ import { Slice9 } from '../components/Slice9'
 import { Tab } from '../components/Tab'
 import { Icon } from '../components/Icon'
 import { ElemLabel } from '../components/ElemLabel'
-import { ItemPreview } from '../components/ItemPreview'
+import { Selectable } from '../components/Selectable'
 import { Panel } from '../components/Panel'
+import { Item } from '../components/Item'
 
 export function CharacterCreationScreen() {
   const [tab, setTab] = useState('head')
@@ -92,46 +93,67 @@ export function CharacterCreationScreen() {
                 </Tab>
               </div>
               <Slice9 className="relative flex-auto">
-                <Panel>
-                  <div className="flex flex-wrap p-[1rem] justify-around">
+                <div className="inset-0 absolute flex flex-col overflow-auto custom-scroll">
+                  <div className="grid grid-cols-2 p-[1rem] justify-around">
                     {Object.entries(itemDetails)
                       .filter(([_, i]: any) => i.type === tab)
                       .map(([id, i]: any) => {
+                        const selected =
+                          i.type === 'head'
+                            ? head === id.replace('head_', '')
+                            : i.type === 'body'
+                            ? body === id.replace('body_', '')
+                            : i.type === 'legs'
+                            ? legs === id.replace('legs_', '')
+                            : weapon === id
+
+                        const onClick = () => {
+                          switch (i.type) {
+                            case 'head':
+                              setHead(id.replace('head_', ''))
+                              break
+                            case 'body':
+                              setBody(id.replace('body_', ''))
+                              break
+                            case 'legs':
+                              setLegs(id.replace('legs_', ''))
+                              break
+                            case 'weapon':
+                              setWeapon(id)
+                              break
+                          }
+                          setLastSelected(id)
+                        }
+
+                        const name =
+                          i.type === 'head'
+                            ? i.name.replace('HEAD', '')
+                            : i.type === 'body'
+                            ? i.name.replace('BODY', '')
+                            : i.type === 'legs'
+                            ? i.name.replace('LEGS', '')
+                            : i.name
+
                         return (
-                          <ItemPreview
+                          <Selectable
                             key={id}
-                            id={id}
-                            selected={
-                              i.type === 'head'
-                                ? head === id.replace('head_', '')
-                                : i.type === 'body'
-                                ? body === id.replace('body_', '')
-                                : i.type === 'legs'
-                                ? legs === id.replace('legs_', '')
-                                : weapon === id
-                            }
-                            onClick={() => {
-                              switch (i.type) {
-                                case 'head':
-                                  setHead(id.replace('head_', ''))
-                                  break
-                                case 'body':
-                                  setBody(id.replace('body_', ''))
-                                  break
-                                case 'legs':
-                                  setLegs(id.replace('legs_', ''))
-                                  break
-                                case 'weapon':
-                                  setWeapon(id)
-                                  break
+                            selected={selected}
+                            onClick={onClick}
+                          >
+                            <Item
+                              name={name}
+                              src={i.details.img}
+                              className={
+                                i.type === 'weapon'
+                                  ? 'w-[4rem] h-[2rem]'
+                                  : 'w-[2rem] h-[2rem]'
                               }
-                              setLastSelected(id)
-                            }}
-                          />
+                            />
+                          </Selectable>
                         )
                       })}
                   </div>
-                </Panel>
+                </div>
               </Slice9>
             </div>
             {lastSelected && (

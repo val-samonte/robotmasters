@@ -27,7 +27,7 @@ export function CharacterPreview({
   const processedImage = useProcessedImage('player1', layerUrls, colorMap)
 
   return (
-    <div className="relative w-[4rem] h-[4rem] overflow-hidden scale-200">
+    <div className="relative w-[4rem] h-[4rem] overflow-hidden">
       <img
         className="absolute w-[12rem] h-[12rem] max-w-none"
         src={processedImage ?? undefined}
