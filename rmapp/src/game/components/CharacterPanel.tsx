@@ -1,4 +1,4 @@
-import { ReactNode, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { itemDetails } from '../itemList'
 import { SpriteText } from './SpriteText'
 import { CharacterPreview } from './CharacterPreview'

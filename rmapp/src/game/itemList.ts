@@ -33,6 +33,44 @@ export const cpuDesc: any = {
 // 7 shoot
 // 8 reload
 
+export const paints = [
+  {
+    id: 'default',
+    primary: '#0078FF',
+    secondary: '#00ECDC',
+  },
+  {
+    id: 'cut',
+    primary: '#787878',
+    secondary: '#F8F8F8',
+  },
+  {
+    id: 'elec',
+    primary: '#787878',
+    secondary: '#FFDC78',
+  },
+  {
+    id: 'ice',
+    primary: '#0058FF',
+    secondary: '#F8F8F8',
+  },
+  {
+    id: 'fire',
+    primary: '#FF3800',
+    secondary: '#FFBC00',
+  },
+  {
+    id: 'bomb',
+    primary: '#00BC00',
+    secondary: '#F8F8F8',
+  },
+  {
+    id: 'guts',
+    primary: '#E45C10',
+    secondary: '#F8F8F8',
+  },
+]
+
 export const itemDetails: any = {
   '': {
     name: ' ',

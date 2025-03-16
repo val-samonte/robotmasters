@@ -1,6 +1,6 @@
 import { SpriteText } from '../components/SpriteText'
 import { useEffect, useMemo, useState } from 'react'
-import { itemDetails } from '../itemList'
+import { itemDetails, paints } from '../itemList'
 import { CharacterPanel } from '../components/CharacterPanel'
 import { Link, useSearchParams } from 'react-router'
 import { Slice9 } from '../components/Slice9'
@@ -10,6 +10,9 @@ import { ElemLabel } from '../components/ElemLabel'
 import { Selectable } from '../components/Selectable'
 import { Panel } from '../components/Panel'
 import { Item } from '../components/Item'
+import { PaintItem } from '../components/PaintItem'
+import { useAtom } from 'jotai'
+import { paintAtom } from '../../atoms/paintAtom'
 
 export function CharacterCreationScreen() {
   const [tab, setTab] = useState('head')
@@ -18,9 +21,14 @@ export function CharacterCreationScreen() {
   const [body, setBody] = useState(searchParams.get('body') ?? '0')
   const [legs, setLegs] = useState(searchParams.get('legs') ?? '0')
   const [weapon, setWeapon] = useState(searchParams.get('weapon') ?? 'hg_0')
+  const [paint, setPaint] = useAtom(paintAtom)
   const [lastSelected, setLastSelected] = useState('')
 
   useEffect(() => {
+    if (tab === 'color') {
+      setLastSelected('')
+      return
+    }
     const id = { head: head, body: body, legs: legs }?.[tab]
     setLastSelected(id ? `${tab}_${id}` : weapon)
   }, [tab, head, body, legs, weapon])
@@ -93,66 +101,86 @@ export function CharacterCreationScreen() {
                 </Tab>
               </div>
               <Slice9 className="relative flex-auto">
-                <div className="inset-0 absolute flex flex-col overflow-auto custom-scroll">
-                  <div className="grid grid-cols-2 p-[1rem] justify-around">
-                    {Object.entries(itemDetails)
-                      .filter(([_, i]: any) => i.type === tab)
-                      .map(([id, i]: any) => {
-                        const selected =
-                          i.type === 'head'
-                            ? head === id.replace('head_', '')
-                            : i.type === 'body'
-                            ? body === id.replace('body_', '')
-                            : i.type === 'legs'
-                            ? legs === id.replace('legs_', '')
-                            : weapon === id
+                <div className="inset-[1rem] absolute flex flex-col overflow-auto custom-scroll">
+                  {tab !== 'color' && (
+                    <div className="grid grid-cols-2 justify-around">
+                      {Object.entries(itemDetails)
+                        .filter(([_, i]: any) => i.type === tab)
+                        .map(([id, i]: any) => {
+                          const selected =
+                            i.type === 'head'
+                              ? head === id.replace('head_', '')
+                              : i.type === 'body'
+                              ? body === id.replace('body_', '')
+                              : i.type === 'legs'
+                              ? legs === id.replace('legs_', '')
+                              : weapon === id
 
-                        const onClick = () => {
-                          switch (i.type) {
-                            case 'head':
-                              setHead(id.replace('head_', ''))
-                              break
-                            case 'body':
-                              setBody(id.replace('body_', ''))
-                              break
-                            case 'legs':
-                              setLegs(id.replace('legs_', ''))
-                              break
-                            case 'weapon':
-                              setWeapon(id)
-                              break
+                          const onClick = () => {
+                            switch (i.type) {
+                              case 'head':
+                                setHead(id.replace('head_', ''))
+                                break
+                              case 'body':
+                                setBody(id.replace('body_', ''))
+                                break
+                              case 'legs':
+                                setLegs(id.replace('legs_', ''))
+                                break
+                              case 'weapon':
+                                setWeapon(id)
+                                break
+                            }
+                            setLastSelected(id)
                           }
-                          setLastSelected(id)
-                        }
 
-                        const name =
-                          i.type === 'head'
-                            ? i.name.replace('HEAD', '')
-                            : i.type === 'body'
-                            ? i.name.replace('BODY', '')
-                            : i.type === 'legs'
-                            ? i.name.replace('LEGS', '')
-                            : i.name
+                          const name =
+                            i.type === 'head'
+                              ? i.name.replace('HEAD', '')
+                              : i.type === 'body'
+                              ? i.name.replace('BODY', '')
+                              : i.type === 'legs'
+                              ? i.name.replace('LEGS', '')
+                              : i.name
 
-                        return (
-                          <Selectable
-                            key={id}
-                            selected={selected}
-                            onClick={onClick}
-                          >
-                            <Item
-                              name={name}
-                              src={i.details.img}
-                              className={
-                                i.type === 'weapon'
-                                  ? 'w-[4rem] h-[2rem]'
-                                  : 'w-[2rem] h-[2rem]'
-                              }
-                            />
-                          </Selectable>
-                        )
-                      })}
-                  </div>
+                          return (
+                            <Selectable
+                              key={id}
+                              selected={selected}
+                              onClick={onClick}
+                            >
+                              <Item
+                                name={name}
+                                src={i.details.img}
+                                className={
+                                  i.type === 'weapon'
+                                    ? 'w-[4rem] h-[2rem]'
+                                    : 'w-[2rem] h-[2rem]'
+                                }
+                              />
+                            </Selectable>
+                          )
+                        })}
+                    </div>
+                  )}
+                  {tab === 'color' && (
+                    <div className="grid grid-cols-4 justify-around">
+                      {paints.map((p) => (
+                        <Selectable
+                          key={p.id}
+                          selected={paint === p.id}
+                          onClick={() => setPaint(p.id)}
+                        >
+                          <Item
+                            name={p.id.toUpperCase()}
+                            src={'/paint.png'}
+                            className={'w-[4rem] h-[2rem]'}
+                            {...p}
+                          />
+                        </Selectable>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </Slice9>
             </div>

@@ -109,14 +109,14 @@ export function Slice9({
     }
   }, [frameUrl])
 
+  if (!sliceUrls || !imageCache[frameUrl]) {
+    return null
+  }
+
   const adjustedTileSize = sliceUrls ? imageCache[frameUrl].tileSize : null
   const wrapperFontSize = adjustedTileSize
     ? (rootFontSize / 8) * adjustedTileSize
     : rootFontSize
-
-  if (!sliceUrls) {
-    return null
-  }
 
   return (
     <div

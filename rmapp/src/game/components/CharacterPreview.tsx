@@ -1,4 +1,7 @@
+import { useAtomValue } from 'jotai'
 import { useProcessedImage } from '../../utils/useProcessedImage'
+import { paintAtom } from '../../atoms/paintAtom'
+import { paints } from '../itemList'
 
 export interface CharacterPreviewProps {
   body: string
@@ -15,6 +18,8 @@ export function CharacterPreview({
 }: CharacterPreviewProps) {
   const weapon_type = weapon.split('_')[0]
   const arm = [weapon_type, body].join('_')
+  const paintId = useAtomValue(paintAtom)
+  const paint = paints.find((p) => p.id === paintId)
 
   const layerUrls = [
     `/skins/body_${body}.png`,
@@ -23,8 +28,13 @@ export function CharacterPreview({
     `/skins/${weapon}.png`,
     `/skins/arms_${arm}.png`,
   ]
-  const colorMap = { '#5B6EE1': '#FF6699' }
+  const colorMap = {
+    '#5B6EE1': paint?.primary ?? '#5B6EE1',
+    '#FFFFFF': paint?.secondary ?? '#FFFFFF',
+  }
   const processedImage = useProcessedImage('player1', layerUrls, colorMap)
+
+  if (!processedImage) return null
 
   return (
     <div className="relative w-[4rem] h-[4rem] overflow-hidden">
