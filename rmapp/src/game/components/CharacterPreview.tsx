@@ -29,8 +29,8 @@ export function CharacterPreview({
     `/skins/arms_${arm}.png`,
   ]
   const colorMap = {
-    '#5B6EE1': paint?.primary ?? '#5B6EE1',
-    '#FFFFFF': paint?.secondary ?? '#FFFFFF',
+    '#FF00FF': paint?.primary ?? '#5B6EE1',
+    '#00FFFF': paint?.secondary ?? '#FFFFFF',
   }
   const processedImage = useProcessedImage('player1', layerUrls, colorMap)
 
