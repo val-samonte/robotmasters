@@ -41,13 +41,15 @@ export function Item({
 
   return (
     <Slice9 frameUrl={processedImage} className="w-full">
-      <div className="flex items-center gap-[0.5rem] justify-between">
-        <SpriteText>{name}</SpriteText>
-        <div className="w-[4rem] h-[1rem] flex items-center justify-center relative overflow-visible">
+      <div className="flex items-center justify-between w-full">
+        <div className="flex-auto">
+          <SpriteText>{name}</SpriteText>
+        </div>
+        <div className="w-[4rem] h-[1rem] flex-none flex items-center justify-center relative overflow-visible">
           <PaintItem
             src={src}
             alt={name}
-            className={cn(className, '-translate-y-[0.125rem]')}
+            className={cn(className, '-translate-y-[0.125rem] flex-none')}
             primary={primary ?? paint?.primary}
             secondary={secondary ?? paint?.secondary}
           />

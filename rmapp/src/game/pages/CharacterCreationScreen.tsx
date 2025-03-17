@@ -112,7 +112,7 @@ export function CharacterCreationScreen() {
                 </Tab>
               </div>
               <Slice9 className="relative flex-auto">
-                <div className="inset-[1rem] absolute flex flex-col overflow-auto custom-scroll">
+                <div className="inset-0 absolute flex flex-col overflow-auto custom-scroll">
                   {tab !== 'color' && (
                     <div className="grid grid-cols-2 justify-around">
                       {Object.entries(itemDetails)

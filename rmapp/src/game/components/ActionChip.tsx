@@ -22,7 +22,7 @@ export function ActionChip({
       title={name.toUpperCase()}
       message={''}
       disable={true}
-      className={cn('gap-[1rem] h-[2rem]', className)}
+      className={cn('gap-[1rem] h-[2rem] w-full', className)}
     >
       <Slice9
         frameUrl="/action_frame.png"

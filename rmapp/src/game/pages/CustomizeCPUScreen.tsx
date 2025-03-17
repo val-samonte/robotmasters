@@ -94,7 +94,7 @@ export function CustomizeCPUScreen() {
             <Slice9 className="flex-auto min-w-[24rem] relative">
               <Panel title="CPU">
                 <div className="flex">
-                  <div className="flex-1 flex flex-col items-end gap-[0.25rem]">
+                  <div className="flex-1 flex flex-col gap-[0.25rem] pl-[0.5rem]">
                     {[...itemDetails['head_' + head].details.cpu, 'always'].map(
                       (name: string, i: number) => {
                         return (
@@ -107,7 +107,7 @@ export function CustomizeCPUScreen() {
                                 setSelected(null)
                               }
                             }}
-                            className="cursor-pointer relative flex items-center"
+                            className="cursor-pointer relative items-center flex w-full"
                           >
                             <CpuChip name={name} index={i} />
                             {selected === i && (
@@ -130,13 +130,25 @@ export function CustomizeCPUScreen() {
                         if (mapping[i] !== undefined) {
                           const [name, cost] = actions[mapping[i]]
                           return (
-                            <ActionChip
-                              key={`${name}_${i}`}
-                              name={name}
-                              cost={cost}
-                              inserted
-                              className={cn(selected === i && 'opacity-0')}
-                            />
+                            <button
+                              key={i}
+                              onClick={() => {
+                                if (selected !== i) {
+                                  setSelected(i)
+                                } else {
+                                  setSelected(null)
+                                }
+                              }}
+                              className="cursor-pointer flex w-full"
+                            >
+                              <ActionChip
+                                key={`${name}_${i}`}
+                                name={name}
+                                cost={cost}
+                                inserted
+                                className={cn(selected === i && 'opacity-0')}
+                              />
+                            </button>
                           )
                         }
 

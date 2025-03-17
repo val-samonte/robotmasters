@@ -26,7 +26,7 @@ export function HelpTip({
       onPointerEnter={() => {
         if (!disable) setTip({ title, message })
       }}
-      onPointerLeave={() => {
+      onMouseLeave={() => {
         if (!disable) setTip(null)
       }}
     >
