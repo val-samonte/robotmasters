@@ -2,7 +2,7 @@
 /* eslint-disable */
 export class RmGameEngine {
   free(): void;
-  constructor(seed: number, initial_objects_js: any, tiles_js: any, gravity: number);
+  constructor(seed: number, demo: boolean, initial_objects_js: any, tiles_js: any, gravity: number);
   get_frame(): any;
   next_frame(): any;
 }
@@ -12,7 +12,7 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly __wbg_rmgameengine_free: (a: number, b: number) => void;
-  readonly rmgameengine_new: (a: number, b: any, c: any, d: number) => number;
+  readonly rmgameengine_new: (a: number, b: number, c: any, d: any, e: number) => number;
   readonly rmgameengine_get_frame: (a: number) => any;
   readonly rmgameengine_next_frame: (a: number) => any;
   readonly __wbindgen_exn_store: (a: number) => void;

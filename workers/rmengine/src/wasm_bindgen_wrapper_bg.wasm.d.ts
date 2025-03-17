@@ -2,7 +2,7 @@
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
 export const __wbg_rmgameengine_free: (a: number, b: number) => void;
-export const rmgameengine_new: (a: number, b: any, c: any, d: number) => number;
+export const rmgameengine_new: (a: number, b: number, c: any, d: any, e: number) => number;
 export const rmgameengine_get_frame: (a: number) => any;
 export const rmgameengine_next_frame: (a: number) => any;
 export const __wbindgen_exn_store: (a: number) => void;

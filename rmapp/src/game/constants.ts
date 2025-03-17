@@ -43,3 +43,14 @@ export const actionLookup = [
   'shoot', //  6
   'reload', // 7
 ]
+
+export const elemLookup = [
+  'P', // Punct
+  'B', // Blast
+  'F', // Force
+  'S', // Sever
+  'H', // Heat
+  'C', // Cryo
+  'J', // Jolt
+  'V', // Virus
+]

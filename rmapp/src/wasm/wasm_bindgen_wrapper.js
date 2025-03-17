@@ -186,12 +186,13 @@ export class RmGameEngine {
     }
     /**
      * @param {number} seed
+     * @param {boolean} demo
      * @param {any} initial_objects_js
      * @param {any} tiles_js
      * @param {number} gravity
      */
-    constructor(seed, initial_objects_js, tiles_js, gravity) {
-        const ret = wasm.rmgameengine_new(seed, initial_objects_js, tiles_js, gravity);
+    constructor(seed, demo, initial_objects_js, tiles_js, gravity) {
+        const ret = wasm.rmgameengine_new(seed, demo, initial_objects_js, tiles_js, gravity);
         this.__wbg_ptr = ret >>> 0;
         RmGameEngineFinalization.register(this, this.__wbg_ptr, this);
         return this;

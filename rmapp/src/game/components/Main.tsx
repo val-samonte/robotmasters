@@ -147,7 +147,7 @@ export function Main() {
     initialized.current = true
     init()
       .then(() => {
-        game.current = new RmGameEngine(333, initialObjects, tiles, 0.5)
+        game.current = new RmGameEngine(333, true, initialObjects, tiles, 0.5)
         const snapshot = game.current.next_frame() as GameState
         setGameState(snapshot)
       })
