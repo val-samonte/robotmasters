@@ -43,26 +43,3 @@ export const actionLookup = [
   'shoot', //  6
   'reload', // 7
 ]
-
-export const weaponData = {
-  hg_0: [
-    1, // firearm
-    1, // projectile lookup index
-    1, // projectile ejection method (single, tri45, tri90, shotgun90, up, down) todo: replace with ejection "script"
-    2, // attack energy cost
-    5, // reload energy cost
-    120, // reload cooldown
-    5, // ammo cap
-    15, // rate of fire
-    5, //   outputPosX = 5,
-    16, //   outputPosY = 16,
-    1, //   outputCount = 1, // note: loop, attackCounter still counts individually
-    0, //   recoil = 0,
-    0, //   requireGrounded,
-  ],
-  hg_1: [], // 7, 14
-  hg_2: [], // 8, 15
-  gl_0: [], // 7, 15
-  gl_1: [], // 4, 15
-  gl_2: [], // 8, 16
-}

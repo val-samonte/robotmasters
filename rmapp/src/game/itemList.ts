@@ -275,8 +275,8 @@ export const itemDetails: any = {
       1, // projectile ejection method (single, tri45, tri90, shotgun90, up, down) todo: replace with ejection "script"
       2, // attack energy cost
       5, // reload energy cost
-      120, // reload cooldown
-      5, // ammo cap
+      60, // reload cooldown
+      12, // ammo cap
       15, // rate of fire
       5, //   outputPosX = 5,
       16, //   outputPosY = 16,
@@ -304,6 +304,21 @@ export const itemDetails: any = {
         ['reload', 5],
       ],
     },
+    data: [
+      1, // firearm
+      2, // projectile lookup index
+      1, // projectile ejection method (single, tri45, tri90, shotgun90, up, down) todo: replace with ejection "script"
+      2, // attack energy cost
+      5, // reload energy cost
+      60, // reload cooldown
+      6, // ammo cap
+      120, // rate of fire
+      7, //   outputPosX = 7,
+      15, //   outputPosY = 15,
+      1, //   outputCount = 1, // note: loop, attackCounter still counts individually
+      0, //   recoil = 0,
+      0, //   requireGrounded,
+    ],
   },
   hg_2: {
     type: 'weapon',
@@ -324,6 +339,21 @@ export const itemDetails: any = {
         ['reload', 5],
       ],
     },
+    data: [
+      1, // firearm
+      3, // projectile lookup index
+      1, // projectile ejection method (single, tri45, tri90, shotgun90, up, down) todo: replace with ejection "script"
+      2, // attack energy cost
+      5, // reload energy cost
+      60, // reload cooldown
+      3, // ammo cap
+      30, // rate of fire
+      8, //   outputPosX = 8,
+      15, //   outputPosY = 15,
+      1, //   outputCount = 1, // note: loop, attackCounter still counts individually
+      0, //   recoil = 0,
+      0, //   requireGrounded,
+    ],
   },
   gl_0: {
     type: 'weapon',
@@ -343,6 +373,9 @@ export const itemDetails: any = {
         ['reload', 10],
       ],
     },
+    data: [
+      // 7, 15
+    ],
   },
   gl_1: {
     type: 'weapon',
@@ -363,6 +396,9 @@ export const itemDetails: any = {
         ['reload', 10],
       ],
     },
+    data: [
+      // 4, 15
+    ],
   },
   gl_2: {
     type: 'weapon',
@@ -383,5 +419,8 @@ export const itemDetails: any = {
         ['reload', 10],
       ],
     },
+    data: [
+      // 8, 16
+    ],
   },
 }
