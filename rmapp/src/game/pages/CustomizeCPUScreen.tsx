@@ -14,6 +14,8 @@ import { CpuChip } from '../components/CpuChip'
 import { InsertAnim } from '../components/InsertAnim'
 import { ActionChip } from '../components/ActionChip'
 import { Button } from '../components/Button'
+import { GameEgine } from '../components/GameEngine'
+import { actionLookup, cpuLookup } from '../constants'
 
 export function CustomizeCPUScreen() {
   const [searchParams] = useSearchParams()
@@ -21,6 +23,7 @@ export function CustomizeCPUScreen() {
   const [mapping, setMapping] = useState<(number | undefined)[]>([])
   const setPaint = useSetAtom(paintAtom)
   const [helpTip] = useAtom(helpTipAtom)
+  const [pause, setPause] = useState(false)
 
   const head = searchParams.get('head') ?? '0'
   const body = searchParams.get('body') ?? '0'
@@ -33,21 +36,98 @@ export function CustomizeCPUScreen() {
     }
   }, [searchParams])
 
-  const actions = useMemo(() => {
-    const head = searchParams.get('head') ?? '0'
-    const body = searchParams.get('body') ?? '0'
-    const legs = searchParams.get('legs') ?? '0'
-    const weapon = searchParams.get('weapon') ?? 'hg_0'
+  const { actions, weight, protections } = useMemo(() => {
+    const hData = itemDetails['head_' + head]
+    const bData = itemDetails['body_' + body]
+    const lData = itemDetails['legs_' + legs]
+    const wData = itemDetails[weapon]
 
     const actions: [string, number][] = [
-      ...(itemDetails['head_' + head].details.actions ?? []),
-      ...(itemDetails['body_' + body].details.actions ?? []),
-      ...(itemDetails['legs_' + legs].details.actions ?? []),
-      ...(itemDetails[weapon].details.actions ?? []),
+      ...(hData.details.actions ?? []),
+      ...(bData.details.actions ?? []),
+      ...(lData.details.actions ?? []),
+      ...(wData.details.actions ?? []),
     ]
 
-    return actions
+    const weight = [hData, bData, lData, wData].reduce((sum, cur) => {
+      return (
+        sum + (cur.details.stats.find(([key]: any) => key === 'WGT')?.[1] ?? 0)
+      )
+    }, 0)
+
+    const protections = [
+      0, // Punct
+      0, // Blast
+      0, // Force
+      0, // Sever
+      0, // Heat
+      0, // Cryo
+      0, // Jolt
+      0, // Virus
+    ]
+
+    ;[hData, bData, lData].forEach((part) => {
+      part.details.protection.forEach(([elem, val]: [string, number]) => {
+        const index = { P: 0, B: 1, H: 4 }[elem]
+        if (index === undefined) return
+        protections[index] += val
+      })
+    })
+
+    return { actions, weight, protections }
   }, [searchParams])
+
+  const gameEngineProps = useMemo(() => {
+    const hData = itemDetails['head_' + head]
+    const bData = itemDetails['body_' + body]
+    const wData = itemDetails[weapon]
+
+    // let generator = bData.details.stats.find(
+    //   ([key]: any) => key === 'GEN'
+    // )[1] ?? '1:1'
+
+    const power =
+      bData.details.stats.find(([key]: any) => key === 'POW')[1] ?? 0
+
+    const potential = Math.min(power / weight, 1)
+    const jump_force = -750 - Math.floor(100 * potential)
+    const move_speed = 125 + Math.floor(125 * potential)
+
+    const behaviors = [...hData.details.cpu, 'always']
+      .map((name: string, i) => {
+        if (mapping[i] === undefined) return undefined
+        const cpuIndex = cpuLookup.findIndex((k) => k === name)
+        if (cpuIndex === undefined) return undefined
+        const [actionName, cost] = actions[mapping[i]]
+        const actionIndex = actionLookup.findIndex((k) => k === actionName)
+        return [cpuIndex, actionIndex, cost]
+      })
+      .filter((i) => i !== undefined) as number[][]
+
+    console.log(behaviors)
+
+    return {
+      demo: true,
+      gravity: 0.5,
+      mapId: 'demo',
+      objects: [
+        {
+          id: 'demo_player',
+          group: 1,
+          x: 0,
+          y: 0,
+          width: 16,
+          height: 32,
+          behaviors,
+          jump_force,
+          move_speed,
+          weapons: [[...wData.data]],
+          protections,
+        },
+      ],
+      seed: 333,
+    }
+  }, [mapping, actions, weight, protections])
 
   return (
     <div className="w-full h-full items-center justify-center p-[1rem]">
@@ -131,7 +211,7 @@ export function CustomizeCPUScreen() {
                           const [name, cost] = actions[mapping[i]]
                           return (
                             <button
-                              key={i}
+                              key={`${name}_${i}`}
                               onClick={() => {
                                 if (selected !== i) {
                                   setSelected(i)
@@ -142,7 +222,6 @@ export function CustomizeCPUScreen() {
                               className="cursor-pointer flex w-full"
                             >
                               <ActionChip
-                                key={`${name}_${i}`}
                                 name={name}
                                 cost={cost}
                                 inserted
@@ -200,7 +279,14 @@ export function CustomizeCPUScreen() {
               )}
             </Slice9>
 
-            <div className="bg-black h-full aspect-[16/15] flex-none relative"></div>
+            <div
+              className="bg-black h-full aspect-[16/15] flex-none relative overflow-hidden"
+              onClick={() => {
+                setPause((p) => !p)
+              }}
+            >
+              <GameEgine {...gameEngineProps} paused={pause} />
+            </div>
           </div>
         </div>
 
