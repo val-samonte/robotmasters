@@ -116,6 +116,7 @@ export function CustomizeCPUScreen() {
           group: 1,
           x: 0,
           y: 0,
+          facing_right: true,
           width: 16,
           height: 32,
           behaviors,

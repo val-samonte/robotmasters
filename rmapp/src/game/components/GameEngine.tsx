@@ -15,6 +15,7 @@ export interface GameObject {
   group: number
   x: number
   y: number
+  facing_right: boolean
   width: number
   height: number
   behaviors: number[][]
@@ -103,6 +104,7 @@ export function GameEgine({
           ...o,
           x: map.spawnPositions[i].x,
           y: map.spawnPositions[i].y,
+          facing_right: map.spawnPositions[i].facing_right,
         }
       })
       game.current = new RmGameEngine(
