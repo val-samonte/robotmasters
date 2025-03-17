@@ -23,7 +23,7 @@ export function HelpTip({
   return (
     <div
       className={cn('flex justify-between items-center', className)}
-      onPointerEnter={() => {
+      onMouseEnter={() => {
         if (!disable) setTip({ title, message })
       }}
       onMouseLeave={() => {

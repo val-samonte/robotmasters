@@ -56,27 +56,6 @@ export const statTips: any = {
   },
 }
 
-// 0 is grounded
-// 1 wall leaning
-// 2 wall slipping
-// 3 is flipped
-// 4 bat 10
-// 5 bat 20
-// 6 bat 50
-// 7 no ammo
-// 8 roll 20
-// 9 roll 10
-// 19 always
-
-// 0 run
-// 1 turn
-// 2 jump
-// 3 w.jump
-// 4 flip gravity
-// 5 recharge
-// 7 shoot
-// 8 reload
-
 export const paints = [
   {
     id: 'default',
@@ -290,6 +269,21 @@ export const itemDetails: any = {
         ['reload', 5],
       ],
     },
+    data: [
+      1, // firearm
+      1, // projectile lookup index
+      1, // projectile ejection method (single, tri45, tri90, shotgun90, up, down) todo: replace with ejection "script"
+      2, // attack energy cost
+      5, // reload energy cost
+      120, // reload cooldown
+      5, // ammo cap
+      15, // rate of fire
+      5, //   outputPosX = 5,
+      16, //   outputPosY = 16,
+      1, //   outputCount = 1, // note: loop, attackCounter still counts individually
+      0, //   recoil = 0,
+      0, //   requireGrounded,
+    ],
   },
   hg_1: {
     type: 'weapon',

@@ -5,8 +5,6 @@ import { useEffect, useRef, useState } from 'react'
 import { GameObjectView } from './GameObject'
 import { GameState } from '../types/GameState'
 import init, { RmGameEngine } from '../../wasm/wasm_bindgen_wrapper'
-import { SpriteText } from './SpriteText'
-import { Slice9 } from './Slice9'
 
 const tiles = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -60,26 +58,6 @@ const initialObjects = [
         0, //   recoil = 0,
         0, //   requireGrounded,
       ],
-      // [
-      //   1,   // firearm
-      //   2,   // projectile lookup index
-      //   1,   // projectile ejection method
-      //   2,   // attack energy cost
-      //   10,  // reload energy cost
-      //   120, // reload cooldown
-      //   1,   // ammo cap
-      //   0    // rate of fire
-      // ],
-      // [
-      //   1,   // firearm
-      //   3,   // projectile lookup index
-      //   1,   // projectile ejection method
-      //   2,   // attack energy cost
-      //   6,   // reload energy cost
-      //   240, // reload cooldown
-      //   6,   // ammo cap
-      //   50   // rate of fire
-      // ],
 
       // todo:
       // crawler

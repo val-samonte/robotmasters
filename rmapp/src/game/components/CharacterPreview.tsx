@@ -39,7 +39,7 @@ export function CharacterPreview({
   return (
     <div className="relative w-[4rem] h-[4rem] overflow-hidden">
       <img
-        className="absolute w-[12rem] h-[12rem] max-w-none"
+        className="absolute w-[12rem] h-[12rem] max-w-none select-auto pointer-events-auto"
         src={processedImage ?? undefined}
         draggable="false"
       />
