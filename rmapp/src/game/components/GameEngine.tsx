@@ -2,10 +2,11 @@ import { Application, useExtend } from '@pixi/react'
 import { Container, Graphics, Sprite } from 'pixi.js'
 import { StageScaler } from '../../wrapper/components/StageScaler'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { GameObjectView } from './GameObject'
+import { GameObjectView } from './GameObjectView'
 import { GameState } from '../types/GameState'
 import init, { RmGameEngine } from '../../wasm/wasm_bindgen_wrapper'
 import { maps } from '../constants'
+import { CharacterRender } from './CharacterRender'
 
 const desiredFPS = 60
 const frameInterval = 1000 / desiredFPS
@@ -146,6 +147,9 @@ export function GameEgine({
           })
         )}
         {(gameState?.entities ?? []).map((obj) => {
+          if (!obj.projectile_id) {
+            return <CharacterRender {...obj} />
+          }
           return (
             <GameObjectView
               key={obj.entity}

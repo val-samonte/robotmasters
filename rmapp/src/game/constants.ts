@@ -80,7 +80,7 @@ export const maps = [
       {
         x: 16,
         y: 192,
-        facing_right: false,
+        facing_right: true,
       },
     ],
   },

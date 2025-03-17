@@ -2,7 +2,7 @@ import { Application, useExtend } from '@pixi/react'
 import { Container, Graphics, Sprite } from 'pixi.js'
 import { StageScaler } from '../../wrapper/components/StageScaler'
 import { useEffect, useRef, useState } from 'react'
-import { GameObjectView } from './GameObject'
+import { GameObjectView } from './GameObjectView'
 import { GameState } from '../types/GameState'
 import init, { RmGameEngine } from '../../wasm/wasm_bindgen_wrapper'
 
