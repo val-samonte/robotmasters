@@ -4,11 +4,10 @@ import { CharacterPanel } from '../components/CharacterPanel'
 import { itemDetails } from '../itemList'
 import { useEffect, useMemo, useState } from 'react'
 import cn from 'classnames'
-import { useAtom, useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { paintAtom } from '../../atoms/paintAtom'
 import { Slice9 } from '../components/Slice9'
 import { Icon } from '../components/Icon'
-import { helpTipAtom } from '../../atoms/helpTipAtom'
 import { Panel } from '../components/Panel'
 import { CpuChip } from '../components/CpuChip'
 import { InsertAnim } from '../components/InsertAnim'
@@ -16,14 +15,13 @@ import { ActionChip } from '../components/ActionChip'
 import { Button } from '../components/Button'
 import { GameEgine } from '../components/GameEngine'
 import { actionLookup, cpuLookup } from '../constants'
-import { ViewWrapper } from '../components/ViewWrapper'
+import { HelpPanel } from '../components/HelpPanel'
 
 export function CustomizeCPUScreen() {
   const [searchParams] = useSearchParams()
   const [selected, setSelected] = useState<number | null>(null)
   const [mapping, setMapping] = useState<(number | undefined)[]>([])
   const setPaint = useSetAtom(paintAtom)
-  const [helpTip] = useAtom(helpTipAtom)
   const [pause, setPause] = useState(false)
 
   const head = searchParams.get('head') ?? '0'
@@ -125,20 +123,6 @@ export function CustomizeCPUScreen() {
           weapons: [[...wData.data]],
           protections,
         },
-        {
-          id: 'demo_player2',
-          group: 1,
-          x: 0,
-          y: 0,
-          facing_right: true,
-          width: 16,
-          height: 28,
-          behaviors,
-          jump_force,
-          move_speed,
-          weapons: [[...wData.data]],
-          protections,
-        },
       ],
       seed: 333,
     }
@@ -162,7 +146,7 @@ export function CustomizeCPUScreen() {
             </Link>
             <SpriteText>PROGRAM</SpriteText>
             <Link
-              to={`/create_game_account?${searchParams.toString()}`}
+              to={`/create_name?${searchParams.toString()}`}
               className="-translate-y-[0.125rem]"
             >
               <Slice9 frameUrl="/button.png">
@@ -308,25 +292,10 @@ export function CustomizeCPUScreen() {
             </div>
           </div>
         </div>
-
-        <Slice9>
-          <div className="p-[0.5rem] flex flex-col gap-[0.5rem] landscape:h-[3.5rem] overflow-auto">
-            {helpTip ? (
-              <>
-                {helpTip.title && (
-                  <SpriteText color="#38B8F8">{helpTip.title}</SpriteText>
-                )}
-                <SpriteText>{helpTip.message}</SpriteText>
-              </>
-            ) : (
-              <SpriteText>
-                Program your Robot Master{"'"}s behavior by selecting each chip
-                and assigning it an action. Priority is always from top to
-                bottom.
-              </SpriteText>
-            )}
-          </div>
-        </Slice9>
+        <HelpPanel>
+          Program your Robot Master{"'"}s behavior by selecting each chip and
+          assigning it an action. Priority is always from top to bottom.
+        </HelpPanel>
       </div>
     </div>
   )

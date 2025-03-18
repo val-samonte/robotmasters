@@ -12,10 +12,10 @@ import { Panel } from '../components/Panel'
 import { Item } from '../components/Item'
 import { useAtom } from 'jotai'
 import { paintAtom } from '../../atoms/paintAtom'
-import { helpTipAtom } from '../../atoms/helpTipAtom'
 import { HelpTip } from '../components/HelpTip'
 import { CpuChip } from '../components/CpuChip'
 import { ActionChip } from '../components/ActionChip'
+import { HelpPanel } from '../components/HelpPanel'
 
 export function CharacterCreationScreen() {
   const [tab, setTab] = useState('head')
@@ -26,7 +26,6 @@ export function CharacterCreationScreen() {
   const [weapon, setWeapon] = useState(searchParams.get('weapon') ?? 'hg_0')
   const [paint, setPaint] = useAtom(paintAtom)
   const [lastSelected, setLastSelected] = useState('')
-  const [helpTip] = useAtom(helpTipAtom)
 
   useEffect(() => {
     if (searchParams.has('paint')) {
@@ -281,21 +280,7 @@ export function CharacterCreationScreen() {
             )}
           </div>
         </div>
-
-        <Slice9>
-          <div className="p-[0.5rem] flex flex-col gap-[0.5rem] landscape:h-[3.5rem] overflow-auto">
-            {helpTip ? (
-              <>
-                {helpTip.title && (
-                  <SpriteText color="#38B8F8">{helpTip.title}</SpriteText>
-                )}
-                <SpriteText>{helpTip.message}</SpriteText>
-              </>
-            ) : (
-              <SpriteText>Please select parts and press NEXT.</SpriteText>
-            )}
-          </div>
-        </Slice9>
+        <HelpPanel>Please select parts and press NEXT.</HelpPanel>
       </div>
     </div>
   )
