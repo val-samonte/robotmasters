@@ -59,6 +59,7 @@ export const elemLookup = [
 export const maps = [
   {
     id: 'demo',
+    skin: '/skins/map_demo.png',
     tiles: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -79,8 +80,13 @@ export const maps = [
     spawnPositions: [
       {
         x: 16,
-        y: 192,
+        y: 196,
         facing_right: true,
+      },
+      {
+        x: 224,
+        y: 196,
+        facing_right: false,
       },
     ],
   },

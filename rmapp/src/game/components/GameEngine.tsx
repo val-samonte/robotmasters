@@ -1,14 +1,15 @@
 import { Application, useExtend } from '@pixi/react'
 import { Container, Graphics, Sprite } from 'pixi.js'
-import { StageScaler } from '../../wrapper/components/StageScaler'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { GameObjectView } from './GameObjectView'
 import { GameState } from '../types/GameState'
 import init, { RmGameEngine } from '../../wasm/wasm_bindgen_wrapper'
 import { maps } from '../constants'
 import { CharacterRender } from './CharacterRender'
+import { MapRender } from './MapRender'
+import { ViewWrapper } from './ViewWrapper'
 
-const desiredFPS = 60
+const desiredFPS = 20
 const frameInterval = 1000 / desiredFPS
 
 export interface GameObject {
@@ -33,6 +34,12 @@ export interface GameEngineProps {
   demo: boolean
   objects: GameObject[]
   gravity: number
+  characters: {
+    head: string
+    body: string
+    legs: string
+    weapon: string
+  }[]
 }
 
 export function GameEgine({
@@ -42,6 +49,7 @@ export function GameEgine({
   demo,
   objects,
   gravity,
+  characters,
 }: GameEngineProps) {
   useExtend({
     Sprite,
@@ -98,7 +106,7 @@ export function GameEgine({
       if (game.current) {
         game.current.free()
       }
-      console.log('Instance', mapId, seed, demo, objects, gravity)
+
       const map = maps.find((m) => m.id === mapId) ?? maps[0]
       const initialObjects = objects.map((o, i) => {
         return {
@@ -123,7 +131,7 @@ export function GameEgine({
   if (!gameState) return null
 
   return (
-    <StageScaler>
+    <ViewWrapper>
       <Application
         width={256}
         height={240}
@@ -131,24 +139,16 @@ export function GameEgine({
         resolution={1}
         backgroundColor={0x000000}
       >
-        {map.tiles.map((row, i) =>
-          row.map((tile, j) => {
-            if (tile === 0) return null
-            return (
-              <GameObjectView
-                key={`${i}-${j}`}
-                x={j * 16}
-                y={i * 16}
-                width={16}
-                height={16}
-                color={'gray'}
-              />
-            )
-          })
-        )}
+        <MapRender skin={map.skin} />
         {(gameState?.entities ?? []).map((obj) => {
           if (!obj.projectile_id) {
-            return <CharacterRender {...obj} />
+            return (
+              <CharacterRender
+                {...obj}
+                {...characters[0]}
+                frame={gameState.frame}
+              />
+            )
           }
           return (
             <GameObjectView
@@ -161,6 +161,6 @@ export function GameEgine({
           )
         })}
       </Application>
-    </StageScaler>
+    </ViewWrapper>
   )
 }

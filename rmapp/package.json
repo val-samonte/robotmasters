@@ -11,12 +11,12 @@
     "build:wasm": "cd ../wasm-bindgen-wrapper && wasm-pack build --target web --out-dir ../rmviewer/src/wasm"
   },
   "dependencies": {
-    "@pixi/react": "8.0.0-beta.21",
+    "@pixi/react": "^8.0.0",
     "@tailwindcss/vite": "^4.0.0",
     "@uidotdev/usehooks": "^2.4.1",
     "classnames": "^2.5.1",
     "jotai": "^2.12.1",
-    "pixi.js": "8.6.6",
+    "pixi.js": "^8.8.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-router": "^7.3.0",

@@ -16,6 +16,7 @@ import { ActionChip } from '../components/ActionChip'
 import { Button } from '../components/Button'
 import { GameEgine } from '../components/GameEngine'
 import { actionLookup, cpuLookup } from '../constants'
+import { ViewWrapper } from '../components/ViewWrapper'
 
 export function CustomizeCPUScreen() {
   const [searchParams] = useSearchParams()
@@ -97,14 +98,13 @@ export function CustomizeCPUScreen() {
       .map((name: string, i) => {
         if (mapping[i] === undefined) return undefined
         const cpuIndex = cpuLookup.findIndex((k) => k === name)
-        if (cpuIndex === undefined) return undefined
+        if (cpuIndex === -1) return undefined
         const [actionName, cost] = actions[mapping[i]]
         const actionIndex = actionLookup.findIndex((k) => k === actionName)
+        if (actionIndex === -1) return undefined
         return [cpuIndex, actionIndex, cost]
       })
       .filter((i) => i !== undefined) as number[][]
-
-    console.log(behaviors)
 
     return {
       demo: true,
@@ -113,12 +113,26 @@ export function CustomizeCPUScreen() {
       objects: [
         {
           id: 'demo_player',
+          group: 0,
+          x: 0,
+          y: 0,
+          facing_right: true,
+          width: 16,
+          height: 28,
+          behaviors,
+          jump_force,
+          move_speed,
+          weapons: [[...wData.data]],
+          protections,
+        },
+        {
+          id: 'demo_player2',
           group: 1,
           x: 0,
           y: 0,
           facing_right: true,
           width: 16,
-          height: 32,
+          height: 28,
           behaviors,
           jump_force,
           move_speed,
@@ -286,7 +300,11 @@ export function CustomizeCPUScreen() {
                 setPause((p) => !p)
               }}
             >
-              <GameEgine {...gameEngineProps} paused={pause} />
+              <GameEgine
+                {...gameEngineProps}
+                paused={pause}
+                characters={[{ head, body, legs, weapon }]}
+              />
             </div>
           </div>
         </div>
