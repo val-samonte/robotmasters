@@ -4,6 +4,7 @@ export class RmGameEngine {
   free(): void;
   constructor(seed: number, demo: boolean, initial_objects_js: any, tiles_js: any, gravity: number);
   get_frame(): any;
+  next_frame_no_data(): boolean;
   next_frame(): any;
 }
 
@@ -14,6 +15,7 @@ export interface InitOutput {
   readonly __wbg_rmgameengine_free: (a: number, b: number) => void;
   readonly rmgameengine_new: (a: number, b: number, c: any, d: any, e: number) => number;
   readonly rmgameengine_get_frame: (a: number) => any;
+  readonly rmgameengine_next_frame_no_data: (a: number) => number;
   readonly rmgameengine_next_frame: (a: number) => any;
   readonly __wbindgen_exn_store: (a: number) => void;
   readonly __externref_table_alloc: () => number;

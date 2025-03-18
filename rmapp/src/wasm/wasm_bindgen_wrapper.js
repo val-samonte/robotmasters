@@ -205,6 +205,13 @@ export class RmGameEngine {
         return ret;
     }
     /**
+     * @returns {boolean}
+     */
+    next_frame_no_data() {
+        const ret = wasm.rmgameengine_next_frame_no_data(this.__wbg_ptr);
+        return ret !== 0;
+    }
+    /**
      * @returns {any}
      */
     next_frame() {

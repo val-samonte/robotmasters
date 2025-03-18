@@ -9,7 +9,7 @@ import { CharacterRender } from './CharacterRender'
 import { MapRender } from './MapRender'
 import { ViewWrapper } from './ViewWrapper'
 
-const desiredFPS = 20
+const desiredFPS = 60
 const frameInterval = 1000 / desiredFPS
 
 export interface GameObject {
@@ -118,7 +118,7 @@ export function GameEgine({
       })
       game.current = new RmGameEngine(
         333,
-        true,
+        demo,
         initialObjects,
         map.tiles,
         gravity

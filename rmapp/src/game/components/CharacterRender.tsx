@@ -1,5 +1,5 @@
 import { Assets, Texture, Rectangle } from 'pixi.js'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CharacterEntity } from '../types/Entity'
 import { usePlayerSkin } from '../../utils/usePlayerSkin'
 import { useBlobUrlToBase64 } from '../../utils/useBlobToBase64'
@@ -8,8 +8,6 @@ import { actionLookup } from '../constants'
 export function CharacterRender({
   x,
   y,
-  width,
-  height,
   c_bottom,
   vel_x,
   vel_y,
