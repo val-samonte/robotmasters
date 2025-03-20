@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@pixi/react": "^8.0.0",
+    "@solana/kit": "^2.1.0",
+    "@solana/webcrypto-ed25519-polyfill": "^2.1.0",
     "@tailwindcss/vite": "^4.0.0",
     "@uidotdev/usehooks": "^2.4.1",
     "classnames": "^2.5.1",

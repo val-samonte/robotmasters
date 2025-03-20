@@ -12,7 +12,6 @@ export class SessionStore extends DurableObject {
 	private state: DurableObjectState;
 	private initialized = false;
 
-	// src/sessionStore.ts (partial)
 	async initialize(): Promise<void> {
 		if (this.initialized) return;
 		try {
@@ -20,14 +19,14 @@ export class SessionStore extends DurableObject {
 				if (this.initialized) return;
 				console.log('Executing: CREATE TABLE sessions');
 				this.state.storage.sql.exec(`
-        CREATE TABLE IF NOT EXISTS sessions (
-          public_key TEXT PRIMARY KEY,
-          nonce TEXT NOT NULL,
-          token TEXT,
-          created_at INTEGER NOT NULL,
-          expires_at INTEGER
-        )
-      `);
+          CREATE TABLE IF NOT EXISTS sessions (
+            public_key TEXT PRIMARY KEY,
+            nonce TEXT NOT NULL,
+            token TEXT,
+            created_at INTEGER NOT NULL,
+            expires_at INTEGER
+          )
+        `);
 				this.initialized = true;
 				console.log('Sessions table initialized');
 			});
@@ -48,6 +47,7 @@ export class SessionStore extends DurableObject {
 			return new Response("Missing 'public_key' parameter", { status: 400 });
 		}
 
+		// Handle token verification
 		if (url.pathname.endsWith('/verify')) {
 			const token = request.headers.get('Authorization')?.replace('Bearer ', '');
 			if (!token) {
@@ -64,10 +64,11 @@ export class SessionStore extends DurableObject {
 			return new Response('Token valid', { status: 200 });
 		}
 
+		// Generate a nonce for the caller to sign
 		if (method === 'GET') {
 			const nonce = crypto.randomUUID();
 			const createdAt = Math.floor(Date.now() / 1000);
-			const expiresAt = createdAt + 300;
+			const expiresAt = createdAt + 300; // 5-minute expiration
 
 			console.log('Executing: INSERT OR REPLACE INTO sessions (public_key, nonce, created_at, expires_at) VALUES (?, ?, ?, ?)', [
 				publicKey,
@@ -85,7 +86,7 @@ export class SessionStore extends DurableObject {
 				);
 			} catch (error) {
 				console.error('SQL Insert Error:', error);
-				throw error;
+				return new Response('Failed to store nonce', { status: 500 });
 			}
 
 			return new Response(JSON.stringify({ nonce }), {
@@ -94,12 +95,21 @@ export class SessionStore extends DurableObject {
 			});
 		}
 
+		// Verify signature and issue a token
 		if (method === 'POST') {
-			const { signature, nonce } = await request.json<{ signature: string; nonce: string }>();
-			if (!signature || !nonce) {
-				return new Response("Missing 'signature' or 'nonce'", { status: 400 });
+			let signature: string, nonce: string;
+			try {
+				const body = await request.json<{ signature: string; nonce: string }>();
+				signature = body.signature;
+				nonce = body.nonce;
+				if (!signature || !nonce) {
+					return new Response("Missing 'signature' or 'nonce' in request body", { status: 400 });
+				}
+			} catch (error) {
+				return new Response('Invalid JSON body', { status: 400 });
 			}
 
+			// Fetch the stored nonce for this public key
 			console.log('Executing: SELECT nonce, expires_at FROM sessions WHERE public_key = ?', [publicKey]);
 			const stored = this.state.storage.sql.exec('SELECT nonce, expires_at FROM sessions WHERE public_key = ?', publicKey).one();
 
@@ -107,23 +117,43 @@ export class SessionStore extends DurableObject {
 				return new Response('Invalid or expired nonce', { status: 401 });
 			}
 
-			const publicKeyBytes = bs58.decode(publicKey);
-			const nonceBytes = new TextEncoder().encode(nonce);
-			const signatureBytes = bs58.decode(signature);
+			// Verify the signature
+			try {
+				const publicKeyBytes = bs58.decode(publicKey); // Decode base58 public key
+				const nonceBytes = new TextEncoder().encode(nonce); // Convert nonce to Uint8Array
+				const signatureBytes = bs58.decode(signature); // Decode base58 signature
 
-			const ed25519Key = await crypto.subtle.importKey('raw', publicKeyBytes, { name: 'Ed25519' }, false, ['verify']);
+				// Import the public key into Web Crypto API
+				const ed25519Key = await crypto.subtle.importKey(
+					'raw', // Raw Ed25519 public key format
+					publicKeyBytes,
+					{ name: 'Ed25519' },
+					false, // Not extractable
+					['verify'] // Usage
+				);
 
-			const isValid = await crypto.subtle.verify('Ed25519', ed25519Key, signatureBytes, nonceBytes);
+				// Verify the signature against the nonce
+				const isValid = await crypto.subtle.verify('Ed25519', ed25519Key, signatureBytes, nonceBytes);
 
-			if (!isValid) {
-				return new Response('Invalid signature', { status: 401 });
+				if (!isValid) {
+					return new Response('Invalid signature', { status: 401 });
+				}
+			} catch (error) {
+				console.error('Signature verification failed:', error);
+				return new Response('Signature verification error', { status: 500 });
 			}
 
+			// Signature is valid, issue a token
 			const token = crypto.randomUUID();
-			const tokenExpiresAt = Math.floor(Date.now() / 1000) + 86400;
+			const tokenExpiresAt = Math.floor(Date.now() / 1000) + 86400; // 24-hour expiration
 
 			console.log('Executing: UPDATE sessions SET token = ?, expires_at = ? WHERE public_key = ?', [token, tokenExpiresAt, publicKey]);
-			this.state.storage.sql.exec('UPDATE sessions SET token = ?, expires_at = ? WHERE public_key = ?', token, tokenExpiresAt, publicKey);
+			try {
+				this.state.storage.sql.exec('UPDATE sessions SET token = ?, expires_at = ? WHERE public_key = ?', token, tokenExpiresAt, publicKey);
+			} catch (error) {
+				console.error('SQL Update Error:', error);
+				return new Response('Failed to store token', { status: 500 });
+			}
 
 			return new Response(JSON.stringify({ token }), {
 				status: 200,
