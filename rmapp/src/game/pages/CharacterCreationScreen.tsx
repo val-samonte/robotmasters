@@ -50,6 +50,7 @@ export function CharacterCreationScreen() {
       weapon,
       paint,
     })
+
     return p.toString()
   }, [head, body, legs, weapon, paint])
 

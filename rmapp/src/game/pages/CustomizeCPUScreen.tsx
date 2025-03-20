@@ -18,7 +18,7 @@ import { actionLookup, cpuLookup } from '../constants'
 import { HelpPanel } from '../components/HelpPanel'
 
 export function CustomizeCPUScreen() {
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [selected, setSelected] = useState<number | null>(null)
   const [mapping, setMapping] = useState<(number | undefined)[]>([])
   const setPaint = useSetAtom(paintAtom)
@@ -38,26 +38,6 @@ export function CustomizeCPUScreen() {
       setPaint(searchParams.get('paint')!)
     }
   }, [searchParams])
-
-  const initializedBehaviors = useRef(false)
-  useEffect(() => {
-    if (searchParams.has('behaviors') && !initializedBehaviors.current) {
-      initializedBehaviors.current = true
-      const behaviors = JSON.parse(searchParams.get('behaviors') ?? '[]')
-      const mappings: (number | undefined)[] = []
-      behaviors.forEach(([cpuIndex, actionIndex]: number[]) => {
-        const cpuName = cpuLookup[cpuIndex]
-        const index = [...hData.details.cpu, 'always'].findIndex(
-          (i: string) => i === cpuName
-        )
-        if (index > -1) {
-          mappings[index] = actionIndex
-        }
-      })
-      console.log(behaviors, mappings)
-      setMapping(mappings)
-    }
-  }, [])
 
   const { actions, weight, protections } = useMemo(() => {
     const actions: [string, number][] = [
@@ -109,17 +89,13 @@ export function CustomizeCPUScreen() {
 
     const behaviors = [...hData.details.cpu, 'always']
       .map((name: string, i) => {
-        try {
-          if (mapping[i] === undefined) return undefined
-          const cpuIndex = cpuLookup.findIndex((k) => k === name)
-          if (cpuIndex === -1) return undefined
-          const [actionName, cost] = actions[mapping[i]]
-          const actionIndex = actionLookup.findIndex((k) => k === actionName)
-          if (actionIndex === -1) return undefined
-          return [cpuIndex, actionIndex, cost]
-        } catch (e) {
-          return undefined
-        }
+        if (mapping[i] === undefined) return undefined
+        const cpuIndex = cpuLookup.findIndex((k) => k === name)
+        if (cpuIndex === -1) return undefined
+        const [actionName, cost] = actions[mapping[i]]
+        const actionIndex = actionLookup.findIndex((k) => k === actionName)
+        if (actionIndex === -1) return undefined
+        return [cpuIndex, actionIndex, cost]
       })
       .filter((i) => i !== undefined) as number[][]
 
@@ -148,9 +124,32 @@ export function CustomizeCPUScreen() {
     }
   }, [mapping, actions, weight, protections])
 
+  const initializedBehaviors = useRef(false)
+  useEffect(() => {
+    if (searchParams.has('behaviors') && !initializedBehaviors.current) {
+      initializedBehaviors.current = true
+      const behaviors = JSON.parse(searchParams.get('behaviors') ?? '[]')
+      const mappings: (number | undefined)[] = []
+      behaviors.forEach(([cpuIndex, actionIndex]: number[]) => {
+        const cpuName = cpuLookup[cpuIndex]
+        const index = [...hData.details.cpu, 'always'].findIndex(
+          (i: string) => i === cpuName
+        )
+        const actionName = actionLookup[actionIndex]
+        const actionListIndex = actions.findIndex((i) => i[0] === actionName)
+
+        if (index > -1) {
+          mappings[index] = actionListIndex
+        }
+      })
+      setMapping(mappings)
+    }
+  }, [actions])
+
   useEffect(() => {
     searchParams.set('behaviors', JSON.stringify(behaviors))
-  }, [behaviors, searchParams])
+    setSearchParams(searchParams)
+  }, [behaviors, mapping, searchParams])
 
   return (
     <div className="w-full h-full items-center justify-center p-[1rem]">

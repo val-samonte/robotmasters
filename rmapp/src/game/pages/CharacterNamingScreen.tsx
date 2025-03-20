@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from 'react-router'
+import { Link, useNavigate, useSearchParams } from 'react-router'
 import { Slice9 } from '../components/Slice9'
 import { Icon } from '../components/Icon'
 import { SpriteText } from '../components/SpriteText'
@@ -8,9 +8,11 @@ import { paintAtom } from '../../atoms/paintAtom'
 import { useSetAtom } from 'jotai'
 import { HelpPanel } from '../components/HelpPanel'
 import { keyboard } from '../constants'
+import cn from 'classnames'
 
 export function CharacterNamingScreen() {
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const nav = useNavigate()
   const setPaint = useSetAtom(paintAtom)
 
   useEffect(() => {
@@ -23,7 +25,7 @@ export function CharacterNamingScreen() {
   const body = searchParams.get('body') ?? '0'
   const legs = searchParams.get('legs') ?? '0'
   const weapon = searchParams.get('weapon') ?? 'hg_0'
-  const [name, setName] = useState('')
+  const [name, setName] = useState(searchParams.get('name') ?? '')
 
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
@@ -53,7 +55,17 @@ export function CharacterNamingScreen() {
     }
   }, [])
 
-  // to={`/create_name?${searchParams.toString()}`}
+  useEffect(() => {
+    searchParams.set('name', name)
+    setSearchParams(searchParams)
+  }, [name, searchParams])
+
+  const disableNext = !(name.length > 2 && name.length < 7)
+
+  const onNext = () => {
+    if (disableNext) return
+    nav(`/create_game_account?${searchParams.toString()}`)
+  }
 
   return (
     <div className="w-full h-full items-center justify-center p-[1rem]">
@@ -72,7 +84,14 @@ export function CharacterNamingScreen() {
               </Slice9>
             </Link>
             <SpriteText>ROBOT MASTER NAME</SpriteText>
-            <button className="-translate-y-[0.125rem]">
+            <button
+              disabled={disableNext}
+              className={cn(
+                '-translate-y-[0.125rem]',
+                !disableNext && 'cursor-pointer'
+              )}
+              onClick={onNext}
+            >
               <Slice9 frameUrl="/button.png">
                 <div className="flex gap-[0.125rem] px-[0.125rem]">
                   <SpriteText>NEXT</SpriteText>
