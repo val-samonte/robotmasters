@@ -57,7 +57,7 @@ export function CharacterCreationScreen() {
     <div className="w-full h-full items-center justify-center p-[1rem]">
       <div className="flex flex-col gap-[0.5rem] h-full">
         <Slice9 className="h-[4rem]">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center h-full">
             <Link to={`/`} className="-translate-y-[0.125rem]">
               <Slice9 frameUrl="/button.png">
                 <div className="flex gap-[0.125rem] px-[0.125rem]">

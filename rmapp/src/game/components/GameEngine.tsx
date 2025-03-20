@@ -144,6 +144,7 @@ export function GameEgine({
           if (!obj.projectile_id) {
             return (
               <CharacterRender
+                key={obj.entity}
                 {...obj}
                 {...characters[0]}
                 frame={gameState.frame}

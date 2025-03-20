@@ -2,7 +2,7 @@ import { Link, useSearchParams } from 'react-router'
 import { SpriteText } from '../components/SpriteText'
 import { CharacterPanel } from '../components/CharacterPanel'
 import { itemDetails } from '../itemList'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import cn from 'classnames'
 import { useSetAtom } from 'jotai'
 import { paintAtom } from '../../atoms/paintAtom'
@@ -28,6 +28,10 @@ export function CustomizeCPUScreen() {
   const body = searchParams.get('body') ?? '0'
   const legs = searchParams.get('legs') ?? '0'
   const weapon = searchParams.get('weapon') ?? 'hg_0'
+  const hData = itemDetails['head_' + head]
+  const bData = itemDetails['body_' + body]
+  const lData = itemDetails['legs_' + legs]
+  const wData = itemDetails[weapon]
 
   useEffect(() => {
     if (searchParams.has('paint')) {
@@ -35,12 +39,27 @@ export function CustomizeCPUScreen() {
     }
   }, [searchParams])
 
-  const { actions, weight, protections } = useMemo(() => {
-    const hData = itemDetails['head_' + head]
-    const bData = itemDetails['body_' + body]
-    const lData = itemDetails['legs_' + legs]
-    const wData = itemDetails[weapon]
+  const initializedBehaviors = useRef(false)
+  useEffect(() => {
+    if (searchParams.has('behaviors') && !initializedBehaviors.current) {
+      initializedBehaviors.current = true
+      const behaviors = JSON.parse(searchParams.get('behaviors') ?? '[]')
+      const mappings: (number | undefined)[] = []
+      behaviors.forEach(([cpuIndex, actionIndex]: number[]) => {
+        const cpuName = cpuLookup[cpuIndex]
+        const index = [...hData.details.cpu, 'always'].findIndex(
+          (i: string) => i === cpuName
+        )
+        if (index > -1) {
+          mappings[index] = actionIndex
+        }
+      })
+      console.log(behaviors, mappings)
+      setMapping(mappings)
+    }
+  }, [])
 
+  const { actions, weight, protections } = useMemo(() => {
     const actions: [string, number][] = [
       ...(hData.details.actions ?? []),
       ...(bData.details.actions ?? []),
@@ -76,11 +95,7 @@ export function CustomizeCPUScreen() {
     return { actions, weight, protections }
   }, [searchParams])
 
-  const gameEngineProps = useMemo(() => {
-    const hData = itemDetails['head_' + head]
-    const bData = itemDetails['body_' + body]
-    const wData = itemDetails[weapon]
-
+  const { behaviors, ...gameEngineProps } = useMemo(() => {
     // let generator = bData.details.stats.find(
     //   ([key]: any) => key === 'GEN'
     // )[1] ?? '1:1'
@@ -94,17 +109,22 @@ export function CustomizeCPUScreen() {
 
     const behaviors = [...hData.details.cpu, 'always']
       .map((name: string, i) => {
-        if (mapping[i] === undefined) return undefined
-        const cpuIndex = cpuLookup.findIndex((k) => k === name)
-        if (cpuIndex === -1) return undefined
-        const [actionName, cost] = actions[mapping[i]]
-        const actionIndex = actionLookup.findIndex((k) => k === actionName)
-        if (actionIndex === -1) return undefined
-        return [cpuIndex, actionIndex, cost]
+        try {
+          if (mapping[i] === undefined) return undefined
+          const cpuIndex = cpuLookup.findIndex((k) => k === name)
+          if (cpuIndex === -1) return undefined
+          const [actionName, cost] = actions[mapping[i]]
+          const actionIndex = actionLookup.findIndex((k) => k === actionName)
+          if (actionIndex === -1) return undefined
+          return [cpuIndex, actionIndex, cost]
+        } catch (e) {
+          return undefined
+        }
       })
       .filter((i) => i !== undefined) as number[][]
 
     return {
+      behaviors,
       demo: true,
       gravity: 0.5,
       mapId: 'demo',
@@ -128,11 +148,15 @@ export function CustomizeCPUScreen() {
     }
   }, [mapping, actions, weight, protections])
 
+  useEffect(() => {
+    searchParams.set('behaviors', JSON.stringify(behaviors))
+  }, [behaviors, searchParams])
+
   return (
     <div className="w-full h-full items-center justify-center p-[1rem]">
       <div className="flex flex-col gap-[0.5rem] h-full">
         <Slice9 className="h-[4rem]">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center h-full">
             <Link
               to={`/create?${searchParams.toString()}`}
               className="-translate-y-[0.125rem]"
@@ -206,37 +230,45 @@ export function CustomizeCPUScreen() {
                           itemDetails['head_' + head].details.cpu.length + 1
                         ).keys(),
                       ].map((i) => {
-                        if (mapping[i] !== undefined) {
-                          const [name, cost] = actions[mapping[i]]
-                          return (
-                            <button
-                              key={`${name}_${i}`}
-                              onClick={() => {
-                                if (selected !== i) {
-                                  setSelected(i)
-                                } else {
-                                  setSelected(null)
-                                }
-                              }}
-                              className="cursor-pointer flex w-full"
-                            >
-                              <ActionChip
-                                name={name}
-                                cost={cost}
-                                inserted
-                                className={cn(selected === i && 'opacity-0')}
-                              />
-                            </button>
-                          )
-                        }
+                        try {
+                          if (mapping[i] !== undefined) {
+                            const [name, cost] = actions[mapping[i]]
+                            return (
+                              <button
+                                key={i}
+                                onClick={() => {
+                                  if (selected !== i) {
+                                    setSelected(i)
+                                  } else {
+                                    setSelected(null)
+                                  }
+                                }}
+                                className="cursor-pointer flex w-full"
+                              >
+                                <ActionChip
+                                  name={name}
+                                  cost={cost}
+                                  inserted
+                                  className={cn(selected === i && 'opacity-0')}
+                                />
+                              </button>
+                            )
+                          }
+                        } catch (e) {}
 
-                        return <div className="h-[2rem]" />
+                        return <div key={i} className="h-[2rem]" />
                       })}
                     </div>
                   </div>
                 </div>
                 <div className="flex justify-center">
-                  <Button onClick={() => setMapping([])}>CLEAR</Button>
+                  <Button
+                    onClick={() => {
+                      setMapping([])
+                    }}
+                  >
+                    CLEAR
+                  </Button>
                 </div>
               </Panel>
               {selected !== null && (
@@ -252,6 +284,7 @@ export function CustomizeCPUScreen() {
                               prev[selected] = i
                               return [...prev]
                             })
+
                             setSelected(null)
                           }}
                           className="cursor-pointer"
@@ -266,6 +299,7 @@ export function CustomizeCPUScreen() {
                             prev[selected] = undefined
                             return [...prev]
                           })
+
                           setSelected(null)
                         }}
                         className="w-full"

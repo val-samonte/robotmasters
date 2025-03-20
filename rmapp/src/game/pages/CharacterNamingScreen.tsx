@@ -53,11 +53,13 @@ export function CharacterNamingScreen() {
     }
   }, [])
 
+  // to={`/create_name?${searchParams.toString()}`}
+
   return (
     <div className="w-full h-full items-center justify-center p-[1rem]">
       <div className="flex flex-col gap-[0.5rem] h-full">
         <Slice9 className="h-[4rem]">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center h-full">
             <Link
               to={`/custom_cpu?${searchParams.toString()}`}
               className="-translate-y-[0.125rem]"
@@ -70,17 +72,14 @@ export function CharacterNamingScreen() {
               </Slice9>
             </Link>
             <SpriteText>ROBOT MASTER NAME</SpriteText>
-            <Link
-              to={`/create_game_account?${searchParams.toString()}`}
-              className="-translate-y-[0.125rem]"
-            >
+            <button className="-translate-y-[0.125rem]">
               <Slice9 frameUrl="/button.png">
                 <div className="flex gap-[0.125rem] px-[0.125rem]">
                   <SpriteText>NEXT</SpriteText>
                   <Icon>{'>'}</Icon>
                 </div>
               </Slice9>
-            </Link>
+            </button>
           </div>
         </Slice9>
 
