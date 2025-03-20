@@ -111,7 +111,15 @@ export const itemDetails: any = {
     details: {
       img: '/icons/head_0.png',
       stats: [['WGT', 2]],
-      cpu: ['bat.10', 'roll 10', 'w.slip', 'ground', 'no ammo', 'w.lean'],
+      cpu: [
+        'bat.10',
+        'roll 10',
+        'w.slip',
+        'roll 10',
+        'ground',
+        'no ammo',
+        'w.lean',
+      ],
       protection: [['P', 3]],
     },
   },
@@ -375,6 +383,19 @@ export const itemDetails: any = {
     },
     data: [
       // 7, 15
+      1, // firearm
+      4, // projectile lookup index
+      1, // projectile ejection method (single, tri45, tri90, shotgun90, up, down) todo: replace with ejection "script"
+      2, // attack energy cost
+      10, // reload energy cost
+      240, // reload cooldown
+      1, // ammo cap
+      0, // rate of fire
+      7, //   outputPosX = 7,
+      15, //   outputPosY = 15,
+      1, //   outputCount = 1, // note: loop, attackCounter still counts individually
+      0, //   recoil = 0,
+      1, //   requireGrounded,
     ],
   },
   gl_1: {
@@ -398,6 +419,19 @@ export const itemDetails: any = {
     },
     data: [
       // 4, 15
+      1, // firearm
+      5, // projectile lookup index
+      1, // projectile ejection method (single, tri45, tri90, shotgun90, up, down) todo: replace with ejection "script"
+      2, // attack energy cost
+      10, // reload energy cost
+      60, // reload cooldown
+      3, // ammo cap
+      60, // rate of fire
+      4, //   outputPosX = 5,
+      15, //   outputPosY = 16,
+      1, //   outputCount = 1, // note: loop, attackCounter still counts individually
+      0, //   recoil = 0,
+      1, //   requireGrounded,
     ],
   },
   gl_2: {
@@ -421,6 +455,19 @@ export const itemDetails: any = {
     },
     data: [
       // 8, 16
+      1, // firearm
+      6, // projectile lookup index
+      1, // projectile ejection method (single, tri45, tri90, shotgun90, up, down) todo: replace with ejection "script"
+      2, // attack energy cost
+      10, // reload energy cost
+      240, // reload cooldown
+      24, // ammo cap
+      60, // rate of fire
+      8, //   outputPosX = 5,
+      16, //   outputPosY = 16,
+      1, //   outputCount = 1, // note: loop, attackCounter still counts individually
+      0, //   recoil = 0,
+      0, //   requireGrounded,
     ],
   },
 }

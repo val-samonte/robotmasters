@@ -7,7 +7,8 @@ import { MainScreen } from './game/pages/MainScreen'
 import { CharacterCreationScreen } from './game/pages/CharacterCreationScreen'
 import { CustomizeCPUScreen } from './game/pages/CustomizeCPUScreen'
 import { CharacterNamingScreen } from './game/pages/CharacterNamingScreen'
-import { CreateGameAccount } from './game/pages/CreateGameAccount'
+// import { CreateGameAccount } from './game/pages/CreateGameAccount'
+import { UnderConstruction } from './game/pages/UnderConstruction'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -18,7 +19,8 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/create" element={<CharacterCreationScreen />} />
           <Route path="/custom_cpu" element={<CustomizeCPUScreen />} />
           <Route path="/create_name" element={<CharacterNamingScreen />} />
-          <Route path="/create_game_account" element={<CreateGameAccount />} />
+          {/* <Route path="/create_game_account" element={<CreateGameAccount />} /> */}
+          <Route path="/create_game_account" element={<UnderConstruction />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -12,6 +12,16 @@ export class SessionStore extends DurableObject {
 	private state: DurableObjectState;
 	private initialized = false;
 
+	// Default CORS headers
+	private getCorsHeaders(origin: string | null): Record<string, string> {
+		return {
+			'Access-Control-Allow-Origin': origin || '*', // Reflect the request origin or use '*' for local dev
+			'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+			'Access-Control-Max-Age': '86400', // Cache preflight for 24 hours
+		};
+	}
+
 	async initialize(): Promise<void> {
 		if (this.initialized) return;
 		try {
@@ -41,34 +51,44 @@ export class SessionStore extends DurableObject {
 
 		const url = new URL(request.url);
 		const method = request.method;
-		const publicKey = url.searchParams.get('public_key');
+		const origin = request.headers.get('Origin'); // Get the requesting origin
+		const corsHeaders = this.getCorsHeaders(origin);
 
-		if (!publicKey) {
-			return new Response("Missing 'public_key' parameter", { status: 400 });
+		// Handle OPTIONS preflight requests
+		if (method === 'OPTIONS') {
+			return new Response(null, {
+				status: 204, // No Content
+				headers: corsHeaders,
+			});
 		}
 
-		// Handle token verification
+		const publicKey = url.searchParams.get('public_key');
+		if (!publicKey) {
+			return new Response("Missing 'public_key' parameter", { status: 400, headers: corsHeaders });
+		}
+
+		// Token verification endpoint
 		if (url.pathname.endsWith('/verify')) {
 			const token = request.headers.get('Authorization')?.replace('Bearer ', '');
 			if (!token) {
-				return new Response('Missing token', { status: 400 });
+				return new Response('Missing token', { status: 400, headers: corsHeaders });
 			}
 
 			console.log('Executing: SELECT token, expires_at FROM sessions WHERE public_key = ?', [publicKey]);
 			const stored = this.state.storage.sql.exec('SELECT token, expires_at FROM sessions WHERE public_key = ?', publicKey).one();
 
 			if (!stored || stored.token !== token || (stored.expires_at as number) < Math.floor(Date.now() / 1000)) {
-				return new Response('Invalid or expired token', { status: 401 });
+				return new Response('Invalid or expired token', { status: 401, headers: corsHeaders });
 			}
 
-			return new Response('Token valid', { status: 200 });
+			return new Response('Token valid', { status: 200, headers: corsHeaders });
 		}
 
-		// Generate a nonce for the caller to sign
+		// Generate nonce
 		if (method === 'GET') {
 			const nonce = crypto.randomUUID();
 			const createdAt = Math.floor(Date.now() / 1000);
-			const expiresAt = createdAt + 300; // 5-minute expiration
+			const expiresAt = createdAt + 300;
 
 			console.log('Executing: INSERT OR REPLACE INTO sessions (public_key, nonce, created_at, expires_at) VALUES (?, ?, ?, ?)', [
 				publicKey,
@@ -86,16 +106,16 @@ export class SessionStore extends DurableObject {
 				);
 			} catch (error) {
 				console.error('SQL Insert Error:', error);
-				return new Response('Failed to store nonce', { status: 500 });
+				return new Response('Failed to store nonce', { status: 500, headers: corsHeaders });
 			}
 
 			return new Response(JSON.stringify({ nonce }), {
 				status: 200,
-				headers: { 'Content-Type': 'application/json' },
+				headers: { 'Content-Type': 'application/json', ...corsHeaders },
 			});
 		}
 
-		// Verify signature and issue a token
+		// Verify signature and issue token
 		if (method === 'POST') {
 			let signature: string, nonce: string;
 			try {
@@ -103,64 +123,52 @@ export class SessionStore extends DurableObject {
 				signature = body.signature;
 				nonce = body.nonce;
 				if (!signature || !nonce) {
-					return new Response("Missing 'signature' or 'nonce' in request body", { status: 400 });
+					return new Response("Missing 'signature' or 'nonce' in request body", { status: 400, headers: corsHeaders });
 				}
 			} catch (error) {
-				return new Response('Invalid JSON body', { status: 400 });
+				return new Response('Invalid JSON body', { status: 400, headers: corsHeaders });
 			}
 
-			// Fetch the stored nonce for this public key
 			console.log('Executing: SELECT nonce, expires_at FROM sessions WHERE public_key = ?', [publicKey]);
 			const stored = this.state.storage.sql.exec('SELECT nonce, expires_at FROM sessions WHERE public_key = ?', publicKey).one();
 
 			if (!stored || stored.nonce !== nonce || (stored.expires_at as number) < Math.floor(Date.now() / 1000)) {
-				return new Response('Invalid or expired nonce', { status: 401 });
+				return new Response('Invalid or expired nonce', { status: 401, headers: corsHeaders });
 			}
 
-			// Verify the signature
 			try {
-				const publicKeyBytes = bs58.decode(publicKey); // Decode base58 public key
-				const nonceBytes = new TextEncoder().encode(nonce); // Convert nonce to Uint8Array
-				const signatureBytes = bs58.decode(signature); // Decode base58 signature
+				const publicKeyBytes = bs58.decode(publicKey);
+				const nonceBytes = new TextEncoder().encode(nonce);
+				const signatureBytes = bs58.decode(signature);
 
-				// Import the public key into Web Crypto API
-				const ed25519Key = await crypto.subtle.importKey(
-					'raw', // Raw Ed25519 public key format
-					publicKeyBytes,
-					{ name: 'Ed25519' },
-					false, // Not extractable
-					['verify'] // Usage
-				);
+				const ed25519Key = await crypto.subtle.importKey('raw', publicKeyBytes, { name: 'Ed25519' }, false, ['verify']);
 
-				// Verify the signature against the nonce
 				const isValid = await crypto.subtle.verify('Ed25519', ed25519Key, signatureBytes, nonceBytes);
-
 				if (!isValid) {
-					return new Response('Invalid signature', { status: 401 });
+					return new Response('Invalid signature', { status: 401, headers: corsHeaders });
 				}
 			} catch (error) {
 				console.error('Signature verification failed:', error);
-				return new Response('Signature verification error', { status: 500 });
+				return new Response('Signature verification error', { status: 500, headers: corsHeaders });
 			}
 
-			// Signature is valid, issue a token
 			const token = crypto.randomUUID();
-			const tokenExpiresAt = Math.floor(Date.now() / 1000) + 86400; // 24-hour expiration
+			const tokenExpiresAt = Math.floor(Date.now() / 1000) + 86400;
 
 			console.log('Executing: UPDATE sessions SET token = ?, expires_at = ? WHERE public_key = ?', [token, tokenExpiresAt, publicKey]);
 			try {
 				this.state.storage.sql.exec('UPDATE sessions SET token = ?, expires_at = ? WHERE public_key = ?', token, tokenExpiresAt, publicKey);
 			} catch (error) {
 				console.error('SQL Update Error:', error);
-				return new Response('Failed to store token', { status: 500 });
+				return new Response('Failed to store token', { status: 500, headers: corsHeaders });
 			}
 
 			return new Response(JSON.stringify({ token }), {
 				status: 200,
-				headers: { 'Content-Type': 'application/json' },
+				headers: { 'Content-Type': 'application/json', ...corsHeaders },
 			});
 		}
 
-		return new Response('Method not allowed', { status: 405 });
+		return new Response('Method not allowed', { status: 405, headers: corsHeaders });
 	}
 }

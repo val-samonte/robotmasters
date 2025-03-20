@@ -16,6 +16,7 @@
     "@solana/webcrypto-ed25519-polyfill": "^2.1.0",
     "@tailwindcss/vite": "^4.0.0",
     "@uidotdev/usehooks": "^2.4.1",
+    "bs58": "^6.0.0",
     "classnames": "^2.5.1",
     "jotai": "^2.12.1",
     "pixi.js": "^8.8.1",

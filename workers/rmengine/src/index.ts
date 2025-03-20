@@ -2,7 +2,7 @@
 
 import { SessionStore } from './sessionStore';
 import { MatchMaker } from './matchMaker';
-import { generateKeyPair } from '@solana/kit';
+import { createKeyPairFromBytes, getAddressFromPublicKey } from '@solana/kit';
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -14,25 +14,25 @@ export default {
 			return sessionStore.fetch(request);
 		}
 
-		// // Require access_token for all subsequent endpoints
-		// const token = request.headers.get('Authorization')?.replace('Bearer ', '');
-		// if (!token) {
-		// 	return new Response("Missing 'Authorization' header with Bearer token", { status: 400 });
-		// }
+		// Require access_token for all subsequent endpoints
+		const token = request.headers.get('Authorization')?.replace('Bearer ', '');
+		if (!token) {
+			return new Response("Missing 'Authorization' header with Bearer token", { status: 400 });
+		}
 
-		// // Verify token with SessionStore
-		// const publicKey = url.searchParams.get('public_key');
-		// if (!publicKey) {
-		// 	return new Response("Missing 'public_key' parameter", { status: 400 });
-		// }
-		// const sessionStore = env.SESSION_STORE.get(env.SESSION_STORE.idFromName('auth'));
-		// const verifyRequest = new Request(`${url.origin}/auth/verify?public_key=${publicKey}`, {
-		// 	headers: { Authorization: `Bearer ${token}` },
-		// });
-		// const verifyResponse = await sessionStore.fetch(verifyRequest);
-		// if (verifyResponse.status !== 200) {
-		// 	return new Response('Unauthorized - Invalid or expired token', { status: 401 });
-		// }
+		// Verify token with SessionStore
+		const publicKey = url.searchParams.get('public_key');
+		if (!publicKey) {
+			return new Response("Missing 'public_key' parameter", { status: 400 });
+		}
+		const sessionStore = env.SESSION_STORE.get(env.SESSION_STORE.idFromName('auth'));
+		const verifyRequest = new Request(`${url.origin}/auth/verify?public_key=${publicKey}`, {
+			headers: { Authorization: `Bearer ${token}` },
+		});
+		const verifyResponse = await sessionStore.fetch(verifyRequest);
+		if (verifyResponse.status !== 200) {
+			return new Response('Unauthorized - Invalid or expired token', { status: 401 });
+		}
 
 		// // Matchmaking endpoint
 		// if (url.pathname.startsWith('/matchmaking')) {
@@ -40,15 +40,16 @@ export default {
 		// 	return matchMaker.fetch(request);
 		// }
 
-		// // Airdrop endpoint
-		// if (url.pathname === '/airdrop') {
-		// 	// Load keypair from environment (JSON array of bytes)
-		// 	const secretKeyBytes = JSON.parse(env.SOLANA_SECRET_KEY); // Parse JSON string to array
-		// 	const secretKey = Uint8Array.from(secretKeyBytes); // Convert to Uint8Array
-		// 	const keypairSigner = await createKeyPairFromBytes(secretKey);
-		// 	if (keypairSigner.address !== env.SOLANA_PUBLIC_KEY) {
-		// 		return new Response('Keypair mismatch', { status: 500 });
-		// 	}
+		// Airdrop endpoint
+		if (url.pathname === '/airdrop') {
+			const secretKeyBytes = JSON.parse(env.SOLANA_SECRET_KEY);
+			const secretKey = Uint8Array.from(secretKeyBytes);
+			const keypairSigner = await createKeyPairFromBytes(secretKey);
+			const adPubkey = await getAddressFromPublicKey(keypairSigner.publicKey);
+			if (adPubkey !== env.SOLANA_PUBLIC_KEY) {
+				return new Response('Keypair mismatch', { status: 500 });
+			}
+		}
 
 		// 	// Set up RPC with HTTP transport
 		// 	const transport = createHttpTransport({ url: env.SOLANA_RPC_URL });
@@ -71,7 +72,6 @@ export default {
 		// 		status: 200,
 		// 		headers: { 'Content-Type': 'application/json' },
 		// 	});
-		// }
 
 		return new Response('Not Found', { status: 404 });
 	},

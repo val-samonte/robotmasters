@@ -11,11 +11,11 @@ export function MainScreen() {
         className="h-[8rem] w-[28rem] flex-none"
       />
       <div className="flex flex-col mt-[3em] gap-y-[1.5em] items-center">
-        <SpriteText>CONTINUE</SpriteText>
+        <SpriteText color="#707070">CONTINUE</SpriteText>
         <Link to={'/create'}>
           <SpriteText>NEW GAME</SpriteText>
         </Link>
-        <SpriteText>LOAD GAME</SpriteText>
+        <SpriteText color="#707070">LOAD GAME</SpriteText>
       </div>
     </div>
   )
