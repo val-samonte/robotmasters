@@ -18,7 +18,7 @@ export function CharacterRender({
   legs,
   weapon,
   last_action,
-  last_action_frame,
+  // last_action_frame,
   frame,
 }: CharacterEntity & {
   head: string

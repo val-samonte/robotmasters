@@ -10,7 +10,7 @@ install()
 export function CreateGameAccount() {
   const started = useRef(false)
   const [status, setStatus] = useState('GENERATING GAME KEYPAIR')
-  const [kp, setKp] = useState<CryptoKeyPair | null>(null)
+  const [_, setKp] = useState<CryptoKeyPair | null>(null)
   // const [address, setAddress] = useState('')
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export function CreateGameAccount() {
         }
       )
       const tokenJson = await tokenResponse.json()
-      const { token } = tokenJson
+      const { token: _ } = tokenJson
 
       setStatus('AWAITING SOL AIRDROP')
 
