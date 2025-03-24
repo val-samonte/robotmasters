@@ -97,7 +97,6 @@ function CharacterPanelInner(props: CharacterStatsProps) {
         <div className="flex portrait:flex-col landscape:px-[1rem] landscape:h-[2rem] portrait:py-[1rem]">
           {['s', 'p', 'c', 'a', 'r'].map((t: string) => (
             <Tab
-              className="landscape:hidden"
               flip={viewMode === 1}
               key={t}
               asIcon={true}
