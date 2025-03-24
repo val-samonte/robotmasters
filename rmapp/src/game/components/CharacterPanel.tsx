@@ -22,14 +22,6 @@ export interface CharacterStatsProps {
 }
 
 export function CharacterPanel(props: CharacterStatsProps) {
-  return (
-    <Suspense>
-      <CharacterPanelInner {...props} />
-    </Suspense>
-  )
-}
-
-function CharacterPanelInner(props: CharacterStatsProps) {
   const { head, body, legs, weapon } = props
   const [tab, setTab] = useState('s')
   const viewMode = useAtomValue(viewModeAtom)
@@ -95,19 +87,21 @@ function CharacterPanelInner(props: CharacterStatsProps) {
       </div>
       <div className="flex flex-col portrait:flex-row flex-auto portrait:-space-x-[0.25rem]">
         <div className="flex portrait:flex-col landscape:px-[1rem] landscape:h-[2rem] portrait:py-[1rem]">
-          {['s', 'p', 'c', 'a', 'r'].map((t: string) => (
-            <Tab
-              flip={viewMode === 1}
-              key={t}
-              asIcon={true}
-              active={t === tab}
-              onClick={() => {
-                setTab(t)
-              }}
-            >
-              {t}
-            </Tab>
-          ))}
+          <Suspense>
+            {['s', 'p', 'c', 'a', 'r'].map((t: string) => (
+              <Tab
+                flip={viewMode === 1}
+                key={t}
+                asIcon={true}
+                active={t === tab}
+                onClick={() => {
+                  setTab(t)
+                }}
+              >
+                {t}
+              </Tab>
+            ))}
+          </Suspense>
         </div>
         <Slice9 className="relative flex-auto">
           {tab === 's' && (

@@ -207,7 +207,7 @@ export function CustomizeCPUScreen() {
               />
             </div>
 
-            <div className="flex flex-auto portrait:flex-col-reverse">
+            <div className="flex flex-auto portrait:flex-col-reverse gap-[0.5rem]">
               <Slice9 className="flex-auto min-w-[24rem] relative">
                 <Panel title="CPU">
                   <div className="flex">
