@@ -197,8 +197,8 @@ export function CustomizeCPUScreen() {
         </Slice9>
 
         <div className="flex-auto relative overflow-hidden">
-          <div className="flex absolute inset-0 gap-[0.5rem] portrait:flex-col-reverse">
-            <div className="w-[16rem] h-full flex-none portrait:hidden">
+          <div className="flex absolute inset-0 gap-[0.5rem] portrait:flex-col">
+            <div className="landscape:w-[16rem] landscape:h-full portrait:h-[12rem] portrait:w-full flex-none">
               <CharacterPanel
                 head={head}
                 body={body}
@@ -207,12 +207,15 @@ export function CustomizeCPUScreen() {
               />
             </div>
 
-            <Slice9 className="flex-auto min-w-[24rem] relative">
-              <Panel title="CPU">
-                <div className="flex">
-                  <div className="flex-1 flex flex-col gap-[0.25rem] pl-[0.5rem]">
-                    {[...itemDetails['head_' + head].details.cpu, 'always'].map(
-                      (name: string, i: number) => {
+            <div className="flex flex-auto portrait:flex-col-reverse">
+              <Slice9 className="flex-auto min-w-[24rem] relative">
+                <Panel title="CPU">
+                  <div className="flex">
+                    <div className="flex-1 flex flex-col gap-[0.25rem] pl-[0.5rem]">
+                      {[
+                        ...itemDetails['head_' + head].details.cpu,
+                        'always',
+                      ].map((name: string, i: number) => {
                         return (
                           <button
                             key={i}
@@ -233,109 +236,111 @@ export function CustomizeCPUScreen() {
                             )}
                           </button>
                         )
-                      }
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex-1 flex flex-col gap-[0.25rem] pr-[0.5rem]">
-                      {[
-                        ...Array(
-                          itemDetails['head_' + head].details.cpu.length + 1
-                        ).keys(),
-                      ].map((i) => {
-                        try {
-                          if (mapping[i] !== undefined) {
-                            const [name, cost] = actions[mapping[i]]
-                            return (
-                              <button
-                                key={i}
-                                onClick={() => {
-                                  if (selected !== i) {
-                                    setSelected(i)
-                                  } else {
-                                    setSelected(null)
-                                  }
-                                }}
-                                className="cursor-pointer flex w-full"
-                              >
-                                <ActionChip
-                                  name={name}
-                                  cost={cost}
-                                  inserted
-                                  className={cn(selected === i && 'opacity-0')}
-                                />
-                              </button>
-                            )
-                          }
-                        } catch (e) {}
-
-                        return <div key={i} className="h-[2rem]" />
                       })}
                     </div>
+                    <div className="flex-1">
+                      <div className="flex-1 flex flex-col gap-[0.25rem] pr-[0.5rem]">
+                        {[
+                          ...Array(
+                            itemDetails['head_' + head].details.cpu.length + 1
+                          ).keys(),
+                        ].map((i) => {
+                          try {
+                            if (mapping[i] !== undefined) {
+                              const [name, cost] = actions[mapping[i]]
+                              return (
+                                <button
+                                  key={i}
+                                  onClick={() => {
+                                    if (selected !== i) {
+                                      setSelected(i)
+                                    } else {
+                                      setSelected(null)
+                                    }
+                                  }}
+                                  className="cursor-pointer flex w-full"
+                                >
+                                  <ActionChip
+                                    name={name}
+                                    cost={cost}
+                                    inserted
+                                    className={cn(
+                                      selected === i && 'opacity-0'
+                                    )}
+                                  />
+                                </button>
+                              )
+                            }
+                          } catch (e) {}
+
+                          return <div key={i} className="h-[2rem]" />
+                        })}
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="flex justify-center">
-                  <Button
-                    onClick={() => {
-                      setMapping([])
-                    }}
-                  >
-                    CLEAR
-                  </Button>
-                </div>
-              </Panel>
-              {selected !== null && (
-                <div className="absolute right-[calc(50%-3rem)] top-[1rem]">
-                  <Slice9 className="absolute w-[16rem] z-50 max-h-full">
-                    <div className="flex flex-col gap-[0.25rem] p-[0.5rem]">
-                      {actions.map(([action, cost]: any, i: number) => (
-                        <button
-                          key={i}
+                  <div className="flex justify-center">
+                    <Button
+                      onClick={() => {
+                        setMapping([])
+                      }}
+                    >
+                      CLEAR
+                    </Button>
+                  </div>
+                </Panel>
+                {selected !== null && (
+                  <div className="absolute right-[calc(50%-3rem)] top-[1rem]">
+                    <Slice9 className="absolute w-[16rem] z-50 max-h-full">
+                      <div className="flex flex-col gap-[0.25rem] p-[0.5rem]">
+                        {actions.map(([action, cost]: any, i: number) => (
+                          <button
+                            key={i}
+                            onClick={() => {
+                              if (selected === null) return
+                              setMapping((prev) => {
+                                prev[selected] = i
+                                return [...prev]
+                              })
+
+                              setSelected(null)
+                            }}
+                            className="cursor-pointer"
+                          >
+                            <ActionChip name={action} cost={cost} />
+                          </button>
+                        ))}
+                        <Button
                           onClick={() => {
                             if (selected === null) return
                             setMapping((prev) => {
-                              prev[selected] = i
+                              prev[selected] = undefined
                               return [...prev]
                             })
 
                             setSelected(null)
                           }}
-                          className="cursor-pointer"
+                          className="w-full"
                         >
-                          <ActionChip name={action} cost={cost} />
-                        </button>
-                      ))}
-                      <Button
-                        onClick={() => {
-                          if (selected === null) return
-                          setMapping((prev) => {
-                            prev[selected] = undefined
-                            return [...prev]
-                          })
+                          UNSET
+                        </Button>
+                      </div>
+                    </Slice9>
+                  </div>
+                )}
+              </Slice9>
 
-                          setSelected(null)
-                        }}
-                        className="w-full"
-                      >
-                        UNSET
-                      </Button>
-                    </div>
-                  </Slice9>
-                </div>
-              )}
-            </Slice9>
-
-            <div
-              className="bg-black landscape:h-full portrait:w-full aspect-[16/15] flex-none relative overflow-hidden"
-              onClick={() => {
-                setPause((p) => !p)
-              }}
-            >
-              <GameEgine
-                {...gameEngineProps}
-                paused={pause}
-                characters={[{ head, body, legs, weapon }]}
-              />
+              <div
+                className="bg-black landscape:h-full portrait:w-full aspect-[16/15] flex-none relative overflow-hidden"
+                onClick={() => {
+                  setPause((p) => !p)
+                }}
+              >
+                <GameEgine
+                  {...gameEngineProps}
+                  paused={pause}
+                  characters={[{ head, body, legs, weapon }]}
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -72,3 +72,9 @@ button {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+#root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

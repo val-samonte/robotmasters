@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { Fragment, Suspense, useMemo, useState } from 'react'
 import { itemDetails, statTips } from '../itemList'
 import { SpriteText } from './SpriteText'
 import { CharacterPreview } from './CharacterPreview'
@@ -11,6 +11,8 @@ import { CpuChip } from './CpuChip'
 import { HelpTip } from './HelpTip'
 import { ActionChip } from './ActionChip'
 import { Icon } from './Icon'
+import { useAtomValue } from 'jotai'
+import { viewModeAtom } from '../../atoms/viewModeAtom'
 
 export interface CharacterStatsProps {
   head: string
@@ -20,8 +22,17 @@ export interface CharacterStatsProps {
 }
 
 export function CharacterPanel(props: CharacterStatsProps) {
+  return (
+    <Suspense>
+      <CharacterPanelInner {...props} />
+    </Suspense>
+  )
+}
+
+function CharacterPanelInner(props: CharacterStatsProps) {
   const { head, body, legs, weapon } = props
   const [tab, setTab] = useState('s')
+  const viewMode = useAtomValue(viewModeAtom)
 
   const overallStats = useMemo(() => {
     let generator =
@@ -61,9 +72,16 @@ export function CharacterPanel(props: CharacterStatsProps) {
   }, [head, body, legs, weapon])
 
   return (
-    <div className="flex flex-col h-full -gap-[0.25rem]">
-      <div className="relative h-[8rem]">
-        <img src="/mug_bg.png" className="w-[24rem]" draggable="false" />
+    <div className="flex flex-col portrait:flex-row h-full portrait:w-full -gap-[0.25rem]">
+      <div className="relative landscape:h-[8rem] portrait:h-full portrait:w-[8rem]">
+        <img
+          src="/mug_bg.png"
+          className="w-[24rem] portrait:hidden"
+          draggable="false"
+        />
+        <div className="absolute inset-y-[0.25rem] left-[0rem] -right-[2rem] landscape:hidden">
+          <Slice9 frameUrl="/plate.png" className="h-full w-full" />
+        </div>
         <div className="flex items-center justify-center p-[1em] pointer-events-none absolute inset-0">
           <CharacterPreview {...props} />
         </div>
@@ -75,10 +93,12 @@ export function CharacterPanel(props: CharacterStatsProps) {
           )}
         </div>
       </div>
-      <div className="flex flex-col flex-auto">
-        <div className="flex px-[1rem] h-[2rem]">
+      <div className="flex flex-col portrait:flex-row flex-auto portrait:-space-x-[0.25rem]">
+        <div className="flex portrait:flex-col landscape:px-[1rem] landscape:h-[2rem] portrait:py-[1rem]">
           {['s', 'p', 'c', 'a', 'r'].map((t: string) => (
             <Tab
+              className="landscape:hidden"
+              flip={viewMode === 1}
               key={t}
               asIcon={true}
               active={t === tab}
@@ -116,24 +136,26 @@ function OverallStats({
 }) {
   return (
     <Panel title="STATS">
-      {overallStats.map(([key, val]: any, i: number) => {
-        const isOverweight = (key === 'POW' || key === 'WGT') && overweight
-        return (
-          <HelpTip
-            title={statTips[key].title}
-            message={statTips[key].message}
-            key={`${key}_${i}`}
-            className="flex px-[0.5rem]"
-          >
-            <SpriteText color={isOverweight ? '#F89838' : '#FFFFFF'}>
-              {key.toUpperCase()}
-            </SpriteText>
-            <SpriteText color={isOverweight ? '#F89838' : '#FFFFFF'}>
-              {val + ''}
-            </SpriteText>
-          </HelpTip>
-        )
-      })}
+      <div className="grid portrait:grid-cols-2 landscape:grid-cols-1 gap-[1rem]">
+        {overallStats.map(([key, val]: any, i: number) => {
+          const isOverweight = (key === 'POW' || key === 'WGT') && overweight
+          return (
+            <HelpTip
+              title={statTips[key].title}
+              message={statTips[key].message}
+              key={`${key}_${i}`}
+              className="flex px-[0.5rem]"
+            >
+              <SpriteText color={isOverweight ? '#F89838' : '#FFFFFF'}>
+                {key.toUpperCase()}
+              </SpriteText>
+              <SpriteText color={isOverweight ? '#F89838' : '#FFFFFF'}>
+                {val + ''}
+              </SpriteText>
+            </HelpTip>
+          )
+        })}
+      </div>
     </Panel>
   )
 }
@@ -141,7 +163,7 @@ function OverallStats({
 function Parts({ head, body, legs, weapon }: CharacterStatsProps) {
   return (
     <Panel title="PARTS">
-      <div className="flex flex-col gap-[0.25rem]">
+      <div className="grid portrait:grid-cols-2 landscape:grid-cols-1 gap-[0.25rem]">
         <HelpTip
           title={itemDetails[weapon].name}
           message={itemDetails[weapon].desc}
@@ -190,7 +212,7 @@ function Parts({ head, body, legs, weapon }: CharacterStatsProps) {
 function CPU({ head }: CharacterStatsProps) {
   return (
     <Panel title={`CPU`}>
-      <div className="flex flex-col gap-[0.25rem] px-[0.5rem]">
+      <div className="grid portrait:grid-cols-2 landscape:grid-cols-1 gap-[0.25rem] px-[0.5rem] gap-x-[1rem]">
         {[...itemDetails['head_' + head].details.cpu, 'always'].map(
           (name: string, i: number) => (
             <CpuChip key={i} name={name} index={i} />
@@ -214,7 +236,7 @@ function Actions({ head, body, legs, weapon }: CharacterStatsProps) {
   }, [head, body, legs, weapon])
   return (
     <Panel title="ACTIONS">
-      <div className="flex flex-col gap-[0.25rem] px-[0.5rem]">
+      <div className="grid portrait:grid-cols-2 landscape:grid-cols-1 gap-[0.25rem] px-[0.5rem] gap-x-[1rem]">
         {actions.map(([action, cost]: any, i: number) => (
           <ActionChip key={i} name={action} cost={cost} />
         ))}
@@ -252,19 +274,21 @@ function Armor({ head, body, legs }: CharacterStatsProps) {
 
   return (
     <Panel title="ARMOR">
-      {armor.map((val: number, i: number) => {
-        if (val === 0) return null
-        const elem = ['P', 'B', 'F', 'S', 'H', 'C', 'J', 'V'][i]
-        return (
-          <div
-            key={i}
-            className="flex items-center justify-between px-[0.5rem]"
-          >
-            <ElemLabel key={i} value={elem} />
-            <SpriteText>{val}</SpriteText>
-          </div>
-        )
-      })}
+      <div className="grid portrait:grid-cols-2 landscape:grid-cols-1 gap-[1rem]">
+        {armor.map((val: number, i: number) => {
+          if (val === 0) return null
+          const elem = ['P', 'B', 'F', 'S', 'H', 'C', 'J', 'V'][i]
+          return (
+            <div
+              key={i}
+              className="flex items-center justify-between px-[0.5rem]"
+            >
+              <ElemLabel key={i} value={elem} />
+              <SpriteText>{val}</SpriteText>
+            </div>
+          )
+        })}
+      </div>
     </Panel>
   )
 }

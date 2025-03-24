@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai'
 import { rootFontSizeAtom } from '../../atoms/rootFontSizeAtom'
 
 interface Slice9Props {
-  children: React.ReactNode
+  children?: React.ReactNode
   className?: string
   frameUrl?: string
 }

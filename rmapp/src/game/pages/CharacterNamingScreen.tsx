@@ -103,8 +103,8 @@ export function CharacterNamingScreen() {
         </Slice9>
 
         <div className="flex-auto relative overflow-hidden">
-          <div className="flex absolute inset-0 gap-[0.5rem]">
-            <div className="w-[16rem] h-full flex-none portrait:hidden">
+          <div className="flex absolute inset-0 gap-[0.5rem] portrait:flex-col">
+            <div className="landscape:w-[16rem] landscape:h-full portrait:h-[12rem] portrait:w-full flex-none">
               <CharacterPanel
                 head={head}
                 body={body}
