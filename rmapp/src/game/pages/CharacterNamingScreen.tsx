@@ -104,7 +104,7 @@ export function CharacterNamingScreen() {
 
         <div className="flex-auto relative overflow-hidden">
           <div className="flex absolute inset-0 gap-[0.5rem]">
-            <div className="w-[16rem] h-full flex-none">
+            <div className="w-[16rem] h-full flex-none portrait:hidden">
               <CharacterPanel
                 head={head}
                 body={body}
@@ -126,7 +126,7 @@ export function CharacterNamingScreen() {
               </Slice9>
               <Slice9 frameUrl="/plate.png" className="flex-auto">
                 <div className="flex items-center justify-center h-full">
-                  <div className="grid grid-cols-10 grid-rows-6 gap-[1rem]">
+                  <div className="grid grid-cols-10 grid-rows-6 gap-[2rem]">
                     {keyboard.map((key, i) => (
                       <button
                         key={i}

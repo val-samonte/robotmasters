@@ -225,44 +225,28 @@ function Actions({ head, body, legs, weapon }: CharacterStatsProps) {
 
 function Armor({ head, body, legs }: CharacterStatsProps) {
   const armor = useMemo(() => {
-    const armor: number[] = [
-      0, // punct
-      0, // blast
-      0, // heat
+    const armor = [
+      0, // Punct
+      0, // Blast
+      0, // Force
+      0, // Sever
+      0, // Heat
+      0, // Cryo
+      0, // Jolt
+      0, // Virus
     ]
-    itemDetails['head_' + head].details.protection.forEach(
-      ([elem, val]: any) => {
-        if (elem === 'P') {
-          armor[0] += val
-        } else if (elem === 'B') {
-          armor[1] += val
-        } else if (elem === 'H') {
-          armor[2] += val
-        }
-      }
-    )
-    itemDetails['body_' + body].details.protection.forEach(
-      ([elem, val]: any) => {
-        if (elem === 'P') {
-          armor[0] += val
-        } else if (elem === 'B') {
-          armor[1] += val
-        } else if (elem === 'H') {
-          armor[2] += val
-        }
-      }
-    )
-    itemDetails['legs_' + legs].details.protection.forEach(
-      ([elem, val]: any) => {
-        if (elem === 'P') {
-          armor[0] += val
-        } else if (elem === 'B') {
-          armor[1] += val
-        } else if (elem === 'H') {
-          armor[2] += val
-        }
-      }
-    )
+
+    ;[
+      itemDetails['head_' + head],
+      itemDetails['body_' + body],
+      itemDetails['legs_' + legs],
+    ].forEach((part) => {
+      part.details.protection.forEach(([elem, val]: [string, number]) => {
+        const index = { P: 0, B: 1, F: 2, S: 3, H: 4, C: 5, J: 6, V: 7 }[elem]
+        if (index === undefined) return
+        armor[index] += val
+      })
+    })
     return armor
   }, [head, body, legs])
 
@@ -270,7 +254,7 @@ function Armor({ head, body, legs }: CharacterStatsProps) {
     <Panel title="ARMOR">
       {armor.map((val: number, i: number) => {
         if (val === 0) return null
-        const elem = ['P', 'B', 'H'][i]
+        const elem = ['P', 'B', 'F', 'S', 'H', 'C', 'J', 'V'][i]
         return (
           <div
             key={i}

@@ -84,7 +84,7 @@ export function CharacterCreationScreen() {
 
         <div className="flex-auto relative overflow-hidden">
           <div className="flex absolute inset-0 gap-[0.5rem]">
-            <div className="w-[16rem] h-full flex-none">
+            <div className="w-[16rem] h-full flex-none portrait:hidden">
               <CharacterPanel
                 head={head}
                 body={body}

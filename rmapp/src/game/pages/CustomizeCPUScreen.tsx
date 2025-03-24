@@ -197,8 +197,8 @@ export function CustomizeCPUScreen() {
         </Slice9>
 
         <div className="flex-auto relative overflow-hidden">
-          <div className="flex absolute inset-0 gap-[0.5rem]">
-            <div className="w-[16rem] h-full flex-none">
+          <div className="flex absolute inset-0 gap-[0.5rem] portrait:flex-col-reverse">
+            <div className="w-[16rem] h-full flex-none portrait:hidden">
               <CharacterPanel
                 head={head}
                 body={body}
@@ -326,7 +326,7 @@ export function CustomizeCPUScreen() {
             </Slice9>
 
             <div
-              className="bg-black h-full aspect-[16/15] flex-none relative overflow-hidden"
+              className="bg-black landscape:h-full portrait:w-full aspect-[16/15] flex-none relative overflow-hidden"
               onClick={() => {
                 setPause((p) => !p)
               }}
