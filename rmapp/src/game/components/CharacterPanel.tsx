@@ -1,4 +1,4 @@
-import { Fragment, Suspense, useMemo, useState } from 'react'
+import { Suspense, useMemo, useState } from 'react'
 import { itemDetails, statTips } from '../itemList'
 import { SpriteText } from './SpriteText'
 import { CharacterPreview } from './CharacterPreview'
