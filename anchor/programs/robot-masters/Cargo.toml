@@ -18,4 +18,4 @@ idl-build = ["anchor-lang/idl-build"]
 
 [dependencies]
 anchor-lang = "0.30.1"
-rmengine = { git = "ssh://git@github.com/val-samonte/rmengine.git", branch = "main", package = "rmengine", default-features = false }
+rmengine = { git = "ssh://git@github.com/val-samonte/rmengine.git", branch = "remove-ecs", package = "rmengine", default-features = false }

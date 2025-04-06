@@ -164,52 +164,29 @@
 // pub struct Initialize {}
 
 use anchor_lang::prelude::*;
-use rmengine::{
-    components::{Group, Position, Velocity},
-    fix16::Fix16,
-    game::GameState,
-    lcg::LCG,
-    tinyecs::TinyECS as World,
-};
 
 declare_id!("YUe8UbyQ88GmfjUpDE6TwoUbqwaj6qteWqd2VLWoVFm");
 
 #[program]
 pub mod robot_masters {
+    use rmengine::structs::Game;
+
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
         msg!("Initializing robot-masters program");
 
-        // Simplified game state
-        let game_state = GameState {
-            state: 0, // Demo mode
-            game_over_since: None,
-            winner: None,
-            frame: 0,
-            gravity: 50,
-            seed: 12345,
-            tile_map: vec![vec![1; 16]; 15], // Simple 15x16 map
-            to_spawn_projectiles: Vec::new(),
-            to_despawn_projectiles: Vec::new(),
-            to_damage: Vec::new(),
-        };
+        let mut game = Game::init(123, vec![], (9, 10), vec![], vec![], vec![], vec![], vec![]);
 
-        // Initialize world and spawn an entity
-        let mut world = World::new();
-        let entity = world.spawn((
-            Group(0),
-            Position {
-                x: Fix16::from_whole(32),
-                y: Fix16::from_whole(192),
-            },
-            Velocity { x: 0, y: 0 },
-        ));
+        msg!("Frame: {:?}", game.frame);
+        game.next_frame();
 
-        let _prng = LCG::new(game_state.seed);
+        let state = game.export_state();
 
-        msg!("World initialized with entity {:?}", entity);
-        msg!("Game state frame: {}", game_state.frame);
+        let new_game = Game::import_state(&state.unwrap()).unwrap();
+
+        msg!("New Frame: {:?}", new_game.frame);
+
         Ok(())
     }
 }
