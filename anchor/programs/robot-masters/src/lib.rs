@@ -91,8 +91,9 @@ pub mod robot_masters {
                     5,  // limit (ammo cap)
                     10, // refresh cost (reload energy cost)
                     60, // refresh duration (reload duration)
-                    0, 0, 0, 0, // extra args (4 in size)
-                    0, 0, 0, // script (rest of the vec, includes reference to projectile 1)
+                    0, 0, 0, 0, // extra args (4 in size, index 0 points to projectile 1)
+                    0, 0,
+                    0, // script (rest of the vec, uses index 0 for projectile 1 reference)
                 ],
             ],
             vec![
