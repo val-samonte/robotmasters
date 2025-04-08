@@ -1336,7 +1336,7 @@ checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
 [[package]]
 name = "rmengine"
 version = "0.1.0"
-source = "git+ssh://git@github.com/val-samonte/rmengine.git?branch=remove-ecs#7e4a15fbfb94ff54e3497fe402615f587c585796"
+source = "git+ssh://git@github.com/val-samonte/rmengine.git?branch=remove-ecs#2aabe3a49677507a8cb00cdf344c8b33a4593b15"
 dependencies = [
  "bincode",
  "serde",
