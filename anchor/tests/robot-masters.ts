@@ -26,7 +26,7 @@ describe('robot-masters', () => {
     let prevFrame = -1
     let i = 0
 
-    while (i < 400) {
+    while (i <= 640) {
       await program.methods
         .runGame()
         .accounts({
@@ -36,12 +36,13 @@ describe('robot-masters', () => {
 
       const state = await program.account.gameState.fetch(
         gameAddress,
-        'confirmed'
+        'processed'
       )
       console.log('frame', state.frame, 'size', state.len)
       if (state.frame !== prevFrame) {
         prevFrame = state.frame
       } else {
+        console.log('Final frame: ', state.frame)
         break
       }
       i++

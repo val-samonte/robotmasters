@@ -37,7 +37,7 @@ pub fn run_game_handler(ctx: Context<RunGame>) -> Result<()> {
 
 	let state = game.export_state().unwrap();
 	let len = state.len();
-	if len > 3000 {
+	if len > 3600 {
         return Err(RunGameError::DataTooLarge.into());
     }
 

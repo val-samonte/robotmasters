@@ -14,11 +14,11 @@ pub struct GameState {
     // initial game state hash
     // - in wasm, export game state, sha256
     // ending game state hash
-    pub data: [u8; 2000],
+    pub data: Box<[u8; 3600]>,
 }
 
 impl GameState {
     pub fn len() -> usize {
-        8 + 1 + 32 + 2 + 2 + 2000
+        8 + 1 + 32 + 2 + 2 + 3600
     }
 }
