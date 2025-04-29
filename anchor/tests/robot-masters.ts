@@ -23,10 +23,24 @@ describe('robot-masters', () => {
   })
 
   it('Runs the game', async () => {
-    await program.methods.runGame().rpc()
+    let prevFrame = -1
+    let i = 0
 
-    const state = await program.account.gameState.fetch(gameAddress)
-
-    console.log(state)
+    while (i < 400) {
+      await program.methods
+        .runGame()
+        .accounts({
+          authority: program.provider.publicKey,
+        })
+        .rpc()
+      const state = await program.account.gameState.fetch(gameAddress)
+      console.log(state)
+      if (state.frame !== prevFrame) {
+        prevFrame = state.frame
+      } else {
+        break
+      }
+      i++
+    }
   })
 })

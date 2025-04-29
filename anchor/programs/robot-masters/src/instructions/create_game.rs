@@ -41,6 +41,7 @@ pub fn create_game_handler(ctx: Context<CreateGame>) -> Result<()> {
 		condition_def(),
 		vec![],
 	);
+	
 
 	let state = game.export_state().unwrap();
 	let len = state.len();
@@ -50,6 +51,7 @@ pub fn create_game_handler(ctx: Context<CreateGame>) -> Result<()> {
 
 	game_state.len = len as u16;
 	game_state.frame = game.game_state.frame;
+
 	game_state.data[..len].copy_from_slice(&state);
 
 	// todo: store initial state hash

@@ -6,11 +6,10 @@ use crate::states::GameState;
 #[derive(Accounts)]
 pub struct RunGame<'info> {
 	#[account(
-	seeds = [
-		b"game",
-	], 
-	has_one = authority,
-	bump = game_state.bump, 
+		seeds = [
+			b"game",
+		], 
+		bump = game_state.bump, 
 	)]
 	pub game_state: Box<Account<'info, GameState>>,
 
