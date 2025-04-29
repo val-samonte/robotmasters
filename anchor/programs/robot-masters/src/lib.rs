@@ -1,3 +1,5 @@
+#![allow(unexpected_cfgs)]
+
 use anchor_lang::prelude::*;
 
 pub mod example;
@@ -11,10 +13,33 @@ declare_id!("YUe8UbyQ88GmfjUpDE6TwoUbqwaj6qteWqd2VLWoVFm");
 #[program]
 pub mod robot_masters {
 
+    use rmengine::structs::Game;
+
     use super::*;
 
-    pub fn initialize(_ctx: Context<Initialize>) -> Result<()> {
+    // // Solana-specific logger
+    // struct SolanaLogger;
+
+    // impl logger::Logger for SolanaLogger {
+    //     fn log(&self, message: &str) {
+    //         msg!("{}", message);
+    //     }
+
+    //     fn warn(&self, message: &str) {
+    //         msg!("WARN: {}", message);
+    //     }
+
+    //     fn error(&self, message: &str) {
+    //         msg!("ERROR: {}", message);
+    //     }
+    // }
+
+    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
         msg!("Initializing robot-masters program");
+
+        // // Initialize Solana logger
+        // static SOLANA_LOGGER: SolanaLogger = SolanaLogger;
+        // set_logger(&SOLANA_LOGGER);
 
         let tile_map = vec![
             vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -138,11 +163,25 @@ pub mod robot_masters {
 
         game.next_frame();
 
-        msg!("{:?}", game.game_state.frame);
+        let state = game.export_state();
+        let bytes = state.unwrap();
+
+        msg!("Game size: {:?}", bytes.len());
+
+        let new_game = Game::import_state(&bytes).unwrap();
+
+        msg!("New Frame: {:?}", new_game.game_state.frame);
+
+        // Log for verification
+        msg!("Game initialized successfully");
 
         Ok(())
     }
 }
 
 #[derive(Accounts)]
-pub struct Initialize {}
+pub struct Initialize<'info> {
+    #[account(mut)]
+    pub signer: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
