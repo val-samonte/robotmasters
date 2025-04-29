@@ -1,123 +1,144 @@
 use anchor_lang::prelude::*;
 
+pub mod example;
+pub mod helper;
+
+pub use example::*;
+pub use helper::*;
+
 declare_id!("YUe8UbyQ88GmfjUpDE6TwoUbqwaj6qteWqd2VLWoVFm");
 
 #[program]
 pub mod robot_masters {
-    use rmengine::structs::Game;
 
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+    pub fn initialize(_ctx: Context<Initialize>) -> Result<()> {
         msg!("Initializing robot-masters program");
 
-        let mut game = Game::init(
-            123,
-            vec![
-                vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                vec![1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                vec![1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                vec![1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1],
-                vec![1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1],
-                vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-                vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-                vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-                vec![1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
-                vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            ],
-            (9, 10),
-            vec![
-                // characters
-                vec![
-                    0,   // id
-                    0,   // group,
-                    16,  // pos x
-                    192, // pos y
-                    16,  // width
-                    32,  // height
-                    1,   // dir, face right
-                    100, // health
-                    100, // energy / energy cap
-                    1,   // energy regen
-                    1,   // energy rate
-                    1,   // power
-                    1,   // weight
-                    100, // punct
-                    100, // blast
-                    100, // force
-                    100, // sever
-                    100, // heat
-                    100, // cryo
-                    100, // jolt
-                    100, // virus
-                ],
-            ],
-            vec![
-                // behaviors
-                vec![
-                    (0, 0), // always condition : shoot action
-                ],
-            ],
-            vec![
-                // spawn definitions
-                vec![
-                    // projectile 1
-                    1,   // health
-                    120, // duration
-                    8,   // damage
-                    1,   // element (punct)
-                    1,   // destroy on collision
-                    0,   // invul
-                    6,   // width
-                    2,   // height
-                    8,   // output x
-                    14,  // output y
-                    0, 0, 0, 0, // extra args (4 in size)
-                    0, 0, 0, // script (rest of the vec)
-                ],
-            ],
-            vec![
-                // action definitions
-                vec![
-                    // shoot projectile 1
-                    2,  // energy cost
-                    30, // interval (rate of fire)
-                    0,  // duration (frames that keeps this action locked)
-                    5,  // limit (ammo cap)
-                    10, // refresh cost (reload energy cost)
-                    60, // refresh duration (reload duration)
-                    0, 0, 0, 0, // extra args (4 in size, index 0 points to projectile 1)
-                    0, 0,
-                    0, // script (rest of the vec, uses index 0 for projectile 1 reference)
-                ],
-            ],
-            vec![
-                // condition definitions
-                vec![
-                    // always
-                    1, // energy cost multiplier
-                    0, 0, 0, 0, // extra args (4 in size)
-                    0, 0, 0, // script (rest of the vec)
-                ],
-            ],
+        let tile_map = vec![
+            vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            vec![1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            vec![1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            vec![1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1],
+            vec![1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+            vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+            vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+            vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+            vec![1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            vec![1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+            vec![1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+
+        // Create components
+        let mut characters = vec![gen_character(0), gen_character(1)];
+        let mut conditions = vec![
+            cond_energy20().expect("Failed to create cond_energy20"),
+            cond_leaning().expect("Failed to create cond_leaning"),
+            cond_always().expect("Failed to create cond_always"),
+            cond_rand20().expect("Failed to create cond_rand20"),
+        ];
+        let mut actions = vec![
+            action_charge().expect("Failed to create action_charge"),
+            action_turn().expect("Failed to create action_turn"),
+            action_run().expect("Failed to create action_run"),
+            action_jump().expect("Failed to create action_jump"),
+            action_shoot(ShootArgs {
+                energy_cost: 5,
+                rate_of_fire: 2,
+                reload_duration: 120,
+                round_capacity: 5,
+            })
+            .expect("Failed to create action_shoot"),
+        ];
+        let mut spawns = vec![spawn_bullet().expect("Failed to create spawn_bullet")];
+
+        let mut builder = GameBuilder::new();
+        builder.reset();
+
+        // Register components
+        let _char1_id = builder.register_character(&characters[0]);
+        let _char2_id = builder.register_character(&characters[1]);
+
+        for condition in conditions.iter_mut() {
+            let id = builder.register_condition(condition);
+            condition.id = Some(id);
+        }
+
+        for action in actions.iter_mut() {
+            let id = builder.register_action(action);
+            action.id = Some(id);
+        }
+
+        let bullet_id = builder.register_spawn(&spawns[0]);
+        spawns[0].id = Some(bullet_id);
+
+        // Associate spawn with shoot action
+        actions[4].add_spawn(bullet_id);
+
+        // Configure character1
+        characters[0]
+            .set_cpu(&[
+                conditions[0].clone(),
+                conditions[1].clone(),
+                conditions[2].clone(),
+                conditions[3].clone(),
+            ])
+            .expect("Failed to set CPU for character1");
+        characters[0]
+            .attach_action(0, &actions[0])
+            .expect("Failed to attach charge to character1");
+        characters[0]
+            .attach_action(1, &actions[1])
+            .expect("Failed to attach turn to character1");
+        characters[0]
+            .attach_action(2, &actions[3])
+            .expect("Failed to attach jump to character1");
+        characters[0]
+            .attach_action(3, &actions[2])
+            .expect("Failed to attach run to character1");
+
+        // Configure character2
+        characters[1]
+            .set_cpu(&[
+                conditions[0].clone(),
+                conditions[1].clone(),
+                conditions[2].clone(),
+                conditions[3].clone(),
+            ])
+            .expect("Failed to set CPU for character2");
+        characters[1]
+            .attach_action(0, &actions[0])
+            .expect("Failed to attach charge to character2");
+        characters[1]
+            .attach_action(1, &actions[1])
+            .expect("Failed to attach turn to character2");
+        characters[1]
+            .attach_action(2, &actions[4])
+            .expect("Failed to attach shoot to character2");
+        characters[1]
+            .attach_action(3, &actions[2])
+            .expect("Failed to attach run to character2");
+
+        // Compose the game
+        let mut game = builder.compose(
+            125,
+            false,
+            tile_map,
+            (0, 1),
+            &characters,
+            &conditions,
+            &actions,
+            &spawns,
         );
 
-        msg!("Frame: {:?}", game.frame);
         game.next_frame();
 
-        let state = game.export_state();
-        let bytes = state.unwrap();
-
-        msg!("Game size: {:?}", bytes.len());
-
-        let new_game = Game::import_state(&bytes).unwrap();
-
-        msg!("New Frame: {:?}", new_game.frame);
+        msg!("{:?}", game.game_state.frame);
 
         Ok(())
     }
