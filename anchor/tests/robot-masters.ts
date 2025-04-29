@@ -38,7 +38,7 @@ describe('robot-masters', () => {
         gameAddress,
         'confirmed'
       )
-      console.log(state)
+      console.log('frame', state.frame, 'size', state.len)
       if (state.frame !== prevFrame) {
         prevFrame = state.frame
       } else {

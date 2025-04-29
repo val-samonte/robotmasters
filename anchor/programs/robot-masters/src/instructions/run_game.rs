@@ -28,7 +28,7 @@ pub fn run_game_handler(ctx: Context<RunGame>) -> Result<()> {
 
 	// run next_frame 10 times	
 	let mut i = 0;
-	while i < 10 {
+	while i < 6 {
 		game.next_frame();
 		i += 1;
 	}
@@ -36,13 +36,13 @@ pub fn run_game_handler(ctx: Context<RunGame>) -> Result<()> {
 	game_state.frame = game.game_state.frame;
 
 	let state = game.export_state().unwrap();
-	let len = state.len() + 10;
+	let len = state.len();
 	if len > 3000 {
         return Err(RunGameError::DataTooLarge.into());
     }
 
 	game_state.len = len as u16;
-	game_state.data[..state.len()].copy_from_slice(&state);
+	game_state.data[..len].copy_from_slice(&state);
 
 	msg!("len {:?}", len);
 
