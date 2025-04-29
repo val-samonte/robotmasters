@@ -48,8 +48,12 @@ pub fn run_game_handler(ctx: Context<RunGame>) -> Result<()> {
         return Err(RunGameError::DataTooLarge.into());
     }
 
+	msg!("cmp A {:?}", &state[0..len] != &game_state.data[0..len]);
+
 	game_state.len = len as u16;
 	game_state.data[..len].copy_from_slice(&state);
+
+	msg!("cmp B {:?}", &state[0..len] != &game_state.data[0..len]);
 
 	Ok(())
 }

@@ -33,6 +33,9 @@ describe('robot-masters', () => {
           authority: program.provider.publicKey,
         })
         .rpc()
+
+      await new Promise((r) => setTimeout(r, 2000))
+
       const state = await program.account.gameState.fetch(gameAddress)
       console.log(state)
       if (state.frame !== prevFrame) {
