@@ -6,6 +6,7 @@ use crate::states::GameState;
 #[derive(Accounts)]
 pub struct RunGame<'info> {
 	#[account(
+		mut,
 		seeds = [
 			b"game",
 		], 
@@ -21,7 +22,6 @@ pub struct RunGame<'info> {
 
 pub fn run_game_handler(ctx: Context<RunGame>) -> Result<()> {
 	let game_state = &mut ctx.accounts.game_state;
-
 	let data = &game_state.data[..game_state.len as usize];
 
 	let mut game = Game::import_state(&data).unwrap();
@@ -33,27 +33,18 @@ pub fn run_game_handler(ctx: Context<RunGame>) -> Result<()> {
 		i += 1;
 	}
 
-	msg!(
-		"frame {:?} seed {:?} spawns {:?}",
-		game.game_state.frame,
-		game.game_state.seed,
-		game.spawn_instances.len(),
-	);
-
 	game_state.frame = game.game_state.frame;
 
 	let state = game.export_state().unwrap();
-	let len = state.len();
+	let len = state.len() + 10;
 	if len > 3000 {
         return Err(RunGameError::DataTooLarge.into());
     }
 
-	msg!("cmp A {:?}", &state[0..len] != &game_state.data[0..len]);
-
 	game_state.len = len as u16;
-	game_state.data[..len].copy_from_slice(&state);
+	game_state.data[..state.len()].copy_from_slice(&state);
 
-	msg!("cmp B {:?}", &state[0..len] != &game_state.data[0..len]);
+	msg!("len {:?}", len);
 
 	Ok(())
 }
