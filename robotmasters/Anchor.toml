@@ -5,9 +5,10 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-movement = "EjNAx8mcdUwxTnrxgjY5hLtyj5gjHrGfutcctmv6PCwH"
-position = "C4tc56D8fajXcEeTut3yUhBqWGRJkxRpdTmv8ecTo6fT"
-robot_masters = "2kdwQHLg92rzur3uWinZTECYByduNMsyHreV7HviPfF1"
+game_state = "5Bdg5zBdxRBSjYxnUkFshi2neQMmiSLHKYAWgkv6VNQQ"
+movement = "HNkST89REeZsKpC7yCsyPnPsowQsLJq2nL52Fzwvzy8H"
+position = "FsU2K4WV7xvzZWLQvc7H1jZdXxXmQ7MrzufvyWipdZbx"
+robotmasters = "7vFkE6M9xe2CMxJhPPaCHchcVhpPHDWCZsmCFjkhymM6"
 
 [registry]
 url = "https://api.apr.dev"

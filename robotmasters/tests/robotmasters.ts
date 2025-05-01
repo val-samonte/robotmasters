@@ -11,7 +11,7 @@ import {
 import {expect} from "chai";
 import * as anchor from "@coral-xyz/anchor";
 
-describe("robot-masters", () => {
+describe("robotmasters", () => {
   // Configure the client to use the local cluster.
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);

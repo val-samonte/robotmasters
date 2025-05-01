@@ -1,10 +1,10 @@
 use bolt_lang::*;
 
-declare_id!("C4tc56D8fajXcEeTut3yUhBqWGRJkxRpdTmv8ecTo6fT");
+declare_id!("5Bdg5zBdxRBSjYxnUkFshi2neQMmiSLHKYAWgkv6VNQQ");
 
 #[component]
 #[derive(Default)]
-pub struct Position {
+pub struct GameState {
     pub x: i64,
     pub y: i64,
     pub z: i64,

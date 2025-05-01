@@ -1,9 +1,9 @@
 use bolt_lang::prelude::*;
 
-declare_id!("2kdwQHLg92rzur3uWinZTECYByduNMsyHreV7HviPfF1");
+declare_id!("7vFkE6M9xe2CMxJhPPaCHchcVhpPHDWCZsmCFjkhymM6");
 
 #[program]
-pub mod robot_masters {
+pub mod robotmasters {
     use super::*;
 
     pub fn initialize(_ctx: Context<Initialize>) -> Result<()> {
