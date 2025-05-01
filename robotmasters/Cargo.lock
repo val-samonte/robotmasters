@@ -640,6 +640,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "create_game"
+version = "0.2.3"
+dependencies = [
+ "bolt-lang",
+ "game_state",
+ "rmengine",
+ "serde",
+]
+
+[[package]]
 name = "crunchy"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -812,6 +822,14 @@ name = "five8_core"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2551bf44bc5f776c15044b9b94153a00198be06743e262afaaa61f11ac7523a5"
+
+[[package]]
+name = "game_state"
+version = "0.2.3"
+dependencies = [
+ "bolt-lang",
+ "borsh 0.10.4",
+]
 
 [[package]]
 name = "generic-array"
@@ -1308,6 +1326,15 @@ name = "regex-syntax"
 version = "0.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
+
+[[package]]
+name = "rmengine"
+version = "0.1.0"
+source = "git+ssh://git@github.com/val-samonte/rmengine.git?branch=remove-ecs#fcdedd0195b18ca2a58b2792fc1c81224e2b8506"
+dependencies = [
+ "bincode",
+ "serde",
+]
 
 [[package]]
 name = "robotmasters"

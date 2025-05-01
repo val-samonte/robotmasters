@@ -5,6 +5,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
+create_game = "Er2CNhqnMCr2moBM4W5NNFhQ7GfzRo8r3dWjcG5VgakF"
 game_state = "5Bdg5zBdxRBSjYxnUkFshi2neQMmiSLHKYAWgkv6VNQQ"
 movement = "HNkST89REeZsKpC7yCsyPnPsowQsLJq2nL52Fzwvzy8H"
 position = "FsU2K4WV7xvzZWLQvc7H1jZdXxXmQ7MrzufvyWipdZbx"
