@@ -21,3 +21,5 @@ custom-panic = []
 
 [dependencies]
 bolt-lang.workspace = true
+ephemeral-rollups-sdk = "0.2.5"
+rmengine = { git = "ssh://git@github.com/val-samonte/rmengine.git", branch = "remove-ecs", package = "rmengine", default-features = false }
