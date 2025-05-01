@@ -11,7 +11,11 @@ pub mod create_game {
     use rmengine::structs::Game;
 
     pub fn execute(ctx: Context<Components>, _args_p: Vec<u8>) -> Result<Components> {
-        let game_state = &mut ctx.accounts.game_state;
+        let mut game_states = [
+            &mut ctx.accounts.game_state_0,
+            &mut ctx.accounts.game_state_1,
+            &mut ctx.accounts.game_state_2,
+        ];
 
         let game = Game::init(
             125,
@@ -27,21 +31,32 @@ pub mod create_game {
         );
 
         let state = game.export_state().unwrap();
-        let len = state.len();
-        if len > 3600 {
+        let total_len = state.len();
+        if total_len > 2400 {
             return Err(CreateGameError::DataTooLarge.into());
         }
 
-        game_state.len = len as u16;
-        game_state.frame = game.game_state.frame;
-        game_state.data.0[..len].copy_from_slice(&state);
+        let shard_size = 800;
+        let mut offset = 0;
+
+        for (i, game_state) in game_states.iter_mut().enumerate() {
+            let len = std::cmp::min(shard_size, total_len - offset);
+            game_state.len = len as u16;
+            game_state.shard_id = i as u8;
+            if len > 0 {
+                game_state.data.0[..len].copy_from_slice(&state[offset..offset + len]);
+            }
+            offset += len;
+        }
 
         Ok(ctx.accounts)
     }
 
     #[system_input]
     pub struct Components {
-        pub game_state: GameState,
+        pub game_state_0: GameState,
+        pub game_state_1: GameState,
+        pub game_state_2: GameState,
     }
 }
 
