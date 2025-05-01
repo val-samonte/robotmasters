@@ -11,15 +11,18 @@ movement = "HNkST89REeZsKpC7yCsyPnPsowQsLJq2nL52Fzwvzy8H"
 position = "FsU2K4WV7xvzZWLQvc7H1jZdXxXmQ7MrzufvyWipdZbx"
 robotmasters = "7vFkE6M9xe2CMxJhPPaCHchcVhpPHDWCZsmCFjkhymM6"
 
+[programs.devnet]
+robotmasters = "7vFkE6M9xe2CMxJhPPaCHchcVhpPHDWCZsmCFjkhymM6"
+
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [workspace]
-members = ["programs/*", "programs-ecs/components/*", "programs-ecs/systems/*"]
+members = ["programs/*"]
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

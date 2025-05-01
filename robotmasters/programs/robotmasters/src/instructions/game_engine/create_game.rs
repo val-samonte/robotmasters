@@ -9,7 +9,7 @@ pub struct CreateGame<'info> {
     init, 
     payer = authority, 
     seeds = [
-		b"game",
+		b"game1",
     ], 
     bump, 
     space = GameState::len()

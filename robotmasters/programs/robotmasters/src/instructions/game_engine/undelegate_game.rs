@@ -8,7 +8,7 @@ use ephemeral_rollups_sdk::ephem::commit_and_undelegate_accounts;
 pub struct UndelegateGame<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
-    #[account(mut, seeds = [b"game"], bump)]
+    #[account(mut, seeds = [b"game1"], bump)]
     pub game_state: Account<'info, GameState>,
 }
 
