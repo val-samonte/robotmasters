@@ -8,7 +8,7 @@ pub struct RunGame<'info> {
 	#[account(
 		mut,
 		seeds = [
-			b"game2",
+			b"game3",
 		], 
 		bump = game_state.bump, 
 	)]

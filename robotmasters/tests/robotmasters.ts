@@ -17,7 +17,7 @@ import {
 import { ConfirmOptionsWithBlockhash } from '@coral-xyz/anchor/dist/cjs/provider'
 import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 
-const GAME_PDA = 'game2'
+const GAME_PDA = 'game3'
 
 describe('robotmasters', () => {
   const provider = anchor.AnchorProvider.env()
@@ -45,6 +45,8 @@ describe('robotmasters', () => {
     program.programId
   )
 
+  console.log('PDA: ', pda.toBase58())
+
   xit('Creates a game', async () => {
     await program.methods
       .createGame()
@@ -54,7 +56,7 @@ describe('robotmasters', () => {
       .rpc()
   })
 
-  it('Delegate the game to ER', async () => {
+  xit('Delegate the game to ER', async () => {
     const accountInfo = await provider.connection.getAccountInfo(pda)
     if (accountInfo.owner.toBase58() == DELEGATION_PROGRAM_ID.toBase58()) {
       console.log('Account is locked by the delegation program')
@@ -108,26 +110,34 @@ describe('robotmasters', () => {
 
     let prevFrame = -1
     let confirmCounter = 0
+    let id1: NodeJS.Timeout
+    let id2: NodeJS.Timeout
 
-    await new Promise((resolve) => {
-      const id1 = setInterval(async () => {
-        let tx = await program.methods
-          .runGame()
-          .accounts({
-            authority: program.provider.publicKey,
+    await new Promise((resolve, reject) => {
+      id1 = setInterval(async () => {
+        try {
+          let tx = await program.methods
+            .runGame()
+            .accounts({
+              authority: program.provider.publicKey,
+            })
+            .transaction()
+          tx.feePayer = providerEphemeralRollup.wallet.publicKey
+          tx.recentBlockhash = (
+            await providerEphemeralRollup.connection.getLatestBlockhash()
+          ).blockhash
+          tx = await providerEphemeralRollup.wallet.signTransaction(tx)
+          await providerEphemeralRollup.sendAndConfirm(tx, [], {
+            skipPreflight: true,
           })
-          .transaction()
-        tx.feePayer = providerEphemeralRollup.wallet.publicKey
-        tx.recentBlockhash = (
-          await providerEphemeralRollup.connection.getLatestBlockhash()
-        ).blockhash
-        tx = await providerEphemeralRollup.wallet.signTransaction(tx)
-        console.log('>')
-        console.log(await providerEphemeralRollup.sendAndConfirm(tx))
-        console.log('<')
+        } catch (e) {
+          clearInterval(id1)
+          clearInterval(id2)
+          reject(e)
+        }
       }, 10)
 
-      const id2 = setInterval(async () => {
+      id2 = setInterval(async () => {
         try {
           const state = await erProgram.account.gameState.fetch(
             pda,
