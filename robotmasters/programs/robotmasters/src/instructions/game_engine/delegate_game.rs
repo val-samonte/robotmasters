@@ -13,6 +13,6 @@ pub struct DelegateGame<'info> {
 
 pub fn delegate_game_handler(ctx: Context<DelegateGame>) -> Result<()> {
     ctx.accounts
-        .delegate_pda(&ctx.accounts.payer, &[b"game"], DelegateConfig::default())?;
+        .delegate_pda(&ctx.accounts.payer, &[b"game2"], DelegateConfig::default())?;
     Ok(())
 }
