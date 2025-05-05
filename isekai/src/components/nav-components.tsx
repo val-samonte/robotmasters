@@ -1,19 +1,5 @@
-import {
-  Folder,
-  Forward,
-  MoreHorizontal,
-  SquarePlus,
-  Trash2,
-  type LucideIcon,
-} from 'lucide-react'
+import { SquarePlus, type LucideIcon } from 'lucide-react'
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -21,7 +7,6 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from '@/components/ui/sidebar'
 
 export function NavComponents({
@@ -33,8 +18,6 @@ export function NavComponents({
     icon: LucideIcon
   }[]
 }) {
-  const { isMobile } = useSidebar()
-
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Components</SidebarGroupLabel>
@@ -47,7 +30,10 @@ export function NavComponents({
                 <span>{item.name}</span>
               </a>
             </SidebarMenuButton>
-            <SidebarMenuAction showOnHover className="rounded-none">
+            <SidebarMenuAction
+              showOnHover
+              className="rounded-xs cursor-pointer"
+            >
               <SquarePlus />
             </SidebarMenuAction>
           </SidebarMenuItem>
