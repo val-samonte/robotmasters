@@ -5,6 +5,8 @@ import { Root } from './pages/Root'
 import { Blueprints } from './pages/Blueprints'
 import { WalletAdapter } from './components/WalletAdapter'
 import './index.css'
+import { Conditions } from './pages/Conditions'
+import { EditCondition } from './pages/EditCondition'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -13,6 +15,8 @@ createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/" element={<Root />}>
             <Route index element={<Blueprints />} />
+            <Route path="/conditions" element={<Conditions />} />
+            <Route path="/conditions/:id" element={<EditCondition />} />
           </Route>
         </Routes>
       </BrowserRouter>

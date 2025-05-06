@@ -20,10 +20,11 @@ const data = {
       title: 'Blueprints',
       icon: ScrollText,
       isActive: true,
+      url: '/',
       items: [
         {
           title: 'Integrate',
-          url: '#',
+          url: '/',
         },
       ],
     },
@@ -31,17 +32,17 @@ const data = {
   navComponents: [
     {
       name: 'Conditions',
-      url: '#',
+      url: '/conditions',
       icon: Code,
     },
     {
       name: 'Actions',
-      url: '#',
+      url: '/actions',
       icon: Swords,
     },
     {
       name: 'Spawns',
-      url: '#',
+      url: '/spawns',
       icon: CopyPlus,
     },
   ],

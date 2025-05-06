@@ -17,6 +17,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
+import { Link } from 'react-router'
 
 export function NavItembox({
   items,
@@ -57,9 +58,9 @@ export function NavItembox({
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
                         {subItem.url ? (
-                          <a href={subItem.url}>
+                          <Link to={subItem.url}>
                             <span>{subItem.title}</span>
-                          </a>
+                          </Link>
                         ) : (
                           <span>{subItem.title}</span>
                         )}
