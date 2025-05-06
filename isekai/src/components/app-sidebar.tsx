@@ -12,14 +12,9 @@ import {
 } from '@/components/ui/sidebar'
 import { NavItembox } from './nav-itembox'
 import { NavComponents } from './nav-components'
+import { NavWallet } from './nav-wallet'
 
-// This is sample data.
 const data = {
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
   navItembox: [
     {
       title: 'Blueprints',
@@ -80,7 +75,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavItembox items={data.navItembox} />
         <NavComponents items={data.navComponents} />
       </SidebarContent>
-      <SidebarFooter>{/* <NavUser user={data.user} /> */}</SidebarFooter>
+      <SidebarFooter>
+        <NavWallet />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   )
