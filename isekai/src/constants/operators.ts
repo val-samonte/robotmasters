@@ -136,7 +136,7 @@ export const operators = {
     operands: [
       {
         name: 'Destination',
-        type: 1,
+        type: 2,
       },
       {
         name: 'Numerator',

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { OperatorSelector } from './OperatorSelector'
 import { Label } from './ui/label'
 import { operators, type OpKey } from '@/constants/operators'
@@ -10,45 +10,34 @@ import { properties, type PropKey } from '@/constants/properties'
 import { isNumber } from '@/utils/isNumber'
 import { ErrorBoundary } from './ErrorBoundary'
 
-export function ScriptHelper() {
-  const [script, setScript] = useState<(number | null)[][]>([[]])
+export interface ScriptHelperProps {
+  segments: (number | null)[][]
+  onChange: (value: (number | null)[][]) => void
+}
 
-  useEffect(() => {
-    if (script.length === 0) {
-      setScript([[]])
-    }
-  }, [script])
-
+export function ScriptHelper({ segments, onChange }: ScriptHelperProps) {
   return (
     <ErrorBoundary fallback={<div>Error occurred. Please refresh.</div>}>
       <div className="flex flex-col">
-        {script.map((s, i) => (
+        {segments.map((s, i) => (
           <ScriptLine
             key={`script_${i}`}
             line={i}
             value={s}
             onChange={(newValue) => {
-              if (JSON.stringify(s) !== JSON.stringify(newValue)) {
-                setScript((script) => {
-                  script[i] = newValue
-                  return [...script]
-                })
-              }
+              segments[i] = newValue
+              onChange([...segments])
             }}
             onAdd={() => {
-              setScript((script) => {
-                script.splice(i + 1, 0, [])
-                return [...script]
-              })
+              segments.splice(i + 1, 0, [])
+              onChange([...segments])
             }}
             onRemove={() => {
-              if (script.length > 1) {
-                setScript((script) => {
-                  script.splice(i, 1)
-                  return [...script]
-                })
+              if (segments.length > 1) {
+                segments.splice(i, 1)
+                onChange([...segments])
               } else {
-                setScript([[]])
+                onChange([[]])
               }
             }}
           />

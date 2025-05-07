@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 
 // #[derive(Serialize, Deserialize)]
@@ -21,6 +22,7 @@ import { Link, useParams } from 'react-router'
 
 export function EditCondition() {
   const { id } = useParams()
+  const [script, setScript] = useState<(number | null)[][]>([[]])
 
   return (
     <>
@@ -50,7 +52,7 @@ export function EditCondition() {
         </div>
       </header>
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <ScriptHelper />
+        <ScriptHelper segments={script} onChange={setScript} />
       </div>
     </>
   )
