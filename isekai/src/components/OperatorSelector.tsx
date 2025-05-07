@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/popover'
 import { useState } from 'react'
 import { operators, type OpKey } from '@/constants/operators'
+import { isNumber } from '@/utils/isNumber'
 
 export function OperatorSelector({
   id,
@@ -24,8 +25,8 @@ export function OperatorSelector({
   setValue,
 }: {
   id?: string
-  value: string
-  setValue: (value: string) => void
+  value: number | null
+  setValue: (value: number | null) => void
 }) {
   const [open, setOpen] = useState(false)
 
@@ -39,7 +40,7 @@ export function OperatorSelector({
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value
+          {isNumber(value)
             ? operators[value as unknown as OpKey].name
             : 'Select Operator'}
           <ChevronsUpDown className="opacity-50" />
@@ -66,7 +67,8 @@ export function OperatorSelector({
                   key={operator}
                   value={operator}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? '' : currentValue)
+                    const op = parseInt(currentValue)
+                    setValue(isNumber(op) ? op : null)
                     setOpen(false)
                   }}
                 >
@@ -74,7 +76,7 @@ export function OperatorSelector({
                   <Check
                     className={cn(
                       'ml-auto',
-                      value === operator ? 'opacity-100' : 'opacity-0'
+                      value + '' === operator ? 'opacity-100' : 'opacity-0'
                     )}
                   />
                 </CommandItem>

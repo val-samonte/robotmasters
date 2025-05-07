@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { OperatorSelector } from './OperatorSelector'
 import { Label } from './ui/label'
 import { operators, type OpKey } from '@/constants/operators'
@@ -73,59 +73,59 @@ function ScriptLine({
   onAdd,
   onRemove,
 }: ScriptLineProps) {
-  const [operator, setOperator] = useState('')
-  const [operands, setOperands] = useState<(number | null)[]>([])
-
-  useEffect(() => {
+  const { operator, operands } = useMemo(() => {
     if (!isNumber(value[0])) {
-      setOperator('')
-      return
+      return {
+        operator: null,
+        operands: [],
+      }
     }
     const opsList = operators[value[0] as unknown as OpKey]?.operands ?? []
     const ops = value.slice(1)
     const forced = opsList.findIndex((op) => op.type === 4)
 
-    setOperator((op) => {
-      if (op !== value[0] + '') {
-        setOperands([])
-      } else {
-        setOperands(
-          opsList.map((op, i) => {
-            if (isNumber(ops[i])) {
-              if (op.type === 3 && forced !== -1 && ops[forced] !== null) {
-                if (properties[ops[forced] as unknown as PropKey].type === 2) {
-                  ops[i] = (ops[i]! % 8) + 8
-                }
-              } else if (op.type === 2) {
-                ops[i] = (ops[i]! % 8) + 8
-              }
+    return {
+      operator: value[0],
+      operands: opsList.map((op, i) => {
+        if (isNumber(ops[i])) {
+          if (op.type === 3 && forced !== -1 && ops[forced] !== null) {
+            if (properties[ops[forced] as unknown as PropKey].type === 2) {
+              ops[i] = (ops[i]! % 8) + 8
             }
-            return ops[i] ?? null
-          })
-        )
-      }
-      return value[0] + ''
-    })
+          } else if (op.type === 2) {
+            ops[i] = (ops[i]! % 8) + 8
+          }
+        }
+        return ops[i] ?? null
+      }),
+    }
   }, [value])
 
-  useEffect(() => {
-    const opsList = operators[operator as unknown as OpKey]?.operands ?? []
-    const opr = parseInt(operator)
-    const returnValue = [
-      isNaN(opr) ? null : opr,
-      ...opsList.map((op, i) => {
-        if (op.type === 0) return operands[i]
-        if (op.type === 4) return operands[i]
+  const updateChanges = useCallback(
+    (operator: number | null, operands: (number | null)[]) => {
+      if (!isNumber(operator)) {
+        onChange([null])
+        return
+      }
 
-        if (operands[i] !== null) {
-          return operands[i] % 8
-        }
-        return null
-      }),
-    ]
+      const opsList = operators[operator as unknown as OpKey]?.operands ?? []
+      const returnValue = [
+        operator,
+        ...opsList.map((op, i) => {
+          if (op.type === 0) return operands[i]
+          if (op.type === 4) return operands[i]
 
-    onChange(returnValue)
-  }, [operator, operands])
+          if (isNumber(operands[i])) {
+            return operands[i]! % 8
+          }
+          return null
+        }),
+      ]
+
+      onChange(returnValue)
+    },
+    [onChange]
+  )
 
   const opsList = operators[operator as unknown as OpKey]?.operands ?? []
 
@@ -164,12 +164,7 @@ function ScriptLine({
             id={`script_op_${line}`}
             value={operator}
             setValue={(val) => {
-              setOperator((old) => {
-                if (old !== val) {
-                  setOperands([])
-                }
-                return val
-              })
+              updateChanges(val, operator !== val ? [] : operands)
             }}
           />
         </div>
@@ -191,14 +186,6 @@ function ScriptLine({
           }
 
           // todo: known bug: correction of var vs fixed
-          // if (isNumber(value)) {
-          //   if (type === 1) {
-          //     value = value! % 8
-          //   } else if (type === 2) {
-          //     value = Math.min((value! % 8) + 8, 13)
-          //   }
-          // }
-
           return (
             <div className="flex flex-col gap-1" key={i}>
               <Label
@@ -213,10 +200,8 @@ function ScriptLine({
                   id={`script_op_${line}_${i}`}
                   value={value}
                   setValue={(val) => {
-                    setOperands((arr) => {
-                      arr[i] = val
-                      return [...arr]
-                    })
+                    operands[i] = val
+                    updateChanges(operator, [...operands])
                   }}
                 />
               )}
@@ -226,10 +211,8 @@ function ScriptLine({
                   value={operands[i] ?? ''}
                   min={0}
                   onChange={(e) => {
-                    setOperands((arr) => {
-                      arr[i] = parseInt(e.target.value)
-                      return [...arr]
-                    })
+                    operands[i] = parseInt(e.target.value)
+                    updateChanges(operator, [...operands])
                   }}
                   placeholder="Enter Value"
                 />
@@ -237,14 +220,10 @@ function ScriptLine({
               {operand.type === 4 && (
                 <PropertySelector
                   id={`script_op_${line}_${i}`}
-                  value={(operands[i] ?? '') + ''}
+                  value={operands[i]}
                   setValue={(val) => {
-                    setOperands((arr) => {
-                      const num = parseInt(val)
-                      // todo: var / fix check for type 3
-                      arr[i] = isNumber(num) ? num : null
-                      return [...arr]
-                    })
+                    operands[i] = val
+                    updateChanges(operator, [...operands])
                   }}
                 />
               )}

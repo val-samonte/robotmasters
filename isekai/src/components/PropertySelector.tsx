@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/popover'
 import { useState } from 'react'
 import { properties, type PropKey } from '@/constants/properties'
+import { isNumber } from '@/utils/isNumber'
 
 export function PropertySelector({
   id,
@@ -24,8 +25,8 @@ export function PropertySelector({
   setValue,
 }: {
   id?: string
-  value: string
-  setValue: (val: string) => void
+  value: number | null
+  setValue: (val: number | null) => void
 }) {
   const [open, setOpen] = useState(false)
 
@@ -39,7 +40,7 @@ export function PropertySelector({
           aria-expanded={open}
           className="w-72 justify-between"
         >
-          {value
+          {isNumber(value)
             ? properties[value as unknown as PropKey].name
             : 'Select Property'}
 
@@ -67,7 +68,8 @@ export function PropertySelector({
                   key={operand}
                   value={operand}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? '' : currentValue)
+                    const prop = parseInt(currentValue)
+                    setValue(isNumber(prop) ? prop : null)
                     setOpen(false)
                   }}
                 >
@@ -75,7 +77,7 @@ export function PropertySelector({
                   <Check
                     className={cn(
                       'ml-auto',
-                      value === operand ? 'opacity-100' : 'opacity-0'
+                      value + '' === operand ? 'opacity-100' : 'opacity-0'
                     )}
                   />
                 </CommandItem>
