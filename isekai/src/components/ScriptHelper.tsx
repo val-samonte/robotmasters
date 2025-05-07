@@ -9,21 +9,85 @@ import { PropertySelector } from './PropertySelector'
 import { properties, type PropKey } from '@/constants/properties'
 
 export function ScriptHelper() {
+  const [script, setScript] = useState<(number | null)[][]>([[]])
   return (
     <div className="flex flex-col">
-      <ScriptLine line={0} />
-      <ScriptLine line={1} />
+      {script.map((s, i) => (
+        <ScriptLine
+          key={`script_${i}`}
+          line={i}
+          value={s}
+          onChange={() => {}}
+          onAdd={() => {}}
+          onRemove={() => {}}
+        />
+      ))}
     </div>
   )
 }
 
-function ScriptLine({ line }: { line: number }) {
+interface ScriptLineProps {
+  line: number
+  value: (number | null)[]
+  onChange: (value: (number | null)[]) => void
+  onAdd: (line: number) => void
+  onRemove: (line: number) => void
+}
+
+function ScriptLine({
+  line,
+  value,
+  onChange,
+  onAdd,
+  onRemove,
+}: ScriptLineProps) {
   const [operator, setOperator] = useState('')
   const [operands, setOperands] = useState<(number | null)[]>([])
 
   useEffect(() => {
     setOperands([])
   }, [operator])
+
+  useEffect(() => {
+    if (value[0] === null || value[0] === undefined || isNaN(value[0])) {
+      setOperator('')
+      return
+    }
+    const opsList = operators[value[0] as unknown as OpKey]?.operands ?? []
+    const ops = value.slice(1)
+    const forced = opsList.findIndex((op) => op.type === 4)
+
+    setOperands(
+      opsList.map((op, i) => {
+        if (ops[i] !== null || ops[i] !== undefined) {
+          if (op.type === 3 && forced !== -1 && ops[forced] !== null) {
+            if (properties[ops[forced] as unknown as PropKey].type === 2) {
+              ops[i] = ops[i]! + 8
+            }
+          }
+        }
+        return ops[i] ?? null
+      })
+    )
+  }, [value])
+
+  useEffect(() => {
+    const opsList = operators[operator as unknown as OpKey]?.operands ?? []
+    const opr = parseInt(operator)
+    const returnValue = [
+      isNaN(opr) ? null : opr,
+      ...opsList.map((op, i) => {
+        if (op.type === 0) return operands[i]
+        if (op.type === 4) return operands[i]
+
+        if (operands[i] !== null) {
+          return operands[i] % 8
+        }
+        return null
+      }),
+    ]
+    onChange(returnValue)
+  }, [operator, operands])
 
   const opsList = operators[operator as unknown as OpKey]?.operands ?? []
 
@@ -33,6 +97,7 @@ function ScriptLine({ line }: { line: number }) {
         {line + 1}
         <button
           tabIndex={-1}
+          onClick={() => onRemove(line)}
           className="cursor-pointer transition-all opacity-0 hover:opacity-100 z-10 flex absolute items-center justify-center inset-x-0"
         >
           <div className="bg-slate-600 text-red-400 p-1">
@@ -41,6 +106,7 @@ function ScriptLine({ line }: { line: number }) {
         </button>
         <button
           tabIndex={-1}
+          onClick={() => onAdd(line)}
           className="cursor-pointer transition-all opacity-0 hover:opacity-100 z-10 flex absolute items-center justify-center -bottom-[1em] inset-x-0"
         >
           <div className="bg-slate-600 text-blue-400 rounded-full p-1">
