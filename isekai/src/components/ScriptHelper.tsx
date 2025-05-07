@@ -74,11 +74,13 @@ function ScriptLine({
       } else {
         setOperands(
           opsList.map((op, i) => {
-            if (ops[i] !== null || ops[i] !== undefined) {
+            if (isNumber(ops[i])) {
               if (op.type === 3 && forced !== -1 && ops[forced] !== null) {
                 if (properties[ops[forced] as unknown as PropKey].type === 2) {
-                  ops[i] = ops[i]! + 8
+                  ops[i] = (ops[i]! % 8) + 8
                 }
+              } else if (op.type === 2) {
+                ops[i] = (ops[i]! % 8) + 8
               }
             }
             return ops[i] ?? null
