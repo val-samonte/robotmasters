@@ -1,4 +1,6 @@
-export const operands = {
+export type PropKey = keyof typeof properties
+
+export const properties = {
   0x01: { name: 'game.seed', type: 2 },
   0x02: { name: 'game.frame', type: 2 },
   0x03: { name: 'game.gravity', type: 2 },

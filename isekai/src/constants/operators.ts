@@ -1,4 +1,6 @@
 // operands: 0: literal, 1: var only, 2: fixed only, 3: var / fixed, 4: property
+export type OpKey = keyof typeof operators
+
 export const operators = {
   0x00: {
     name: 'Exit',
@@ -596,19 +598,19 @@ export const operators = {
         type: 1,
       },
       {
-        name: 'Var1',
+        name: 'spawn.vars[0]',
         type: 1,
       },
       {
-        name: 'Var2',
+        name: 'spawn.vars[1]',
         type: 1,
       },
       {
-        name: 'Var3',
+        name: 'spawn.vars[2]',
         type: 1,
       },
       {
-        name: 'Var4',
+        name: 'spawn.vars[3]',
         type: 1,
       },
     ],
