@@ -15,7 +15,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useState, type Dispatch, type SetStateAction } from 'react'
+import { useState } from 'react'
 import { operators, type OpKey } from '@/constants/operators'
 
 export function OperatorSelector({
@@ -25,7 +25,7 @@ export function OperatorSelector({
 }: {
   id?: string
   value: string
-  setValue: Dispatch<SetStateAction<string>>
+  setValue: (value: string) => void
 }) {
   const [open, setOpen] = useState(false)
 

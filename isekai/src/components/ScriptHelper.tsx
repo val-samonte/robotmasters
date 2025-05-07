@@ -7,22 +7,33 @@ import { CircleMinus, CirclePlus } from 'lucide-react'
 import { Input } from './ui/input'
 import { PropertySelector } from './PropertySelector'
 import { properties, type PropKey } from '@/constants/properties'
+import { isNumber } from '@/utils/isNumber'
 
 export function ScriptHelper() {
   const [script, setScript] = useState<(number | null)[][]>([[]])
   return (
-    <div className="flex flex-col">
-      {script.map((s, i) => (
-        <ScriptLine
-          key={`script_${i}`}
-          line={i}
-          value={s}
-          onChange={() => {}}
-          onAdd={() => {}}
-          onRemove={() => {}}
-        />
-      ))}
-    </div>
+    <>
+      <div className="flex flex-col">
+        {script.map((s, i) => (
+          <ScriptLine
+            key={`script_${i}`}
+            line={i}
+            value={s}
+            onChange={(newValue) => {
+              if (JSON.stringify(s) !== JSON.stringify(newValue)) {
+                setScript((script) => {
+                  script[i] = newValue
+                  return [...script]
+                })
+              }
+            }}
+            onAdd={() => {}}
+            onRemove={() => {}}
+          />
+        ))}
+      </div>
+      {JSON.stringify(script)}
+    </>
   )
 }
 
@@ -33,6 +44,10 @@ interface ScriptLineProps {
   onAdd: (line: number) => void
   onRemove: (line: number) => void
 }
+
+// TODO:
+// fixed values (mapping back)
+// property
 
 function ScriptLine({
   line,
@@ -45,11 +60,7 @@ function ScriptLine({
   const [operands, setOperands] = useState<(number | null)[]>([])
 
   useEffect(() => {
-    setOperands([])
-  }, [operator])
-
-  useEffect(() => {
-    if (value[0] === null || value[0] === undefined || isNaN(value[0])) {
+    if (!isNumber(value[0])) {
       setOperator('')
       return
     }
@@ -57,18 +68,25 @@ function ScriptLine({
     const ops = value.slice(1)
     const forced = opsList.findIndex((op) => op.type === 4)
 
-    setOperands(
-      opsList.map((op, i) => {
-        if (ops[i] !== null || ops[i] !== undefined) {
-          if (op.type === 3 && forced !== -1 && ops[forced] !== null) {
-            if (properties[ops[forced] as unknown as PropKey].type === 2) {
-              ops[i] = ops[i]! + 8
+    setOperator((op) => {
+      if (op !== value[0] + '') {
+        setOperands([])
+      } else {
+        setOperands(
+          opsList.map((op, i) => {
+            if (ops[i] !== null || ops[i] !== undefined) {
+              if (op.type === 3 && forced !== -1 && ops[forced] !== null) {
+                if (properties[ops[forced] as unknown as PropKey].type === 2) {
+                  ops[i] = ops[i]! + 8
+                }
+              }
             }
-          }
-        }
-        return ops[i] ?? null
-      })
-    )
+            return ops[i] ?? null
+          })
+        )
+      }
+      return value[0] + ''
+    })
   }, [value])
 
   useEffect(() => {
@@ -77,6 +95,8 @@ function ScriptLine({
     const returnValue = [
       isNaN(opr) ? null : opr,
       ...opsList.map((op, i) => {
+        // if (!isNumber(operands[i])) return null
+
         if (op.type === 0) return operands[i]
         if (op.type === 4) return operands[i]
 
@@ -86,6 +106,7 @@ function ScriptLine({
         return null
       }),
     ]
+
     onChange(returnValue)
   }, [operator, operands])
 
@@ -125,7 +146,14 @@ function ScriptLine({
           <OperatorSelector
             id={`script_op_${line}`}
             value={operator}
-            setValue={setOperator}
+            setValue={(val) => {
+              setOperator((old) => {
+                if (old !== val) {
+                  setOperands([])
+                }
+                return val
+              })
+            }}
           />
         </div>
         {opsList.map((operand, i) => {
@@ -176,6 +204,7 @@ function ScriptLine({
                       return [...arr]
                     })
                   }}
+                  placeholder="Enter Value"
                 />
               )}
               {operand.type === 4 && (
@@ -186,7 +215,7 @@ function ScriptLine({
                     setOperands((arr) => {
                       const num = parseInt(val)
                       // todo: var / fix check for type 3
-                      arr[i] = isNaN(num) ? null : num
+                      arr[i] = isNumber(num) ? null : num
                       return [...arr]
                     })
                   }}

@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { useState } from 'react'
+import { isNumber } from '@/utils/isNumber'
 
 const options = [
   'vars[0]',
@@ -55,8 +56,8 @@ export function VariableSelector({
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value !== null && value !== undefined ? (
-            options[value]
+          {isNumber(value) ? (
+            options[value!]
           ) : (
             <span className="opacity-20">Select Variable</span>
           )}
