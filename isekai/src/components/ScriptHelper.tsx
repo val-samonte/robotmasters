@@ -8,11 +8,19 @@ import { Input } from './ui/input'
 import { PropertySelector } from './PropertySelector'
 import { properties, type PropKey } from '@/constants/properties'
 import { isNumber } from '@/utils/isNumber'
+import { ErrorBoundary } from './ErrorBoundary'
 
 export function ScriptHelper() {
   const [script, setScript] = useState<(number | null)[][]>([[]])
+
+  useEffect(() => {
+    if (script.length === 0) {
+      setScript([[]])
+    }
+  }, [script])
+
   return (
-    <>
+    <ErrorBoundary fallback={<div>Error occurred. Please refresh.</div>}>
       <div className="flex flex-col">
         {script.map((s, i) => (
           <ScriptLine
@@ -27,13 +35,26 @@ export function ScriptHelper() {
                 })
               }
             }}
-            onAdd={() => {}}
-            onRemove={() => {}}
+            onAdd={() => {
+              setScript((script) => {
+                script.splice(i + 1, 0, [])
+                return [...script]
+              })
+            }}
+            onRemove={() => {
+              if (script.length > 1) {
+                setScript((script) => {
+                  script.splice(i, 1)
+                  return [...script]
+                })
+              } else {
+                setScript([[]])
+              }
+            }}
           />
         ))}
       </div>
-      {JSON.stringify(script)}
-    </>
+    </ErrorBoundary>
   )
 }
 
@@ -44,10 +65,6 @@ interface ScriptLineProps {
   onAdd: (line: number) => void
   onRemove: (line: number) => void
 }
-
-// TODO:
-// fixed values (mapping back)
-// property
 
 function ScriptLine({
   line,
@@ -97,8 +114,6 @@ function ScriptLine({
     const returnValue = [
       isNaN(opr) ? null : opr,
       ...opsList.map((op, i) => {
-        // if (!isNumber(operands[i])) return null
-
         if (op.type === 0) return operands[i]
         if (op.type === 4) return operands[i]
 
@@ -160,6 +175,7 @@ function ScriptLine({
         </div>
         {opsList.map((operand, i) => {
           let type = operand.type
+          let value = operands[i]
           if (operand.type === 3) {
             if (opsList[i - 1]?.type === 4) {
               const prop = properties[operands[i - 1] as unknown as PropKey]
@@ -174,6 +190,15 @@ function ScriptLine({
             }
           }
 
+          // todo: known bug: correction of var vs fixed
+          // if (isNumber(value)) {
+          //   if (type === 1) {
+          //     value = value! % 8
+          //   } else if (type === 2) {
+          //     value = Math.min((value! % 8) + 8, 13)
+          //   }
+          // }
+
           return (
             <div className="flex flex-col gap-1" key={i}>
               <Label
@@ -186,7 +211,7 @@ function ScriptLine({
                 <VariableSelector
                   type={type}
                   id={`script_op_${line}_${i}`}
-                  value={operands[i]}
+                  value={value}
                   setValue={(val) => {
                     setOperands((arr) => {
                       arr[i] = val
@@ -217,7 +242,7 @@ function ScriptLine({
                     setOperands((arr) => {
                       const num = parseInt(val)
                       // todo: var / fix check for type 3
-                      arr[i] = isNumber(num) ? null : num
+                      arr[i] = isNumber(num) ? num : null
                       return [...arr]
                     })
                   }}
