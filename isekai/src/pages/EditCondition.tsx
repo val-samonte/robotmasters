@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import { splitScriptToSegments } from '@/utils/splitScriptToSegments'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 
@@ -20,9 +21,18 @@ import { Link, useParams } from 'react-router'
 //     pub script: Vec<u8>, // if size is 1, use standard lookup
 // }
 
+const sampleAction = splitScriptToSegments([
+  19, 0, 45, 17, 0, 0, 0, 23, 0, 0, 0, 20, 27, 0, 19, 0, 35, 19, 1, 36, 21, 3,
+  2, 34, 2, 0, 1, 71, 2, 2, 3, 17, 2, 97, 0, 0, 21, 4, 0, 21, 5, 3, 21, 6, 1,
+  19, 7, 38, 19, 0, 47, 19, 1, 11, 32, 2, 0, 1, 71, 2, 2, 5, 17, 2, 96, 20, 13,
+  4, 0, 1, 19, 0, 13, 74, 0, 0, 6, 20, 13, 0, 73, 2, 0, 7, 32, 2, 2, 4, 17, 2,
+  0, 1, 19, 0, 35, 19, 1, 36, 19, 2, 37, 69, 0, 0, 2, 81, 0, 0, 1, 20, 35, 0, 0,
+  1,
+])
+
 export function EditCondition() {
   const { id } = useParams()
-  const [script, setScript] = useState<(number | null)[][]>([[]])
+  const [script, setScript] = useState<(number | null)[][]>(sampleAction)
 
   return (
     <>
