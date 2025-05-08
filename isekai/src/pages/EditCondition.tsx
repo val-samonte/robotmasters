@@ -9,34 +9,80 @@ import {
 } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { SidebarTrigger } from '@/components/ui/sidebar'
-import { splitScriptToSegments } from '@/utils/splitScriptToSegments'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useParams } from 'react-router'
+import { z } from 'zod'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import { Label } from '@/components/ui/label'
 
-// #[derive(Serialize, Deserialize)]
-// pub struct Condition {
-//     pub id: ConditionId,
-//     pub energy_mul: Fixed,
-//     pub args: [u8; 4],   // arguments for the script to use
-//     pub script: Vec<u8>, // if size is 1, use standard lookup
-// }
-
-const sampleAction = splitScriptToSegments([
-  19, 0, 45, 17, 0, 0, 0, 23, 0, 0, 0, 20, 27, 0, 19, 0, 35, 19, 1, 36, 21, 3,
-  2, 34, 2, 0, 1, 71, 2, 2, 3, 17, 2, 97, 0, 0, 21, 4, 0, 21, 5, 3, 21, 6, 1,
-  19, 7, 38, 19, 0, 47, 19, 1, 11, 32, 2, 0, 1, 71, 2, 2, 5, 17, 2, 96, 20, 13,
-  4, 0, 1, 19, 0, 13, 74, 0, 0, 6, 20, 13, 0, 73, 2, 0, 7, 32, 2, 2, 4, 17, 2,
-  0, 1, 19, 0, 35, 19, 1, 36, 19, 2, 37, 69, 0, 0, 2, 81, 0, 0, 1, 20, 35, 0, 0,
-  1,
-])
+const FormSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: 'Name must be at least 2 characters.' })
+    .max(12, { message: 'Name must be less than or equal to 12 characters.' }),
+  energy_mul: z
+    .number()
+    .min(0, {
+      message: 'Energy multiplier must be positive.',
+    })
+    .max(100_00000, { message: 'Energy multiplier must be below 100_00000' }),
+  args0: z
+    .number()
+    .min(0, {
+      message: 'Arg must be positive number.',
+    })
+    .max(255, { message: 'Arg must be below 256.' }),
+  args1: z
+    .number()
+    .min(0, {
+      message: 'Arg must be positive number.',
+    })
+    .max(255, { message: 'Arg must be below 256.' }),
+  args2: z
+    .number()
+    .min(0, {
+      message: 'Arg must be positive number.',
+    })
+    .max(255, { message: 'Arg must be below 256.' }),
+  args3: z
+    .number()
+    .min(0, {
+      message: 'Arg must be positive number.',
+    })
+    .max(255, { message: 'Arg must be below 256.' }),
+})
 
 export function EditCondition() {
   const { id } = useParams()
-  const [script, setScript] = useState<(number | null)[][]>(sampleAction)
+  const [script, setScript] = useState<(number | null)[][]>([[]])
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      name: '',
+      energy_mul: 1,
+      args0: 0,
+      args1: 0,
+      args2: 0,
+      args3: 0,
+    },
+  })
+
+  // function onSubmit(data: z.infer<typeof FormSchema>) {}
 
   return (
     <>
-      <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 justify-between">
+      <header className="sticky top-0 bg-background z-20 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12 justify-between">
         <div className="flex items-center gap-2 px-4">
           <SidebarTrigger className="-ml-1" />
           <Breadcrumb>
@@ -61,8 +107,96 @@ export function EditCondition() {
           </Button>
         </div>
       </header>
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <ScriptHelper segments={script} onChange={setScript} />
+      <div className="flex flex-1 flex-col gap-6 p-4 pt-0 max-w-7xl">
+        <Form {...form}>
+          <div className="space-y-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="energy_mul"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Energy Cost Multiplier</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="grid grid-cols-4 portrait:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="args0"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>args0</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="args1"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>args1</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="args2"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>args2</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="args3"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>args3</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+        </Form>
+        <Separator />
+        <div className="flex flex-col gap-4">
+          <Label>Script</Label>
+          <ScriptHelper segments={script} onChange={setScript} />
+        </div>
       </div>
     </>
   )
