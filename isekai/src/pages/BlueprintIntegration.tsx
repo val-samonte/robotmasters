@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { LoaderCircle } from 'lucide-react'
+import { LoaderCircle, SquareArrowOutUpRight } from 'lucide-react'
 import { Suspense, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 
@@ -44,16 +44,27 @@ function WithData({ id }: { id: string }) {
       </PageHeader>
       <div className="flex flex-1 flex-col gap-6 p-4 pt-0 max-w-7xl">
         <div className="flex justify-between gap-4">
-          <div className="flex gap-4">
-            <div className="p-4 bg-muted rounded-lg">
+          <div className="flex gap-4 w-full">
+            <div className="p-4 bg-muted rounded-lg flex-none">
               <img
                 src={data.image}
                 alt={data.name}
                 className="object-contain w-24 h-24 aspect-square"
               />
             </div>
-            <div className="flex flex-col gap-2">
-              <h1 className="text-2xl">{data.name}</h1>
+            <div className="flex flex-col gap-2 flex-auto">
+              <div className="flex justify-between">
+                <h1 className="text-2xl">{data.name}</h1>
+                <Button variant={'link'} asChild>
+                  <a
+                    href={`https://itembox.app/blueprints/${data.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <SquareArrowOutUpRight />
+                  </a>
+                </Button>
+              </div>
               <div className="text-sm text-muted-foreground">{id}</div>
               <div className="flex gap-2 items-center mt-auto">
                 <div>Integrate as</div>
@@ -73,7 +84,7 @@ function WithData({ id }: { id: string }) {
           </div>
         </div>
 
-        <Tabs defaultValue="details" className="w-full gap-6">
+        <Tabs defaultValue="blueprint" className="w-full gap-6">
           <TabsList className="w-full">
             <TabsTrigger value="blueprint">Blueprint</TabsTrigger>
             <TabsTrigger value="details">Details</TabsTrigger>

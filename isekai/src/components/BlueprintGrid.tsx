@@ -6,12 +6,14 @@ export interface BlueprintsGridProps {
   children?: ReactNode
   whenEmpty?: ReactNode
   ids: string[]
+  nonFungibleOnly?: boolean
 }
 
 export function BlueprintsGrid({
   children,
   whenEmpty,
   ids,
+  nonFungibleOnly,
 }: BlueprintsGridProps) {
   return (
     <div className="w-full max-w-7xl mx-auto">
@@ -19,7 +21,7 @@ export function BlueprintsGrid({
       <div className="show-next-when-empty grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 px-5">
         {ids.map((id) => (
           <Suspense key={id} fallback={null}>
-            <BlueprintCard id={id} />
+            <BlueprintCard id={id} nonFungibleOnly={nonFungibleOnly} />
           </Suspense>
         ))}
       </div>

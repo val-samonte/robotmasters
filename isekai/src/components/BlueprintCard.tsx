@@ -32,11 +32,22 @@ function CardSkeleton() {
   )
 }
 
-function CardWithData({ id }: { id: string }) {
+interface CardProps {
+  id: string
+  nonFungibleOnly?: boolean
+}
+
+function CardWithData({ id, nonFungibleOnly }: CardProps) {
   const blueprint = useAtomValue(blueprintAtom(id))
 
   if (!blueprint) {
     return <CardSkeleton />
+  }
+
+  if (typeof nonFungibleOnly === 'boolean') {
+    if (nonFungibleOnly !== blueprint.nonFungible) {
+      return null
+    }
   }
 
   return (
@@ -76,16 +87,16 @@ function CardWithData({ id }: { id: string }) {
   )
 }
 
-export function BlueprintCard({ id }: { id: string }) {
-  const reload = useSetAtom(blueprintAtom(id))
+export function BlueprintCard(props: CardProps) {
+  const reload = useSetAtom(blueprintAtom(props.id))
 
   useEffect(() => {
     reload()
-  }, [id])
+  }, [props.id])
 
   return (
     <Suspense fallback={<CardSkeleton />}>
-      <CardWithData id={id} />
+      <CardWithData {...props} />
     </Suspense>
   )
 }

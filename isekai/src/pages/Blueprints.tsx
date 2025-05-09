@@ -34,6 +34,7 @@ export function Blueprints() {
       <div className="pb-5">
         {wallet?.publicKey ? (
           <BlueprintsGrid
+            nonFungibleOnly={true}
             ids={blueprintIds}
             whenEmpty={
               <div className="flex flex-col gap-10 items-center justify-center text-center">
