@@ -24,12 +24,24 @@ const FormSchema = z.object({
     .string()
     .min(2, { message: 'Name must be at least 2 characters.' })
     .max(12, { message: 'Name must be less than or equal to 12 characters.' }),
-  energy_mul: z
+  energy_cost: z
     .number()
     .min(0, {
-      message: 'Multiplier must be positive.',
+      message: 'Must be positive.',
     })
-    .max(1000, { message: 'Must be below 1000.' }),
+    .max(255, { message: 'Must be below 256.' }),
+  interval: z
+    .number()
+    .min(0, {
+      message: 'Must be positive.',
+    })
+    .max(3840, { message: 'Must be below 3840.' }),
+  duration: z
+    .number()
+    .min(0, {
+      message: 'Must be positive.',
+    })
+    .max(3840, { message: 'Must be below 3840.' }),
   args0: z
     .number()
     .min(0, {
@@ -56,14 +68,16 @@ const FormSchema = z.object({
     .max(255, { message: 'Must be below 256.' }),
 })
 
-export function EditCondition() {
+export function EditAction() {
   const { id } = useParams()
   const [script, setScript] = useState<(number | null)[][]>([[]])
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: '',
-      energy_mul: 100,
+      energy_cost: 0,
+      interval: 0,
+      duration: 0,
       args0: 0,
       args1: 0,
       args2: 0,
@@ -78,16 +92,17 @@ export function EditCondition() {
       <PageHeader
         breadcrumbs={[
           {
-            label: 'Conditions',
-            link: '/conditions',
+            label: 'Actions',
+            link: '/actions',
           },
         ]}
         title={id?.toLowerCase() === 'new' ? 'New' : id ?? ''}
       >
         <Button asChild>
-          <Link to="/conditions/new">Create Condition</Link>
+          <Link to="/actions/new">Create Action</Link>
         </Button>
       </PageHeader>
+
       <div className="flex flex-1 flex-col gap-6 p-4 pt-0 max-w-7xl">
         <Form {...form}>
           <div className="space-y-6">
@@ -96,7 +111,7 @@ export function EditCondition() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Condition Name</FormLabel>
+                  <FormLabel>Action Name</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -106,15 +121,46 @@ export function EditCondition() {
             />
             <FormField
               control={form.control}
-              name="energy_mul"
+              name="energy_cost"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Energy Cost Multiplier</FormLabel>
+                  <FormLabel>Energy Cost</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="interval"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Interval</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
                   <FormDescription>
-                    In percentage, so 100 is 1 unit.
+                    1 second is 60 FPS. Mini "cooldown" for this Action per
+                    frame.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="duration"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Duration</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    1 second is 60 FPS. No special use asides from as an
+                    additional property for the script.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
