@@ -31,16 +31,18 @@ export function Blueprints() {
           </a>
         </Button>
       </PageHeader>
-      <BlueprintsGrid
-        ids={blueprintIds}
-        whenEmpty={
-          <div className="flex flex-col gap-10 items-center justify-center text-center">
-            <span className="opacity-50 text-lg">
-              You do not have any Blueprints yet!
-            </span>
-          </div>
-        }
-      />
+      <div className="pb-5">
+        <BlueprintsGrid
+          ids={blueprintIds}
+          whenEmpty={
+            <div className="flex flex-col gap-10 items-center justify-center text-center">
+              <span className="opacity-50 text-lg">
+                You do not have any Blueprints yet!
+              </span>
+            </div>
+          }
+        />
+      </div>
     </>
   )
 }
