@@ -215,7 +215,7 @@ export function EditSpawn() {
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-2 portrait:grid-cols-1 gap-4 items-center">
+            <div className="grid grid-cols-2 portrait:grid-cols-1 gap-4 space-y-4 items-center">
               <FormField
                 control={form.control}
                 name="destroy_on_collision"
@@ -293,7 +293,7 @@ export function EditSpawn() {
               />
             </div>
             {showCrit && (
-              <div className="grid grid-cols-2 portrait:grid-cols-1 gap-4">
+              <div className="grid grid-cols-2 portrait:grid-cols-1 gap-4 items-start">
                 <FormField
                   control={form.control}
                   name="damage_base"
@@ -329,7 +329,7 @@ export function EditSpawn() {
                 />
               </div>
             )}
-            <div className="grid grid-cols-2 portrait:grid-cols-1 gap-4">
+            <div className="grid grid-cols-2 portrait:grid-cols-1 gap-4 items-start">
               <FormField
                 control={form.control}
                 name="width"
@@ -357,7 +357,7 @@ export function EditSpawn() {
                 )}
               />
             </div>
-            <div className="grid grid-cols-2 portrait:grid-cols-1 gap-4">
+            <div className="grid grid-cols-2 portrait:grid-cols-1 gap-4 items-start">
               <FormField
                 control={form.control}
                 name="output_x"

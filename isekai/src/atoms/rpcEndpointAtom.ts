@@ -18,7 +18,9 @@ interface RPC {
 const officialRpcs: RPC[] = [
   {
     name: 'Devnet',
-    url: 'https://devnet.helius-rpc.com/?api-key=8e1061ca-764a-4435-a567-bba9405cc1c2',
+    // url: 'https://devnet.helius-rpc.com/?api-key=8e1061ca-764a-4435-a567-bba9405cc1c2',
+    url: 'https://devnet.helius-rpc.com/?api-key=4a2c2cc6-845d-4608-93b6-0c8b19e415ff',
+    // url: 'https://api.devnet.solana.com',
   },
 ]
 
