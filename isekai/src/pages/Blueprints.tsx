@@ -32,16 +32,26 @@ export function Blueprints() {
         </Button>
       </PageHeader>
       <div className="pb-5">
-        <BlueprintsGrid
-          ids={blueprintIds}
-          whenEmpty={
+        {wallet?.publicKey ? (
+          <BlueprintsGrid
+            ids={blueprintIds}
+            whenEmpty={
+              <div className="flex flex-col gap-10 items-center justify-center text-center">
+                <span className="opacity-50 text-lg">
+                  You do not have any Blueprints yet!
+                </span>
+              </div>
+            }
+          />
+        ) : (
+          <div className="flex items-center justify-center px-5 h-[30vh]">
             <div className="flex flex-col gap-10 items-center justify-center text-center">
               <span className="opacity-50 text-lg">
-                You do not have any Blueprints yet!
+                Please connect your wallet to proceed
               </span>
             </div>
-          }
-        />
+          </div>
+        )}
       </div>
     </>
   )

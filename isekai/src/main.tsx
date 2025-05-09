@@ -9,6 +9,7 @@ import { Conditions } from './pages/Conditions'
 import { EditCondition } from './pages/EditCondition'
 import { EditAction } from './pages/EditAction'
 import { EditSpawn } from './pages/EditSpawn'
+import { BlueprintIntegration } from './pages/BlueprintIntegration'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/" element={<Root />}>
             <Route index element={<Blueprints />} />
+            <Route path="/blueprints/:id" element={<BlueprintIntegration />} />
             <Route path="/conditions" element={<Conditions />} />
             <Route path="/conditions/:id" element={<EditCondition />} />
             <Route path="/actions" element={<Conditions />} />

@@ -23,7 +23,15 @@ const data = {
       url: '/',
       items: [
         {
-          title: 'Integrate',
+          title: 'Integrate Part',
+          url: '/',
+        },
+        {
+          title: 'Resources & Currency',
+          url: '/',
+        },
+        {
+          title: 'Paint',
           url: '/',
         },
       ],
