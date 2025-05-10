@@ -38,11 +38,18 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useSortable } from '@dnd-kit/sortable'
-import { GripVertical } from 'lucide-react'
+import { GripVertical, MoreVertical } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from './ui/dropdown-menu'
 
 interface Cond {
   id: number
-  slot: number
   name: string
   mul: number
 }
@@ -57,7 +64,7 @@ const DragHandle = ({ id }: { id: number }) => {
       {...listeners}
       variant="ghost"
       size="icon"
-      className="size-7 text-muted-foreground hover:bg-transparent"
+      className="cursor-grab size-7 text-muted-foreground hover:bg-transparent"
     >
       <GripVertical className="size-3 text-muted-foreground" />
       <span className="sr-only">Drag to reorder</span>
@@ -69,14 +76,19 @@ const DraggableRow = ({ row }: { row: Row<Cond> }) => {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.original.id,
   })
+
   return (
-    <TableRow
+    <tr
       data-state={row.getIsSelected() && 'selected'}
       data-dragging={isDragging}
+      data-slot="table-row"
       ref={setNodeRef}
-      className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
+      className={cn(
+        'hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors',
+        'relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80'
+      )}
       style={{
-        transform: CSS.Transform.toString(transform),
+        transform: transform ? CSS.Transform.toString(transform) : 'none',
         transition: transition,
       }}
     >
@@ -85,7 +97,7 @@ const DraggableRow = ({ row }: { row: Row<Cond> }) => {
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </TableCell>
       ))}
-    </TableRow>
+    </tr>
   )
 }
 
@@ -101,7 +113,8 @@ export function CpuTab() {
       },
       {
         accessorKey: 'slot',
-        header: () => 'Slot',
+        header: 'Slot',
+        cell: ({ row }) => row.index + 1,
       },
       {
         accessorKey: 'mul',
@@ -110,6 +123,28 @@ export function CpuTab() {
       {
         accessorKey: 'name',
         header: () => 'Condition Name',
+      },
+      {
+        id: 'actions',
+        cell: () => (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="flex items-center justify-end">
+                <Button
+                  variant="ghost"
+                  className="cursor-pointer flex size-8 text-muted-foreground data-[state=open]:bg-muted"
+                  size="icon"
+                >
+                  <MoreVertical />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-32">
+              <DropdownMenuItem>Remove</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ),
       },
     ],
     []
@@ -120,13 +155,11 @@ export function CpuTab() {
       id: 0x01,
       mul: 1,
       name: 'Always',
-      slot: 0,
     },
     {
       id: 0x02,
       mul: 1,
       name: 'Grounded',
-      slot: 1,
     },
   ])
 
@@ -172,7 +205,11 @@ export function CpuTab() {
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} colSpan={header.colSpan}>
+                  <TableHead
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    className="text-muted-foreground"
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(

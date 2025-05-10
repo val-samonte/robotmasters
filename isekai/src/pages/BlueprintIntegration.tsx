@@ -45,19 +45,19 @@ function WithData({ id }: { id: string }) {
           </a>
         </Button>
       </PageHeader>
-      <div className="flex flex-1 flex-col gap-6 p-4 pt-0 max-w-7xl">
+      <div className="flex flex-1 flex-col gap-6 px-4 pb-20 pt-0 max-w-7xl">
         <div className="flex justify-between gap-4">
-          <div className="flex gap-4 w-full">
-            <div className="p-4 bg-muted rounded-lg flex-none">
+          <div className="flex portrait:flex-col gap-4 w-full">
+            <div className="p-4 bg-muted rounded-lg flex-none flex items-center justify-center">
               <img
                 src={data.image}
                 alt={data.name}
-                className="object-contain w-24 h-24 aspect-square"
+                className="object-contain w-24 h-24 portrait:w-full portrait:h-auto portrait:max-w-xs aspect-square"
               />
             </div>
             <div className="flex flex-col gap-2 flex-auto">
               <div className="flex justify-between">
-                <h1 className="text-2xl">{data.name}</h1>
+                <h1 className="text-2xl text-wrap">{data.name}</h1>
                 <Button variant={'link'} asChild>
                   <a
                     href={`https://itembox.app/blueprints/${data.id}`}
@@ -68,7 +68,9 @@ function WithData({ id }: { id: string }) {
                   </a>
                 </Button>
               </div>
-              <div className="text-sm text-muted-foreground">{id}</div>
+              <div className="text-sm text-muted-foreground text-wrap break-all">
+                {id}
+              </div>
               <div className="flex gap-2 items-center mt-auto">
                 <div>Integrate as</div>
                 <Select onValueChange={setPart} defaultValue={part}>
