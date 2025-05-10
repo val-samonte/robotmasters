@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 
-export function Blueprints() {
+export function BlueprintsForPart() {
   const wallet = useUserWallet()
   const [blueprintIds, loadIds] = useAtom(
     userBlueprintsAtom(wallet?.publicKey?.toBase58() ?? '')
@@ -20,7 +20,7 @@ export function Blueprints() {
 
   return (
     <>
-      <PageHeader title="Blueprints" breadcrumbs={[]}>
+      <PageHeader title="Integrate" breadcrumbs={[]}>
         <Button asChild>
           <a
             href="https://itembox.app/blueprints"

@@ -28,11 +28,11 @@ const data = {
         },
         {
           title: 'Resources & Currency',
-          url: '/',
+          url: '/resources',
         },
         {
           title: 'Paint',
-          url: '/',
+          url: '/paint',
         },
       ],
     },

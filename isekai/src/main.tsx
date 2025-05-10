@@ -3,7 +3,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { Root } from './pages/Root'
-import { Blueprints } from './pages/Blueprints'
+import { BlueprintsForPart } from './pages/BlueprintsForPart'
 import { WalletAdapter } from './components/WalletAdapter'
 import { Conditions } from './pages/Conditions'
 import { EditCondition } from './pages/EditCondition'
@@ -17,7 +17,7 @@ createRoot(document.getElementById('root')!).render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Root />}>
-            <Route index element={<Blueprints />} />
+            <Route index element={<BlueprintsForPart />} />
             <Route path="/blueprints/:id" element={<BlueprintIntegration />} />
             <Route path="/conditions" element={<Conditions />} />
             <Route path="/conditions/:id" element={<EditCondition />} />

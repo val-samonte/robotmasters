@@ -1,5 +1,8 @@
 import { blueprintAtom } from '@/atoms/blueprintAtom'
+import { ArmorTab } from '@/components/ArmorTab'
 import { BlueprintTab } from '@/components/BlueprintTab'
+import { CpuTab } from '@/components/CpuTab'
+import { DetailsTab } from '@/components/DetailsTab'
 import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
 import {
@@ -24,10 +27,10 @@ function WithData({ id }: { id: string }) {
   return (
     <>
       <PageHeader
-        title={`Integrate ${data.name}`}
+        title={`${data.name}`}
         breadcrumbs={[
           {
-            label: 'Blueprints',
+            label: 'Integrate',
             link: '/',
           },
         ]}
@@ -90,15 +93,27 @@ function WithData({ id }: { id: string }) {
             <TabsTrigger value="details">Details</TabsTrigger>
             {part === 'head' && <TabsTrigger value="cpu">CPU</TabsTrigger>}
             <TabsTrigger value="actions">Actions</TabsTrigger>
-            <TabsTrigger value="armor">Armor</TabsTrigger>
+            {part !== 'weapon' && (
+              <TabsTrigger value="armor">Armor</TabsTrigger>
+            )}
           </TabsList>
           <TabsContent value="blueprint">
             <BlueprintTab id={id} />
           </TabsContent>
-          <TabsContent value="details"></TabsContent>
-          {part === 'head' && <TabsContent value="cpu"></TabsContent>}
+          <TabsContent value="details">
+            <DetailsTab part={part} />
+          </TabsContent>
+          {part === 'head' && (
+            <TabsContent value="cpu">
+              <CpuTab />
+            </TabsContent>
+          )}
           <TabsContent value="actions"></TabsContent>
-          <TabsContent value="armor"></TabsContent>
+          {part !== 'weapon' && (
+            <TabsContent value="armor">
+              <ArmorTab />
+            </TabsContent>
+          )}
         </Tabs>
       </div>
     </>
