@@ -24,14 +24,14 @@ pub struct Condition {
 impl Condition {
     pub fn len(script_len: usize) -> usize {
         8 +  // account discriminator
-        1 +  // bump
-        1 +  // state
-        4 +  // id
-        4 +  // version
-        1 +  // energy_mul_num
-        1 +  // energy_mul_den
-        4 +  // args
-        4 +  // Vec length prefix (u32)
-        script_len // actual script data
+		1 +  // bump
+		1 +  // state
+		4 +  // id
+		4 +  // version
+		1 +  // energy_mul_num
+		1 +  // energy_mul_den
+		4 +  // args
+		4 +  // Vec length prefix (u32)
+		script_len // actual script data
     }
 }
