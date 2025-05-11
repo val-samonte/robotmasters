@@ -1,12 +1,11 @@
-use bolt_lang::*;
-
+use bolt_lang::prelude::*;
 #[account]
-pub struct ConditionControl {
+pub struct ConditionManager {
     pub bump: u8,
     pub counter: u32,
 }
 
-impl ConditionControl {
+impl ConditionManager {
     pub fn len() -> usize {
         8 +  // account discriminator
         1 +  // bump

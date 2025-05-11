@@ -1,4 +1,4 @@
-use bolt_lang::*;
+use bolt_lang::prelude::*;
 
 #[account]
 pub struct ConditionControl {
