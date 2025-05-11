@@ -640,16 +640,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "create_game"
-version = "0.2.3"
-dependencies = [
- "bolt-lang",
- "game_state",
- "rmengine",
- "serde",
-]
-
-[[package]]
 name = "crunchy"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -822,14 +812,6 @@ name = "five8_core"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2551bf44bc5f776c15044b9b94153a00198be06743e262afaaa61f11ac7523a5"
-
-[[package]]
-name = "game_state"
-version = "0.2.3"
-dependencies = [
- "bolt-lang",
- "borsh 0.10.4",
-]
 
 [[package]]
 name = "generic-array"
@@ -1084,15 +1066,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "movement"
-version = "0.2.3"
-dependencies = [
- "bolt-lang",
- "position",
- "serde",
-]
-
-[[package]]
 name = "num-bigint"
 version = "0.4.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1164,13 +1137,6 @@ dependencies = [
  "redox_syscall",
  "smallvec",
  "windows-targets",
-]
-
-[[package]]
-name = "position"
-version = "0.2.3"
-dependencies = [
- "bolt-lang",
 ]
 
 [[package]]

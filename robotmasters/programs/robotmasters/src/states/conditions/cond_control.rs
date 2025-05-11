@@ -1,2 +1,21 @@
-// contains the counter for versions of a specific condition &
-// which version is currently active atm
+use bolt_lang::*;
+
+#[account]
+pub struct ConditionControl {
+    pub bump: u8,
+    pub id: u32,
+    pub active: u32,
+    pub counter: u32,
+    pub owner: Pubkey,
+}
+
+impl ConditionControl {
+    pub fn len() -> usize {
+        8 +  // account discriminator
+        1 +  // bump
+		4 +  // id
+        4 +  // counter
+        4 +  // active
+        32 // owner
+    }
+}
