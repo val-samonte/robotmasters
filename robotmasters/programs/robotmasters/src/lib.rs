@@ -17,6 +17,22 @@ pub mod robotmasters {
 
     use super::*;
 
+    pub fn init(ctx: Context<Init>, args: InitArgs) -> Result<()> {
+        init_handler(ctx, args)
+    }
+
+    pub fn create_cond(ctx: Context<CreateCondition>, args: CreateConditionArgs) -> Result<()> {
+        create_cond_handler(ctx, args)
+    }
+
+    pub fn update_cond(ctx: Context<UpdateCondition>, args: UpdateConditionArgs) -> Result<()> {
+        update_cond_handler(ctx, args)
+    }
+
+    pub fn version_cond(ctx: Context<VersionCondition>, args: VersionConditionArgs) -> Result<()> {
+        version_cond_handler(ctx, args)
+    }
+
     pub fn create_game(ctx: Context<CreateGame>) -> Result<()> {
         create_game_handler(ctx)
     }

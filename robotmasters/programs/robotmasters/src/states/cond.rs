@@ -7,6 +7,7 @@ pub enum ConditionState {
     Rejected,
     Approved,
     Published,
+    Deprecated,
 }
 
 #[account]
