@@ -10,6 +10,7 @@ pub struct UpdateConditionArgs {
     state: ConditionState,
     energy_mul_num: Option<u8>,
     energy_mul_den: Option<u8>,
+    args: Option<[u8; 4]>,
     script: Option<Vec<u8>>,
 }
 
@@ -69,6 +70,10 @@ pub fn update_cond_handler(ctx: Context<UpdateCondition>, args: UpdateConditionA
 
     if let Some(energy_mul_den) = args.energy_mul_den {
         cond.energy_mul_den = energy_mul_den;
+    }
+
+    if let Some(args) = args.args {
+        cond.args = args;
     }
 
     if let Some(script) = args.script {

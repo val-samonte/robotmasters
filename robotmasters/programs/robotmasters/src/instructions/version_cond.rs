@@ -6,6 +6,7 @@ use crate::{Admin, Condition, ConditionControl, ConditionState};
 pub struct VersionConditionArgs {
     energy_mul_num: u8,
     energy_mul_den: u8,
+    args: [u8; 4],
     script: Vec<u8>,
 }
 
@@ -77,12 +78,14 @@ pub fn version_cond_handler(
 
     // old_cond.state = ConditionState::Deprecated;
     cond_control.counter += 1;
-    cond_control.active = cond_control.counter;
+    // cond_control.active = cond_control.counter;
 
     new_cond.bump = ctx.bumps.new_cond;
+    new_cond.version = cond_control.counter;
     new_cond.state = ConditionState::Draft;
     new_cond.energy_mul_num = args.energy_mul_num;
     new_cond.energy_mul_den = args.energy_mul_den;
+    new_cond.args = args.args;
     new_cond.script = args.script;
 
     Ok(())

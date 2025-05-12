@@ -6,6 +6,7 @@ use crate::{Condition, ConditionControl, ConditionManager, ConditionState};
 pub struct CreateConditionArgs {
     energy_mul_num: u8,
     energy_mul_den: u8,
+	args: [u8; 4],
 	script: Vec<u8>,
 }
 
@@ -69,6 +70,7 @@ pub fn create_cond_handler(ctx: Context<CreateCondition>, args: CreateConditionA
 
 	cond.energy_mul_num = args.energy_mul_num;
 	cond.energy_mul_den = args.energy_mul_den;
+	cond.args = args.args;
 	cond.script = args.script;
 
 	// Created a fresh cond, so increment id
