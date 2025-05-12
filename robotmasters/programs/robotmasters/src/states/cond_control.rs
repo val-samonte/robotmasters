@@ -12,10 +12,10 @@ pub struct ConditionControl {
 impl ConditionControl {
     pub fn len() -> usize {
         8 +  // account discriminator
-        1 +  // bump
+		1 +  // bump
 		4 +  // id
-        4 +  // counter
-        4 +  // active
-        32 // owner
+		4 +  // counter
+		4 +  // active
+		32 // owner
     }
 }
