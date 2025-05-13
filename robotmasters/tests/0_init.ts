@@ -16,6 +16,8 @@ export let matchCounterPda: anchor.web3.PublicKey
 export let itemManagerPda: anchor.web3.PublicKey
 export let condPda: anchor.web3.PublicKey
 export let condControlPda: anchor.web3.PublicKey
+export let actionPda: anchor.web3.PublicKey
+export let actionControlPda: anchor.web3.PublicKey
 
 describe('Init', () => {
   const provider = anchor.AnchorProvider.env()
@@ -44,6 +46,13 @@ describe('Init', () => {
     condControlPda = deriveComponentControlPda(
       program.programId,
       'cond_control',
+      0
+    )[0]
+
+    actionPda = deriveComponentPda(program.programId, 'action', 0, 0)[0]
+    actionControlPda = deriveComponentControlPda(
+      program.programId,
+      'action_control',
       0
     )[0]
   })

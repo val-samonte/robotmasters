@@ -23,7 +23,7 @@ describe('Condition', () => {
       .accounts({
         authority: program.provider.publicKey,
         cond: condPda,
-        condControl: condControlPda,
+        control: condControlPda,
       })
       .rpc()
 
@@ -51,7 +51,7 @@ describe('Condition', () => {
       })
       .accounts({
         cond: condPda,
-        condControl: condControlPda,
+        control: condControlPda,
         signer: program.provider.publicKey,
       })
       .rpc()
@@ -73,7 +73,7 @@ describe('Condition', () => {
       })
       .accounts({
         cond: condPda,
-        condControl: condControlPda,
+        control: condControlPda,
         signer: program.provider.publicKey,
       })
       .rpc()
@@ -93,7 +93,7 @@ describe('Condition', () => {
         })
         .accounts({
           cond: condPda,
-          condControl: condControlPda,
+          control: condControlPda,
           signer: program.provider.publicKey,
         })
         .rpc()
@@ -114,7 +114,7 @@ describe('Condition', () => {
       })
       .accounts({
         cond: condPda,
-        condControl: condControlPda,
+        control: condControlPda,
         signer: itemAuthority.publicKey,
       })
       .signers([itemAuthority])
@@ -136,7 +136,7 @@ describe('Condition', () => {
       .accounts({
         oldCond: condPda,
         newCond: newCondPda,
-        condControl: condControlPda,
+        control: condControlPda,
         signer: program.provider.wallet.publicKey,
       })
       .rpc()
