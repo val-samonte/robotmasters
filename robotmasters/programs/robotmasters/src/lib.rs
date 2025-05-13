@@ -45,6 +45,18 @@ pub mod robotmasters {
         version_action_handler(ctx, args)
     }
 
+    pub fn create_spawn(ctx: Context<CreateSpawn>, args: CreateSpawnArgs) -> Result<()> {
+        create_spawn_handler(ctx, args)
+    }
+
+    pub fn update_spawn(ctx: Context<UpdateSpawn>, args: UpdateSpawnArgs) -> Result<()> {
+        update_spawn_handler(ctx, args)
+    }
+
+    pub fn version_spawn(ctx: Context<VersionSpawn>, args: VersionSpawnArgs) -> Result<()> {
+        version_spawn_handler(ctx, args)
+    }
+
     pub fn create_game(ctx: Context<CreateGame>) -> Result<()> {
         create_game_handler(ctx)
     }

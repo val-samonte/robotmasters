@@ -18,6 +18,8 @@ export let condPda: anchor.web3.PublicKey
 export let condControlPda: anchor.web3.PublicKey
 export let actionPda: anchor.web3.PublicKey
 export let actionControlPda: anchor.web3.PublicKey
+export let spawnPda: anchor.web3.PublicKey
+export let spawnControlPda: anchor.web3.PublicKey
 
 describe('Init', () => {
   const provider = anchor.AnchorProvider.env()
@@ -53,6 +55,13 @@ describe('Init', () => {
     actionControlPda = deriveComponentControlPda(
       program.programId,
       'action_control',
+      0
+    )[0]
+
+    spawnPda = deriveComponentPda(program.programId, 'spawn', 0, 0)[0]
+    spawnControlPda = deriveComponentControlPda(
+      program.programId,
+      'spawn_control',
       0
     )[0]
   })
