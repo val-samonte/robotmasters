@@ -4,7 +4,7 @@ import { Robotmasters } from '../target/types/robotmasters'
 
 import { Keypair } from '@solana/web3.js'
 import { expect } from 'chai'
-import { deriveControlPda, derivePda } from './utils'
+import { deriveComponentControlPda, deriveComponentPda } from './utils'
 
 export let program: Program<Robotmasters>
 
@@ -40,8 +40,12 @@ describe('Init', () => {
       program.programId
     )[0]
 
-    condPda = derivePda(program.programId, 'cond', 0, 0)[0]
-    condControlPda = deriveControlPda(program.programId, 'cond_control', 0)[0]
+    condPda = deriveComponentPda(program.programId, 'cond', 0, 0)[0]
+    condControlPda = deriveComponentControlPda(
+      program.programId,
+      'cond_control',
+      0
+    )[0]
   })
 
   it('Initializes program', async () => {
@@ -73,7 +77,9 @@ describe('Init', () => {
 
     expect(matchCounter.band.length).eq(64)
 
-    const itemManger = await program.account.itemManager.fetch(itemManagerPda)
+    const itemManger = await program.account.componentManager.fetch(
+      itemManagerPda
+    )
 
     expect(itemManger.counter).eq(0)
   })

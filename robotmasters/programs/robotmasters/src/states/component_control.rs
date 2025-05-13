@@ -1,7 +1,7 @@
 use bolt_lang::prelude::*;
 
 #[account]
-pub struct ConditionControl {
+pub struct ComponentControl {
     pub bump: u8,
     pub id: u32,
     pub active: u32,
@@ -9,7 +9,7 @@ pub struct ConditionControl {
     pub owner: Pubkey,
 }
 
-impl ConditionControl {
+impl ComponentControl {
     pub fn len() -> usize {
         8 +  // account discriminator
 		1 +  // bump
@@ -18,4 +18,14 @@ impl ConditionControl {
 		4 +  // active
 		32 // owner
     }
+}
+
+#[derive(Copy, Clone, AnchorSerialize, AnchorDeserialize)]
+pub enum ComponentState {
+    Draft,
+    Pending,
+    Rejected,
+    Approved,
+    Published,
+    Deprecated,
 }

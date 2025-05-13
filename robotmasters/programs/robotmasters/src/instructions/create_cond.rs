@@ -1,6 +1,6 @@
 use bolt_lang::*;
 
-use crate::{Condition, ConditionControl, ConditionManager, ConditionState};
+use crate::{ComponentControl, ComponentManager, ComponentState, Condition};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct CreateConditionArgs {
@@ -35,16 +35,16 @@ pub struct CreateCondition<'info> {
 			&cond_manager.counter.to_le_bytes()[..],
 		],
 		bump,
-		space = ConditionControl::len()
+		space = ComponentControl::len()
 	)]
-	pub cond_control: Account<'info, ConditionControl>,
+	pub cond_control: Account<'info, ComponentControl>,
 
     #[account(
     	mut, 
 		seeds = [b"cond_manager"], 
 		bump = cond_manager.bump
 	)]
-    pub cond_manager: Account<'info, ConditionManager>,
+    pub cond_manager: Account<'info, ComponentManager>,
 
 	#[account(mut)]
 	pub authority: Signer<'info>,
@@ -66,7 +66,7 @@ pub fn create_cond_handler(ctx: Context<CreateCondition>, args: CreateConditionA
 	cond.bump = ctx.bumps.cond;
 	cond.id = cond_manager.counter;
 	cond.version = cond_control.counter;
-	cond.state = ConditionState::Draft;
+	cond.state = ComponentState::Draft;
 
 	cond.energy_mul_num = args.energy_mul_num;
 	cond.energy_mul_den = args.energy_mul_den;

@@ -2,9 +2,8 @@ import { Program } from '@coral-xyz/anchor'
 import * as anchor from '@coral-xyz/anchor'
 import { Robotmasters } from '../target/types/robotmasters'
 
-import { Keypair } from '@solana/web3.js'
 import { expect } from 'chai'
-import { deriveControlPda, derivePda } from './utils'
+import { deriveComponentPda } from './utils'
 import { condControlPda, condPda, itemAuthority } from './0_init'
 
 describe('Condition', () => {
@@ -33,7 +32,7 @@ describe('Condition', () => {
     expect(condData.energyMulNum).eq(100)
     expect(condData.energyMulDen).eq(100)
 
-    const condControlData = await program.account.conditionControl.fetch(
+    const condControlData = await program.account.componentControl.fetch(
       condControlPda
     )
 
@@ -125,7 +124,7 @@ describe('Condition', () => {
   })
 
   it('Should be able to make a version of the Condition', async () => {
-    const [newCondPda] = derivePda(program.programId, 'cond', 0, 1)
+    const [newCondPda] = deriveComponentPda(program.programId, 'cond', 0, 1)
 
     await program.methods
       .versionCond({
@@ -142,7 +141,7 @@ describe('Condition', () => {
       })
       .rpc()
 
-    const condControlData = await program.account.conditionControl.fetch(
+    const condControlData = await program.account.componentControl.fetch(
       condControlPda
     )
 

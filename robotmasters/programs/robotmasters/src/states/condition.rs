@@ -1,21 +1,13 @@
 use bolt_lang::prelude::*;
 
-#[derive(Copy, Clone, AnchorSerialize, AnchorDeserialize)]
-pub enum ConditionState {
-    Draft,
-    Pending,
-    Rejected,
-    Approved,
-    Published,
-    Deprecated,
-}
+use super::ComponentState;
 
 #[account]
 pub struct Condition {
     pub bump: u8,
     pub id: u32,
     pub version: u32,
-    pub state: ConditionState,
+    pub state: ComponentState,
     pub energy_mul_num: u8,
     pub energy_mul_den: u8,
     pub args: [u8; 4],

@@ -1,13 +1,13 @@
 use bolt_lang::*;
 
-use crate::{Admin, Condition, ConditionControl, ConditionState};
+use crate::{Admin, ComponentControl, ComponentState, Condition};
 
 // freely update cond details when in draft state
 // also used to transition the cond's state
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct UpdateConditionArgs {
-    state: ConditionState,
+    state: ComponentState,
     energy_mul_num: Option<u8>,
     energy_mul_den: Option<u8>,
     args: Option<[u8; 4]>,
@@ -35,7 +35,7 @@ pub struct UpdateCondition<'info> {
 		],
 		bump = cond_control.bump
 	)]
-    pub cond_control: Account<'info, ConditionControl>,
+    pub cond_control: Account<'info, ComponentControl>,
 
     #[account(
 		seeds = [b"admin"],
@@ -54,7 +54,7 @@ pub fn update_cond_handler(ctx: Context<UpdateCondition>, args: UpdateConditionA
     let admin = &ctx.accounts.admin;
 
     let is_authorized = match cond.state {
-        ConditionState::Draft => cond_control.owner == signer || admin.item_authority == signer,
+        ComponentState::Draft => cond_control.owner == signer || admin.item_authority == signer,
         _ => admin.item_authority == signer,
     };
 

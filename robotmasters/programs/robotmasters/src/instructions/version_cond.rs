@@ -1,6 +1,6 @@
 use bolt_lang::*;
 
-use crate::{Admin, Condition, ConditionControl, ConditionState};
+use crate::{Admin, ComponentControl, ComponentState, Condition};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct VersionConditionArgs {
@@ -34,7 +34,7 @@ pub struct VersionCondition<'info> {
 		],
 		bump,
 		constraint = match old_cond.state {
-			ConditionState::Published => true,
+			ComponentState::Published => true,
 			_ => false
 		} @ VersionCondError::InvalidState
 	)]
@@ -48,7 +48,7 @@ pub struct VersionCondition<'info> {
 		],
 		bump = cond_control.bump
 	)]
-    pub cond_control: Account<'info, ConditionControl>,
+    pub cond_control: Account<'info, ComponentControl>,
 
     #[account(
 		seeds = [b"admin"],
@@ -82,7 +82,7 @@ pub fn version_cond_handler(
 
     new_cond.bump = ctx.bumps.new_cond;
     new_cond.version = cond_control.counter;
-    new_cond.state = ConditionState::Draft;
+    new_cond.state = ComponentState::Draft;
     new_cond.energy_mul_num = args.energy_mul_num;
     new_cond.energy_mul_den = args.energy_mul_den;
     new_cond.args = args.args;

@@ -1,6 +1,6 @@
 use bolt_lang::*;
 
-use crate::{ActionManager, Admin, ConditionManager, ItemManager, MatchCounter, SpawnManager};
+use crate::{Admin, ComponentManager, MatchCounter};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct InitArgs {
@@ -40,9 +40,9 @@ pub struct Init<'info> {
 			b"item_manager",
 		],
 		bump,
-		space = ItemManager::len()
+		space = ComponentManager::len()
 	)]
-    pub item_manager: Account<'info, ItemManager>,
+    pub item_manager: Account<'info, ComponentManager>,
 
     #[account(
 		init,
@@ -51,9 +51,9 @@ pub struct Init<'info> {
 			b"cond_manager",
 		],
 		bump,
-		space = ConditionManager::len()
+		space = ComponentManager::len()
 	)]
-    pub cond_manager: Account<'info, ConditionManager>,
+    pub cond_manager: Account<'info, ComponentManager>,
 
     #[account(
 		init,
@@ -62,9 +62,9 @@ pub struct Init<'info> {
 			b"action_manager",
 		],
 		bump,
-		space = ActionManager::len()
+		space = ComponentManager::len()
 	)]
-    pub action_manager: Account<'info, ActionManager>,
+    pub action_manager: Account<'info, ComponentManager>,
 
     #[account(
 		init,
@@ -73,9 +73,9 @@ pub struct Init<'info> {
 			b"spawn_manager",
 		],
 		bump,
-		space = SpawnManager::len()
+		space = ComponentManager::len()
 	)]
-    pub spawn_manager: Account<'info, SpawnManager>,
+    pub spawn_manager: Account<'info, ComponentManager>,
 
     #[account(mut)]
     pub payer: Signer<'info>,

@@ -1,11 +1,11 @@
 use bolt_lang::prelude::*;
 #[account]
-pub struct SpawnManager {
+pub struct ComponentManager {
     pub bump: u8,
     pub counter: u32,
 }
 
-impl SpawnManager {
+impl ComponentManager {
     pub fn len() -> usize {
         8 +  // account discriminator
         1 +  // bump

@@ -1,14 +1,14 @@
 import * as anchor from '@coral-xyz/anchor'
 
-export function derivePda(
+export function deriveComponentPda(
   programId: anchor.web3.PublicKey,
   name: string,
-  condManagerCounter: number,
+  componentManagerCounter: number,
   version: number = 0
 ): [anchor.web3.PublicKey, number] {
   const condSeed = Buffer.from(name)
   const idSeed = Buffer.alloc(4)
-  idSeed.writeUIntLE(condManagerCounter, 0, 4)
+  idSeed.writeUIntLE(componentManagerCounter, 0, 4)
   const versionSeed = Buffer.alloc(4)
   versionSeed.writeUIntLE(version, 0, 4)
 
@@ -17,14 +17,14 @@ export function derivePda(
   return anchor.web3.PublicKey.findProgramAddressSync(seeds, programId)
 }
 
-export function deriveControlPda(
+export function deriveComponentControlPda(
   programId: anchor.web3.PublicKey,
   name: string,
-  condManagerCounter: number
+  componentManagerCounter: number
 ): [anchor.web3.PublicKey, number] {
   const condSeed = Buffer.from(name)
   const idSeed = Buffer.alloc(4)
-  idSeed.writeUIntLE(condManagerCounter, 0, 4)
+  idSeed.writeUIntLE(componentManagerCounter, 0, 4)
 
   const seeds = [condSeed, idSeed]
 
