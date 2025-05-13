@@ -37,7 +37,7 @@ pub struct VersionAction<'info> {
 		constraint = match old_action.state {
 			ComponentState::Published => true,
 			_ => false
-		} @ VersionCondError::InvalidState
+		} @ VersionActionError::InvalidState
 	)]
     pub old_action: Account<'info, Action>,
 
@@ -71,7 +71,7 @@ pub fn version_action_handler(ctx: Context<VersionAction>, args: VersionActionAr
     let is_authorized = ctx.accounts.admin.key() == signer || control.owner.key() == signer;
 
     if !is_authorized {
-        return Err(VersionCondError::Unauthorize.into());
+        return Err(VersionActionError::Unauthorize.into());
     }
 
     // old_action.state = ActionState::Deprecated;
@@ -91,7 +91,7 @@ pub fn version_action_handler(ctx: Context<VersionAction>, args: VersionActionAr
 }
 
 #[error_code]
-pub enum VersionCondError {
+pub enum VersionActionError {
     #[msg("Signer is not authorized to update this account.")]
     Unauthorize,
 
