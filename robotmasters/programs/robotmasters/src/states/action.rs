@@ -1,21 +1,13 @@
 use bolt_lang::prelude::*;
 
-#[derive(Copy, Clone, AnchorSerialize, AnchorDeserialize)]
-pub enum ActionState {
-    Draft,
-    Pending,
-    Rejected,
-    Approved,
-    Published,
-    Deprecated,
-}
+use super::ComponentState;
 
 #[account]
 pub struct Action {
     pub bump: u8,
     pub id: u32,
     pub version: u32,
-    pub state: ActionState,
+    pub state: ComponentState,
     pub energy_cost: u8,
     pub interval: u16,
     pub duration: u16,

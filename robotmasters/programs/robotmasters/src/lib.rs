@@ -33,6 +33,18 @@ pub mod robotmasters {
         version_cond_handler(ctx, args)
     }
 
+    pub fn create_action(ctx: Context<CreateAction>, args: CreateActionArgs) -> Result<()> {
+        create_action_handler(ctx, args)
+    }
+
+    pub fn update_action(ctx: Context<UpdateAction>, args: UpdateActionArgs) -> Result<()> {
+        update_action_handler(ctx, args)
+    }
+
+    pub fn version_action(ctx: Context<VersionAction>, args: VersionActionArgs) -> Result<()> {
+        version_action_handler(ctx, args)
+    }
+
     pub fn create_game(ctx: Context<CreateGame>) -> Result<()> {
         create_game_handler(ctx)
     }

@@ -1,37 +1,38 @@
 use bolt_lang::*;
 
-use crate::{ComponentControl, ComponentManager, ComponentState, Condition};
+use crate::{Action, ComponentControl, ComponentManager, ComponentState};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
-pub struct CreateConditionArgs {
-    energy_mul_num: u8,
-    energy_mul_den: u8,
+pub struct CreateActionArgs {
+    energy_cost: u8,
+    interval: u16,
+    duration: u16,
 	args: [u8; 4],
 	script: Vec<u8>,
 }
 
 #[derive(Accounts)]
-#[instruction(args: CreateConditionArgs)]
-pub struct CreateCondition<'info> {
+#[instruction(args: CreateActionArgs)]
+pub struct CreateAction<'info> {
 
 	#[account(
 		init,
 		payer = authority,
 		seeds = [
-			b"cond",
+			b"action",
 			&manager.counter.to_le_bytes()[..],
 			&0_u32.to_le_bytes()[..],
 		],
 		bump,
-		space = Condition::len(args.script.len())
+		space = Action::len(args.script.len())
 	)]
-	pub cond: Account<'info, Condition>,
+	pub action: Account<'info, Action>,
 
 	#[account(
 		init,
 		payer = authority,
 		seeds = [
-			b"cond_control",
+			b"action_control",
 			&manager.counter.to_le_bytes()[..],
 		],
 		bump,
@@ -41,7 +42,7 @@ pub struct CreateCondition<'info> {
 
     #[account(
     	mut, 
-		seeds = [b"cond_manager"], 
+		seeds = [b"action_manager"], 
 		bump = manager.bump
 	)]
     pub manager: Account<'info, ComponentManager>,
@@ -52,8 +53,8 @@ pub struct CreateCondition<'info> {
 	pub system_program: Program<'info, System>,
 }
 
-pub fn create_cond_handler(ctx: Context<CreateCondition>, args: CreateConditionArgs) -> Result<()> {
-	let cond = &mut ctx.accounts.cond;
+pub fn create_action_handler(ctx: Context<CreateAction>, args: CreateActionArgs) -> Result<()> {
+	let action = &mut ctx.accounts.action;
 	let control = &mut ctx.accounts.control;
 	let manager = &mut ctx.accounts.manager;
 
@@ -63,15 +64,16 @@ pub fn create_cond_handler(ctx: Context<CreateCondition>, args: CreateConditionA
 	control.counter = 0;
 	control.owner = ctx.accounts.authority.key();
 
-	cond.bump = ctx.bumps.cond;
-	cond.id = manager.counter;
-	cond.version = control.counter;
-	cond.state = ComponentState::Draft;
+	action.bump = ctx.bumps.action;
+	action.id = manager.counter;
+	action.version = control.counter;
+	action.state = ComponentState::Draft;
 
-	cond.energy_mul_num = args.energy_mul_num;
-	cond.energy_mul_den = args.energy_mul_den;
-	cond.args = args.args;
-	cond.script = args.script;
+	action.energy_cost = args.energy_cost;
+	action.interval = args.interval;
+	action.duration = args.duration;
+	action.args = args.args;
+	action.script = args.script;
 
 	manager.counter += 1;
 

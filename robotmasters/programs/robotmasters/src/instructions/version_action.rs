@@ -1,50 +1,51 @@
 use bolt_lang::*;
 
-use crate::{Admin, ComponentControl, ComponentState, Condition};
+use crate::{Action, Admin, ComponentControl, ComponentState};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
-pub struct VersionConditionArgs {
-    energy_mul_num: u8,
-    energy_mul_den: u8,
+pub struct VersionActionArgs {
+    energy_cost: u8,
+    interval: u16,
+    duration: u16,
     args: [u8; 4],
     script: Vec<u8>,
 }
 
 #[derive(Accounts)]
-#[instruction(args: VersionConditionArgs)]
-pub struct VersionCondition<'info> {
+#[instruction(args: VersionActionArgs)]
+pub struct VersionAction<'info> {
     #[account(
 		init,
 		payer = signer,
 		seeds = [
-			b"cond",
+			b"action",
 			&control.id.to_le_bytes()[..],
 			&(control.counter + 1).to_le_bytes()[..],
 		],
 		bump,
-		space = Condition::len(args.script.len()),
+		space = Action::len(args.script.len()),
 	)]
-    pub new_cond: Account<'info, Condition>,
+    pub new_action: Account<'info, Action>,
 
     #[account(
 		seeds = [
-			b"cond",
+			b"action",
 			&control.id.to_le_bytes()[..],
 			&control.active.to_le_bytes()[..],
 		],
 		bump,
-		constraint = match old_cond.state {
+		constraint = match old_action.state {
 			ComponentState::Published => true,
 			_ => false
 		} @ VersionCondError::InvalidState
 	)]
-    pub old_cond: Account<'info, Condition>,
+    pub old_action: Account<'info, Action>,
 
     #[account(
 		mut,
 		seeds = [
-			b"cond_control",
-			&old_cond.id.to_le_bytes()[..],
+			b"action_control",
+			&old_action.id.to_le_bytes()[..],
 		],
 		bump = control.bump
 	)]
@@ -62,12 +63,9 @@ pub struct VersionCondition<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn version_cond_handler(
-    ctx: Context<VersionCondition>,
-    args: VersionConditionArgs,
-) -> Result<()> {
+pub fn version_action_handler(ctx: Context<VersionAction>, args: VersionActionArgs) -> Result<()> {
     let signer = ctx.accounts.signer.key();
-    let new_cond = &mut ctx.accounts.new_cond;
+    let new_action = &mut ctx.accounts.new_action;
     let control = &mut ctx.accounts.control;
 
     let is_authorized = ctx.accounts.admin.key() == signer || control.owner.key() == signer;
@@ -76,17 +74,18 @@ pub fn version_cond_handler(
         return Err(VersionCondError::Unauthorize.into());
     }
 
-    // old_cond.state = ConditionState::Deprecated;
+    // old_action.state = ActionState::Deprecated;
     control.counter += 1;
     // control.active = control.counter;
 
-    new_cond.bump = ctx.bumps.new_cond;
-    new_cond.version = control.counter;
-    new_cond.state = ComponentState::Draft;
-    new_cond.energy_mul_num = args.energy_mul_num;
-    new_cond.energy_mul_den = args.energy_mul_den;
-    new_cond.args = args.args;
-    new_cond.script = args.script;
+    new_action.bump = ctx.bumps.new_action;
+    new_action.version = control.counter;
+    new_action.state = ComponentState::Draft;
+    new_action.energy_cost = args.energy_cost;
+    new_action.interval = args.interval;
+    new_action.duration = args.duration;
+    new_action.args = args.args;
+    new_action.script = args.script;
 
     Ok(())
 }
