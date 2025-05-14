@@ -57,6 +57,21 @@ pub mod robotmasters {
         version_spawn_handler(ctx, args)
     }
 
+    pub fn create_item_part(ctx: Context<CreateItemPart>, args: CreateItemPartArgs) -> Result<()> {
+        create_item_part_handler(ctx, args)
+    }
+
+    pub fn update_item_part(ctx: Context<UpdateItemPart>, args: UpdateItemPartArgs) -> Result<()> {
+        update_item_part_handler(ctx, args)
+    }
+
+    pub fn version_item_part(
+        ctx: Context<VersionItemPart>,
+        args: VersionItemPartArgs,
+    ) -> Result<()> {
+        version_item_part_handler(ctx, args)
+    }
+
     pub fn create_game(ctx: Context<CreateGame>) -> Result<()> {
         create_game_handler(ctx)
     }

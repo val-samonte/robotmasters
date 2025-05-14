@@ -4,6 +4,7 @@ use crate::{Admin, ComponentControl, ComponentState, ItemPart};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct VersionItemPartArgs {
+    item_type_variation: u8,
     health: u8,
     weight: u8,
     power: u8,
@@ -79,6 +80,7 @@ pub fn version_item_part_handler(
     args: VersionItemPartArgs,
 ) -> Result<()> {
     let signer = ctx.accounts.signer.key();
+    let old_item_part = &ctx.accounts.old_item_part;
     let new_item_part = &mut ctx.accounts.new_item_part;
     let control = &mut ctx.accounts.control;
 
@@ -96,6 +98,8 @@ pub fn version_item_part_handler(
     new_item_part.version = control.counter;
     new_item_part.state = ComponentState::Draft;
 
+    new_item_part.item_type = old_item_part.item_type; // retain the part type
+    new_item_part.item_type_variation = args.item_type_variation;
     new_item_part.health = args.health;
     new_item_part.weight = args.weight;
     new_item_part.power = args.power;

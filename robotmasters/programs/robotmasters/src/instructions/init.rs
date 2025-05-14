@@ -37,7 +37,7 @@ pub struct Init<'info> {
 		init,
 		payer = payer,
 		seeds = [
-			b"item_manager",
+			b"item_part_manager",
 		],
 		bump,
 		space = ComponentManager::len()

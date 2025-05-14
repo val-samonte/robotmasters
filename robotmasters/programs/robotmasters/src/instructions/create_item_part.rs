@@ -1,9 +1,12 @@
 use bolt_lang::*;
 
-use crate::{ComponentControl, ComponentManager, ComponentState, ItemBlueprintLink, ItemPart};
+use crate::{ComponentControl, ComponentManager, ComponentState, ItemBlueprintLink, ItemPart, ItemPartType};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct CreateItemPartArgs {
+
+	item_type: ItemPartType,
+    item_type_variation: u8,
 
 	health: u8,
 	weight: u8,
@@ -45,7 +48,7 @@ pub struct CreateItemPart<'info> {
 		init,
 		payer = authority,
 		seeds = [
-			b"item_blueprint",
+			b"item_blueprint_link",
 			blueprint.key().as_ref(),
 		],
 		bump,
@@ -102,6 +105,9 @@ pub fn create_item_part_handler(ctx: Context<CreateItemPart>, args: CreateItemPa
 	item_part.version = control.counter;
 	item_part.state = ComponentState::Draft;
 	
+	item_part.item_type = args.item_type;
+	item_part.item_type_variation = args.item_type_variation;
+
 	item_part.health = args.health;
 	item_part.weight = args.weight;
 	item_part.power = args.power;
