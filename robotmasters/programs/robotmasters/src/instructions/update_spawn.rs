@@ -77,39 +77,51 @@ pub fn update_spawn_handler(ctx: Context<UpdateSpawn>, args: UpdateSpawnArgs) ->
     if let Some(health_cap) = args.health_cap {
         spawn.health_cap = health_cap;
     }
+
     if let Some(duration) = args.duration {
         spawn.duration = duration;
     }
+
     if let Some(damage_base) = args.damage_base {
         spawn.damage_base = damage_base;
     }
+
     if let Some(damage_range) = args.damage_range {
         spawn.damage_range = damage_range;
     }
+
     if let Some(crit_chance) = args.crit_chance {
         spawn.crit_chance = crit_chance;
     }
+
     if let Some(crit_multiplier) = args.crit_multiplier {
         spawn.crit_multiplier = crit_multiplier;
     }
+
     if let Some(element) = args.element {
         spawn.element = Element::from_byte(element).unwrap();
     }
+
     if let Some(destroy_on_collision) = args.destroy_on_collision {
         spawn.destroy_on_collision = destroy_on_collision;
     }
+
     if let Some(width) = args.width {
         spawn.width = width;
     }
+
     if let Some(height) = args.height {
         spawn.height = height;
     }
+
     if let Some(output_x) = args.output_x {
         spawn.output_x = output_x;
     }
+
     if let Some(output_y) = args.output_y {
         spawn.output_y = output_y;
     }
+
     if let Some(spawns) = args.spawns {
         spawn.spawns = spawns;
     }

@@ -36,7 +36,7 @@ pub enum ItemPartType {
     Back,
 }
 
-impl ItemPartType {
+impl ItemPart {
     pub fn len(
         conditions_len: usize,
         actions_len: usize,
