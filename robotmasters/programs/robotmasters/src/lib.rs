@@ -9,7 +9,7 @@ pub use example::*;
 pub use instructions::*;
 pub use states::*;
 
-declare_id!("7vFkE6M9xe2CMxJhPPaCHchcVhpPHDWCZsmCFjkhymM6");
+declare_id!("BSi1fEa8drVMVNTRhYV3fga467x9Rt5YteMEUHbebxLP");
 
 #[ephemeral]
 #[program]

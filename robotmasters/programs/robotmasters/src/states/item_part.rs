@@ -10,6 +10,7 @@ pub struct ItemPart {
     pub version: u32,
     pub item_type: ItemPartType,
     pub item_type_variation: u8, // for weapons (main / offhand)
+    pub item_tier: u8,           // tier 0s are free during creation
 
     pub health: u8,
     pub weight: u8,
@@ -50,6 +51,7 @@ impl ItemPart {
         4 + // version: u32
         1 + // item_type: ItemPartType (enum)
         1 + // item_type_variation: u8
+        1 + // item_tier: u8
         1 + // health: u8
         1 + // weight: u8
         1 + // power: u8

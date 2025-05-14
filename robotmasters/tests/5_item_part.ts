@@ -22,6 +22,7 @@ describe('ItemPart', () => {
       .createItemPart({
         itemType: { head: {} },
         itemTypeVariation: 0,
+        itemTier: 0,
         health: 20,
         weight: 10,
         power: 5,
@@ -72,6 +73,7 @@ describe('ItemPart', () => {
       .updateItemPart({
         state: { draft: {} },
         itemTypeVariation: 0,
+        itemTier: 0,
         health: 10,
         weight: 10,
         power: 5,
@@ -102,6 +104,7 @@ describe('ItemPart', () => {
       .updateItemPart({
         state: { pending: {} },
         itemTypeVariation: 0,
+        itemTier: 0,
         health: 20,
         weight: 10,
         power: 5,
@@ -130,6 +133,7 @@ describe('ItemPart', () => {
         .updateItemPart({
           state: { pending: {} },
           itemTypeVariation: 0,
+          itemTier: 0,
           health: 20,
           weight: 10,
           power: 5,
@@ -159,6 +163,7 @@ describe('ItemPart', () => {
       .updateItemPart({
         state: { published: {} },
         itemTypeVariation: 0,
+        itemTier: 0,
         health: 20,
         weight: 10,
         power: 5,
@@ -193,6 +198,7 @@ describe('ItemPart', () => {
     await program.methods
       .versionItemPart({
         itemTypeVariation: 0,
+        itemTier: 0,
         health: 20,
         weight: 10,
         power: 5,

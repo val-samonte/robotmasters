@@ -7,6 +7,7 @@ pub struct CreateItemPartArgs {
 
 	item_type: ItemPartType,
     item_type_variation: u8,
+	item_tier: u8,
 
 	health: u8,
 	weight: u8,
@@ -107,6 +108,7 @@ pub fn create_item_part_handler(ctx: Context<CreateItemPart>, args: CreateItemPa
 	
 	item_part.item_type = args.item_type;
 	item_part.item_type_variation = args.item_type_variation;
+	item_part.item_tier = args.item_tier;
 
 	item_part.health = args.health;
 	item_part.weight = args.weight;

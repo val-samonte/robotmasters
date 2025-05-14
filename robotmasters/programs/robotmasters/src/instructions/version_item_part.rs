@@ -5,6 +5,7 @@ use crate::{Admin, ComponentControl, ComponentState, ItemPart};
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct VersionItemPartArgs {
     item_type_variation: u8,
+    item_tier: u8,
     health: u8,
     weight: u8,
     power: u8,
@@ -100,6 +101,7 @@ pub fn version_item_part_handler(
 
     new_item_part.item_type = old_item_part.item_type; // retain the part type
     new_item_part.item_type_variation = args.item_type_variation;
+    new_item_part.item_tier = args.item_tier;
     new_item_part.health = args.health;
     new_item_part.weight = args.weight;
     new_item_part.power = args.power;

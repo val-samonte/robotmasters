@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/robotmasters.json`.
  */
 export type Robotmasters = {
-  "address": "7vFkE6M9xe2CMxJhPPaCHchcVhpPHDWCZsmCFjkhymM6",
+  "address": "BSi1fEa8drVMVNTRhYV3fga467x9Rt5YteMEUHbebxLP",
   "metadata": {
     "name": "robotmasters",
     "version": "0.2.3",
@@ -412,38 +412,38 @@ export type Robotmasters = {
             "program": {
               "kind": "const",
               "value": [
-                102,
-                202,
-                147,
-                180,
-                84,
-                49,
-                49,
-                169,
-                172,
-                1,
-                128,
-                30,
-                228,
-                12,
-                236,
-                61,
-                76,
-                251,
+                155,
                 42,
-                138,
-                209,
-                14,
-                134,
-                214,
-                187,
-                97,
+                194,
+                221,
+                78,
+                60,
+                26,
+                193,
+                29,
+                110,
+                190,
+                149,
                 175,
-                5,
-                38,
+                97,
+                203,
+                4,
+                138,
                 98,
-                96,
-                93
+                54,
+                1,
+                20,
+                59,
+                46,
+                204,
+                106,
+                32,
+                39,
+                231,
+                228,
+                244,
+                35,
+                128
               ]
             }
           }
@@ -528,7 +528,7 @@ export type Robotmasters = {
         },
         {
           "name": "ownerProgram",
-          "address": "7vFkE6M9xe2CMxJhPPaCHchcVhpPHDWCZsmCFjkhymM6"
+          "address": "BSi1fEa8drVMVNTRhYV3fga467x9Rt5YteMEUHbebxLP"
         },
         {
           "name": "delegationProgram",
@@ -1749,6 +1749,10 @@ export type Robotmasters = {
             "type": "u8"
           },
           {
+            "name": "itemTier",
+            "type": "u8"
+          },
+          {
             "name": "health",
             "type": "u8"
           },
@@ -2019,6 +2023,10 @@ export type Robotmasters = {
           },
           {
             "name": "itemTypeVariation",
+            "type": "u8"
+          },
+          {
+            "name": "itemTier",
             "type": "u8"
           },
           {
@@ -2368,6 +2376,12 @@ export type Robotmasters = {
             }
           },
           {
+            "name": "itemTier",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
             "name": "health",
             "type": {
               "option": "u8"
@@ -2637,6 +2651,10 @@ export type Robotmasters = {
         "fields": [
           {
             "name": "itemTypeVariation",
+            "type": "u8"
+          },
+          {
+            "name": "itemTier",
             "type": "u8"
           },
           {

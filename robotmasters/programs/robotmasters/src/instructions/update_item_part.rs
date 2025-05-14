@@ -6,6 +6,7 @@ use crate::{Admin, ComponentControl, ComponentState, ItemPart};
 pub struct UpdateItemPartArgs {
     state: ComponentState,
     item_type_variation: Option<u8>,
+    item_tier: Option<u8>,
     health: Option<u8>,
     weight: Option<u8>,
     power: Option<u8>,
@@ -74,6 +75,10 @@ pub fn update_item_part_handler(
 
     if let Some(item_type_variation) = args.item_type_variation {
         item_part.item_type_variation = item_type_variation;
+    }
+
+    if let Some(item_tier) = args.item_tier {
+        item_part.item_tier = item_tier;
     }
 
     if let Some(health) = args.health {
