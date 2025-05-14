@@ -13,10 +13,11 @@ pub struct Action {
     pub duration: u16,
     pub args: [u8; 4],
     pub script: Vec<u8>,
+    pub spawns: Vec<u32>,
 }
 
 impl Action {
-    pub fn len(script_len: usize) -> usize {
+    pub fn len(script_len: usize, spawns_len: usize) -> usize {
         8 +  // account discriminator
 		1 +  // bump
 		1 +  // state
@@ -26,7 +27,7 @@ impl Action {
 		2 +  // interval
         2 +  // duration
 		4 +  // args
-		4 +  // Vec length prefix (u32)
-		script_len // actual script data
+		(4 + script_len) +
+		(4 + (4 * spawns_len))
     }
 }

@@ -20,6 +20,7 @@ describe('Action', () => {
         duration: 0,
         args: [0, 0, 0, 0],
         script: Buffer.from([]),
+        spawns: [],
       })
       .accounts({
         authority: program.provider.publicKey,
@@ -50,6 +51,7 @@ describe('Action', () => {
         duration: 0,
         args: [0, 0, 0, 0],
         script: Buffer.from([]),
+        spawns: [],
         state: { draft: {} },
       })
       .accounts({
@@ -74,6 +76,7 @@ describe('Action', () => {
         duration: 0,
         args: [0, 0, 0, 0],
         script: Buffer.from([]),
+        spawns: [],
         state: { pending: {} },
       })
       .accounts({
@@ -95,6 +98,7 @@ describe('Action', () => {
           duration: 0,
           args: [0, 0, 0, 0],
           script: Buffer.from([]),
+          spawns: [],
           state: { pending: {} },
         })
         .accounts({
@@ -117,6 +121,7 @@ describe('Action', () => {
         duration: 0,
         args: [0, 0, 0, 0],
         script: Buffer.from([]),
+        spawns: [],
         state: { published: {} },
       })
       .accounts({
@@ -139,6 +144,7 @@ describe('Action', () => {
         interval: 5,
         duration: 0,
         args: [0, 0, 0, 0],
+        spawns: [],
         script: Buffer.from([]),
       })
       .accounts({

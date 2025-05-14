@@ -21,13 +21,13 @@ pub struct Spawn {
     pub height: u8,
     pub output_x: u8,
     pub output_y: u8,
-
     pub args: [u8; 4],
     pub script: Vec<u8>,
+    pub spawns: Vec<u32>,
 }
 
 impl Spawn {
-    pub fn len(script_len: usize) -> usize {
+    pub fn len(script_len: usize, spawns_len: usize) -> usize {
         8 +  // account discriminator
 		1 +  // bump
 		1 +  // state
@@ -46,7 +46,7 @@ impl Spawn {
         1 +  // output_x
         1 +  // output_y
 		4 +  // args
-		4 +  // Vec length prefix (u32)
-		script_len // actual script data
+		(4 + script_len) +
+		(4 + (4 * spawns_len))
     }
 }

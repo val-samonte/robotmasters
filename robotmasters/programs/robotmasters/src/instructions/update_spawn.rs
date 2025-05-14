@@ -1,5 +1,7 @@
 use bolt_lang::*;
 
+// TODO: handle resizing
+
 use crate::{Admin, ComponentControl, ComponentState, Element, Spawn};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
@@ -19,6 +21,7 @@ pub struct UpdateSpawnArgs {
     output_y: Option<u8>,
     args: Option<[u8; 4]>,
     script: Option<Vec<u8>>,
+    spawns: Option<Vec<u32>>,
 }
 
 #[derive(Accounts)]
@@ -106,6 +109,9 @@ pub fn update_spawn_handler(ctx: Context<UpdateSpawn>, args: UpdateSpawnArgs) ->
     }
     if let Some(output_y) = args.output_y {
         spawn.output_y = output_y;
+    }
+    if let Some(spawns) = args.spawns {
+        spawn.spawns = spawns;
     }
 
     Ok(())

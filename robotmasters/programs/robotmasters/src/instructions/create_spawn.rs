@@ -18,6 +18,7 @@ pub struct CreateSpawnArgs {
     output_y: u8,
 	args: [u8; 4],
 	script: Vec<u8>,
+	spawns: Vec<u32>,
 }
 
 #[derive(Accounts)]
@@ -33,7 +34,7 @@ pub struct CreateSpawn<'info> {
 			&0_u32.to_le_bytes()[..],
 		],
 		bump,
-		space = Spawn::len(args.script.len())
+		space = Spawn::len(args.script.len(), args.spawns.len())
 	)]
 	pub spawn: Account<'info, Spawn>,
 
@@ -92,6 +93,7 @@ pub fn create_spawn_handler(ctx: Context<CreateSpawn>, args: CreateSpawnArgs) ->
 	spawn.output_x = args.output_x;
 	spawn.output_y = args.output_y;
 
+	spawn.spawns = args.spawns;
 	spawn.args = args.args;
 	spawn.script = args.script;
 

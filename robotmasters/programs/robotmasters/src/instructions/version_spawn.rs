@@ -18,6 +18,7 @@ pub struct VersionSpawnArgs {
     output_y: u8,
     args: [u8; 4],
     script: Vec<u8>,
+    spawns: Vec<u32>,
 }
 
 #[derive(Accounts)]
@@ -32,7 +33,7 @@ pub struct VersionSpawn<'info> {
 			&(control.counter + 1).to_le_bytes()[..],
 		],
 		bump,
-		space = Spawn::len(args.script.len()),
+		space = Spawn::len(args.script.len(), args.spawns.len()),
 	)]
     pub new_spawn: Account<'info, Spawn>,
 
@@ -105,6 +106,7 @@ pub fn version_spawn_handler(ctx: Context<VersionSpawn>, args: VersionSpawnArgs)
     new_spawn.output_x = args.output_x;
     new_spawn.output_y = args.output_y;
 
+    new_spawn.spawns = args.spawns;
     new_spawn.args = args.args;
     new_spawn.script = args.script;
 

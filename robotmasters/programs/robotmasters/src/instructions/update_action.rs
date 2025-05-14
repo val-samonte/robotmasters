@@ -10,6 +10,7 @@ pub struct UpdateActionArgs {
     duration: Option<u16>,
     args: Option<[u8; 4]>,
     script: Option<Vec<u8>>,
+    spawns: Option<Vec<u32>>,
 }
 
 #[derive(Accounts)]
@@ -80,6 +81,10 @@ pub fn update_action_handler(ctx: Context<UpdateAction>, args: UpdateActionArgs)
 
     if let Some(script) = args.script {
         action.script = script;
+    }
+
+    if let Some(spawns) = args.spawns {
+        action.spawns = spawns;
     }
 
     Ok(())

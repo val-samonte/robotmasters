@@ -9,6 +9,7 @@ pub struct VersionActionArgs {
     duration: u16,
     args: [u8; 4],
     script: Vec<u8>,
+    spawns: Vec<u32>,
 }
 
 #[derive(Accounts)]
@@ -23,7 +24,7 @@ pub struct VersionAction<'info> {
 			&(control.counter + 1).to_le_bytes()[..],
 		],
 		bump,
-		space = Action::len(args.script.len()),
+		space = Action::len(args.script.len(), args.spawns.len()),
 	)]
     pub new_action: Account<'info, Action>,
 
@@ -86,6 +87,7 @@ pub fn version_action_handler(ctx: Context<VersionAction>, args: VersionActionAr
     new_action.duration = args.duration;
     new_action.args = args.args;
     new_action.script = args.script;
+    new_action.spawns = args.spawns;
 
     Ok(())
 }

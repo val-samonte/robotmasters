@@ -29,6 +29,7 @@ describe('Spawn', () => {
         outputY: 8,
         args: [0, 0, 0, 0],
         script: Buffer.from([]),
+        spawns: [],
       })
       .accounts({
         authority: program.provider.publicKey,
@@ -66,6 +67,7 @@ describe('Spawn', () => {
         outputY: 8,
         args: [0, 0, 0, 0],
         script: Buffer.from([]),
+        spawns: [],
         state: { draft: {} },
       })
       .accounts({
@@ -97,6 +99,7 @@ describe('Spawn', () => {
         outputY: 8,
         args: [0, 0, 0, 0],
         script: Buffer.from([]),
+        spawns: [],
         state: { pending: {} },
       })
       .accounts({
@@ -127,6 +130,7 @@ describe('Spawn', () => {
           outputY: 8,
           args: [0, 0, 0, 0],
           script: Buffer.from([]),
+          spawns: [],
           state: { pending: {} },
         })
         .accounts({
@@ -158,6 +162,7 @@ describe('Spawn', () => {
         outputY: 8,
         args: [0, 0, 0, 0],
         script: Buffer.from([]),
+        spawns: [],
         state: { published: {} },
       })
       .accounts({
@@ -190,6 +195,7 @@ describe('Spawn', () => {
         outputY: 8,
         args: [0, 0, 0, 0],
         script: Buffer.from([]),
+        spawns: [],
       })
       .accounts({
         oldSpawn: spawnPda,

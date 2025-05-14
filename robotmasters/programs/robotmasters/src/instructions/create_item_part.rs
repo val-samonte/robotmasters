@@ -1,39 +1,35 @@
 use bolt_lang::*;
 
-use crate::{Action, ComponentControl, ComponentManager, ComponentState};
+use crate::{ComponentControl, ComponentManager, ComponentState, ItemPart};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
-pub struct CreateActionArgs {
-    energy_cost: u8,
-    interval: u16,
-    duration: u16,
+pub struct CreateItemPartArgs {
 	args: [u8; 4],
 	script: Vec<u8>,
-	spawns: Vec<u32>,
 }
 
 #[derive(Accounts)]
-#[instruction(args: CreateActionArgs)]
-pub struct CreateAction<'info> {
+#[instruction(args: CreateItemPartArgs)]
+pub struct CreateItemPart<'info> {
 
 	#[account(
 		init,
 		payer = authority,
 		seeds = [
-			b"action",
+			b"item_part",
 			&manager.counter.to_le_bytes()[..],
 			&0_u32.to_le_bytes()[..],
 		],
 		bump,
-		space = Action::len(args.script.len(), args.spawns.len())
+		space = ItemPart::len(args.script.len())
 	)]
-	pub action: Account<'info, Action>,
+	pub item_part: Account<'info, ItemPart>,
 
 	#[account(
 		init,
 		payer = authority,
 		seeds = [
-			b"action_control",
+			b"item_part_control",
 			&manager.counter.to_le_bytes()[..],
 		],
 		bump,
@@ -43,7 +39,7 @@ pub struct CreateAction<'info> {
 
     #[account(
     	mut, 
-		seeds = [b"action_manager"], 
+		seeds = [b"item_part_manager"], 
 		bump = manager.bump
 	)]
     pub manager: Account<'info, ComponentManager>,
@@ -54,8 +50,8 @@ pub struct CreateAction<'info> {
 	pub system_program: Program<'info, System>,
 }
 
-pub fn create_action_handler(ctx: Context<CreateAction>, args: CreateActionArgs) -> Result<()> {
-	let action = &mut ctx.accounts.action;
+pub fn create_item_part_handler(ctx: Context<CreateItemPart>, args: CreateItemPartArgs) -> Result<()> {
+	let item_part = &mut ctx.accounts.item_part;
 	let control = &mut ctx.accounts.control;
 	let manager = &mut ctx.accounts.manager;
 
@@ -65,17 +61,12 @@ pub fn create_action_handler(ctx: Context<CreateAction>, args: CreateActionArgs)
 	control.counter = 0;
 	control.owner = ctx.accounts.authority.key();
 
-	action.bump = ctx.bumps.action;
-	action.id = manager.counter;
-	action.version = control.counter;
-	action.state = ComponentState::Draft;
+	item_part.bump = ctx.bumps.item_part;
+	item_part.id = manager.counter;
+	item_part.version = control.counter;
+	item_part.state = ComponentState::Draft;
 
-	action.energy_cost = args.energy_cost;
-	action.interval = args.interval;
-	action.duration = args.duration;
-	action.args = args.args;
-	action.script = args.script;
-	action.spawns = args.spawns;
+	
 
 	manager.counter += 1;
 
