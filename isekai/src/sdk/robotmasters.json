@@ -1,0 +1,2772 @@
+{
+  "address": "7vFkE6M9xe2CMxJhPPaCHchcVhpPHDWCZsmCFjkhymM6",
+  "metadata": {
+    "name": "robotmasters",
+    "version": "0.2.3",
+    "spec": "0.1.0",
+    "description": "Created with Bolt"
+  },
+  "instructions": [
+    {
+      "name": "create_action",
+      "discriminator": [
+        125,
+        159,
+        123,
+        141,
+        6,
+        144,
+        175,
+        4
+      ],
+      "accounts": [
+        {
+          "name": "action",
+          "writable": true
+        },
+        {
+          "name": "control",
+          "writable": true
+        },
+        {
+          "name": "manager",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  99,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  109,
+                  97,
+                  110,
+                  97,
+                  103,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "CreateActionArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "create_cond",
+      "discriminator": [
+        22,
+        33,
+        19,
+        201,
+        217,
+        240,
+        173,
+        93
+      ],
+      "accounts": [
+        {
+          "name": "cond",
+          "writable": true
+        },
+        {
+          "name": "control",
+          "writable": true
+        },
+        {
+          "name": "manager",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  100,
+                  95,
+                  109,
+                  97,
+                  110,
+                  97,
+                  103,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "CreateConditionArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "create_game",
+      "discriminator": [
+        124,
+        69,
+        75,
+        66,
+        184,
+        220,
+        72,
+        206
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  51
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_item_part",
+      "discriminator": [
+        83,
+        48,
+        84,
+        45,
+        234,
+        146,
+        165,
+        227
+      ],
+      "accounts": [
+        {
+          "name": "item_part",
+          "writable": true
+        },
+        {
+          "name": "item_blueprint_link",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  116,
+                  101,
+                  109,
+                  95,
+                  98,
+                  108,
+                  117,
+                  101,
+                  112,
+                  114,
+                  105,
+                  110,
+                  116,
+                  95,
+                  108,
+                  105,
+                  110,
+                  107
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "blueprint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "blueprint"
+        },
+        {
+          "name": "control",
+          "writable": true
+        },
+        {
+          "name": "manager",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  116,
+                  101,
+                  109,
+                  95,
+                  112,
+                  97,
+                  114,
+                  116,
+                  95,
+                  109,
+                  97,
+                  110,
+                  97,
+                  103,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "CreateItemPartArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "create_spawn",
+      "discriminator": [
+        248,
+        172,
+        26,
+        56,
+        69,
+        21,
+        136,
+        58
+      ],
+      "accounts": [
+        {
+          "name": "spawn",
+          "writable": true
+        },
+        {
+          "name": "control",
+          "writable": true
+        },
+        {
+          "name": "manager",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  112,
+                  97,
+                  119,
+                  110,
+                  95,
+                  109,
+                  97,
+                  110,
+                  97,
+                  103,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "CreateSpawnArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "delegate_game",
+      "discriminator": [
+        116,
+        183,
+        70,
+        107,
+        112,
+        223,
+        122,
+        210
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "signer": true
+        },
+        {
+          "name": "buffer_pda",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  117,
+                  102,
+                  102,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pda"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                102,
+                202,
+                147,
+                180,
+                84,
+                49,
+                49,
+                169,
+                172,
+                1,
+                128,
+                30,
+                228,
+                12,
+                236,
+                61,
+                76,
+                251,
+                42,
+                138,
+                209,
+                14,
+                134,
+                214,
+                187,
+                97,
+                175,
+                5,
+                38,
+                98,
+                96,
+                93
+              ]
+            }
+          }
+        },
+        {
+          "name": "delegation_record_pda",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  101,
+                  108,
+                  101,
+                  103,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pda"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "delegation_program"
+            }
+          }
+        },
+        {
+          "name": "delegation_metadata_pda",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  101,
+                  108,
+                  101,
+                  103,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110,
+                  45,
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pda"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "delegation_program"
+            }
+          }
+        },
+        {
+          "name": "pda",
+          "docs": [
+            "CHECK GameState"
+          ],
+          "writable": true
+        },
+        {
+          "name": "owner_program",
+          "address": "7vFkE6M9xe2CMxJhPPaCHchcVhpPHDWCZsmCFjkhymM6"
+        },
+        {
+          "name": "delegation_program",
+          "address": "DELeGGvXpWV2fqJUhqcF5ZSYMS4JTLjteaAMARRSaeSh"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "init",
+      "discriminator": [
+        220,
+        59,
+        207,
+        236,
+        108,
+        250,
+        47,
+        100
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "match_counter",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  116,
+                  99,
+                  104,
+                  95,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "item_manager",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  116,
+                  101,
+                  109,
+                  95,
+                  112,
+                  97,
+                  114,
+                  116,
+                  95,
+                  109,
+                  97,
+                  110,
+                  97,
+                  103,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "cond_manager",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  100,
+                  95,
+                  109,
+                  97,
+                  110,
+                  97,
+                  103,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "action_manager",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  99,
+                  116,
+                  105,
+                  111,
+                  110,
+                  95,
+                  109,
+                  97,
+                  110,
+                  97,
+                  103,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "spawn_manager",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  112,
+                  97,
+                  119,
+                  110,
+                  95,
+                  109,
+                  97,
+                  110,
+                  97,
+                  103,
+                  101,
+                  114
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "InitArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "process_undelegation",
+      "discriminator": [
+        196,
+        28,
+        41,
+        206,
+        48,
+        37,
+        51,
+        167
+      ],
+      "accounts": [
+        {
+          "name": "base_account",
+          "writable": true
+        },
+        {
+          "name": "buffer"
+        },
+        {
+          "name": "payer",
+          "writable": true
+        },
+        {
+          "name": "system_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "account_seeds",
+          "type": {
+            "vec": "bytes"
+          }
+        }
+      ]
+    },
+    {
+      "name": "run_game",
+      "discriminator": [
+        234,
+        72,
+        19,
+        218,
+        1,
+        185,
+        22,
+        18
+      ],
+      "accounts": [
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  51
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "undelegate_game_game",
+      "discriminator": [
+        31,
+        203,
+        84,
+        48,
+        207,
+        197,
+        243,
+        68
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "game_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  97,
+                  109,
+                  101,
+                  51
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "magic_program",
+          "address": "Magic11111111111111111111111111111111111111"
+        },
+        {
+          "name": "magic_context",
+          "writable": true,
+          "address": "MagicContext1111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_action",
+      "discriminator": [
+        31,
+        4,
+        202,
+        169,
+        214,
+        55,
+        240,
+        55
+      ],
+      "accounts": [
+        {
+          "name": "action",
+          "writable": true
+        },
+        {
+          "name": "control"
+        },
+        {
+          "name": "admin",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "UpdateActionArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_cond",
+      "discriminator": [
+        69,
+        191,
+        75,
+        236,
+        200,
+        15,
+        48,
+        68
+      ],
+      "accounts": [
+        {
+          "name": "cond",
+          "writable": true
+        },
+        {
+          "name": "control"
+        },
+        {
+          "name": "admin",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "UpdateConditionArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_item_part",
+      "discriminator": [
+        178,
+        142,
+        177,
+        106,
+        171,
+        233,
+        63,
+        59
+      ],
+      "accounts": [
+        {
+          "name": "item_part",
+          "writable": true
+        },
+        {
+          "name": "control"
+        },
+        {
+          "name": "admin",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "UpdateItemPartArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_spawn",
+      "discriminator": [
+        140,
+        82,
+        252,
+        78,
+        113,
+        54,
+        232,
+        228
+      ],
+      "accounts": [
+        {
+          "name": "spawn",
+          "writable": true
+        },
+        {
+          "name": "control"
+        },
+        {
+          "name": "admin",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "UpdateSpawnArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "version_action",
+      "discriminator": [
+        146,
+        182,
+        43,
+        8,
+        32,
+        183,
+        111,
+        186
+      ],
+      "accounts": [
+        {
+          "name": "new_action",
+          "writable": true
+        },
+        {
+          "name": "old_action"
+        },
+        {
+          "name": "control",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "VersionActionArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "version_cond",
+      "discriminator": [
+        198,
+        37,
+        222,
+        167,
+        77,
+        37,
+        4,
+        50
+      ],
+      "accounts": [
+        {
+          "name": "new_cond",
+          "writable": true
+        },
+        {
+          "name": "old_cond"
+        },
+        {
+          "name": "control",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "VersionConditionArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "version_item_part",
+      "discriminator": [
+        200,
+        59,
+        59,
+        251,
+        30,
+        48,
+        75,
+        44
+      ],
+      "accounts": [
+        {
+          "name": "new_item_part",
+          "writable": true
+        },
+        {
+          "name": "old_item_part"
+        },
+        {
+          "name": "control",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "VersionItemPartArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "version_spawn",
+      "discriminator": [
+        13,
+        21,
+        189,
+        126,
+        242,
+        15,
+        73,
+        28
+      ],
+      "accounts": [
+        {
+          "name": "new_spawn",
+          "writable": true
+        },
+        {
+          "name": "old_spawn"
+        },
+        {
+          "name": "control",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  100,
+                  109,
+                  105,
+                  110
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "VersionSpawnArgs"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Action",
+      "discriminator": [
+        144,
+        241,
+        105,
+        219,
+        74,
+        136,
+        203,
+        176
+      ]
+    },
+    {
+      "name": "Admin",
+      "discriminator": [
+        244,
+        158,
+        220,
+        65,
+        8,
+        73,
+        4,
+        65
+      ]
+    },
+    {
+      "name": "ComponentControl",
+      "discriminator": [
+        49,
+        139,
+        83,
+        23,
+        212,
+        46,
+        66,
+        135
+      ]
+    },
+    {
+      "name": "ComponentManager",
+      "discriminator": [
+        218,
+        225,
+        60,
+        31,
+        203,
+        238,
+        96,
+        98
+      ]
+    },
+    {
+      "name": "Condition",
+      "discriminator": [
+        138,
+        226,
+        74,
+        204,
+        104,
+        23,
+        135,
+        63
+      ]
+    },
+    {
+      "name": "GameState",
+      "discriminator": [
+        144,
+        94,
+        208,
+        172,
+        248,
+        99,
+        134,
+        120
+      ]
+    },
+    {
+      "name": "ItemBlueprintLink",
+      "discriminator": [
+        215,
+        57,
+        196,
+        23,
+        209,
+        202,
+        106,
+        178
+      ]
+    },
+    {
+      "name": "ItemPart",
+      "discriminator": [
+        57,
+        41,
+        142,
+        107,
+        131,
+        69,
+        161,
+        132
+      ]
+    },
+    {
+      "name": "MatchCounter",
+      "discriminator": [
+        173,
+        113,
+        64,
+        44,
+        171,
+        44,
+        96,
+        254
+      ]
+    },
+    {
+      "name": "Spawn",
+      "discriminator": [
+        128,
+        79,
+        118,
+        139,
+        192,
+        197,
+        134,
+        233
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Unauthorize",
+      "msg": "Signer is not authorized to update this account."
+    },
+    {
+      "code": 6001,
+      "name": "InvalidState",
+      "msg": "Only Published accounts can have new versions."
+    }
+  ],
+  "types": [
+    {
+      "name": "Action",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "version",
+            "type": "u32"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "ComponentState"
+              }
+            }
+          },
+          {
+            "name": "energy_cost",
+            "type": "u8"
+          },
+          {
+            "name": "interval",
+            "type": "u16"
+          },
+          {
+            "name": "duration",
+            "type": "u16"
+          },
+          {
+            "name": "args",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "script",
+            "type": "bytes"
+          },
+          {
+            "name": "spawns",
+            "type": {
+              "vec": "u32"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Admin",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "item_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ComponentControl",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "active",
+            "type": "u32"
+          },
+          {
+            "name": "counter",
+            "type": "u32"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ComponentManager",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "counter",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ComponentState",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Draft"
+          },
+          {
+            "name": "Pending"
+          },
+          {
+            "name": "Rejected"
+          },
+          {
+            "name": "Approved"
+          },
+          {
+            "name": "Published"
+          },
+          {
+            "name": "Deprecated"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Condition",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "version",
+            "type": "u32"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "ComponentState"
+              }
+            }
+          },
+          {
+            "name": "energy_mul_num",
+            "type": "u8"
+          },
+          {
+            "name": "energy_mul_den",
+            "type": "u8"
+          },
+          {
+            "name": "args",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "script",
+            "type": "bytes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateActionArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "energy_cost",
+            "type": "u8"
+          },
+          {
+            "name": "interval",
+            "type": "u16"
+          },
+          {
+            "name": "duration",
+            "type": "u16"
+          },
+          {
+            "name": "args",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "script",
+            "type": "bytes"
+          },
+          {
+            "name": "spawns",
+            "type": {
+              "vec": "u32"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateConditionArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "energy_mul_num",
+            "type": "u8"
+          },
+          {
+            "name": "energy_mul_den",
+            "type": "u8"
+          },
+          {
+            "name": "args",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "script",
+            "type": "bytes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateItemPartArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "item_type",
+            "type": {
+              "defined": {
+                "name": "ItemPartType"
+              }
+            }
+          },
+          {
+            "name": "item_type_variation",
+            "type": "u8"
+          },
+          {
+            "name": "health",
+            "type": "u8"
+          },
+          {
+            "name": "weight",
+            "type": "u8"
+          },
+          {
+            "name": "power",
+            "type": "u8"
+          },
+          {
+            "name": "energy",
+            "type": "u8"
+          },
+          {
+            "name": "energy_regen",
+            "type": "u8"
+          },
+          {
+            "name": "energy_rate",
+            "type": "u16"
+          },
+          {
+            "name": "armor",
+            "type": {
+              "array": [
+                "u8",
+                8
+              ]
+            }
+          },
+          {
+            "name": "conditions",
+            "type": {
+              "vec": "u32"
+            }
+          },
+          {
+            "name": "actions",
+            "type": {
+              "vec": "u32"
+            }
+          },
+          {
+            "name": "spawns",
+            "type": {
+              "vec": "u32"
+            }
+          },
+          {
+            "name": "effects",
+            "type": {
+              "vec": "u32"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateSpawnArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "health_cap",
+            "type": "u8"
+          },
+          {
+            "name": "duration",
+            "type": "u16"
+          },
+          {
+            "name": "damage_base",
+            "type": "u8"
+          },
+          {
+            "name": "damage_range",
+            "type": "u8"
+          },
+          {
+            "name": "crit_chance",
+            "type": "u8"
+          },
+          {
+            "name": "crit_multiplier",
+            "type": "u8"
+          },
+          {
+            "name": "element",
+            "type": "u8"
+          },
+          {
+            "name": "destroy_on_collision",
+            "type": "bool"
+          },
+          {
+            "name": "width",
+            "type": "u8"
+          },
+          {
+            "name": "height",
+            "type": "u8"
+          },
+          {
+            "name": "output_x",
+            "type": "u8"
+          },
+          {
+            "name": "output_y",
+            "type": "u8"
+          },
+          {
+            "name": "args",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "script",
+            "type": "bytes"
+          },
+          {
+            "name": "spawns",
+            "type": {
+              "vec": "u32"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Element",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Punct"
+          },
+          {
+            "name": "Blast"
+          },
+          {
+            "name": "Force"
+          },
+          {
+            "name": "Sever"
+          },
+          {
+            "name": "Heat"
+          },
+          {
+            "name": "Cryo"
+          },
+          {
+            "name": "Jolt"
+          },
+          {
+            "name": "Virus"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GameState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "len",
+            "type": "u16"
+          },
+          {
+            "name": "frame",
+            "type": "u16"
+          },
+          {
+            "name": "data",
+            "type": {
+              "array": [
+                "u8",
+                3600
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          },
+          {
+            "name": "item_authority",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ItemBlueprintLink",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "blueprint",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ItemPart",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "ComponentState"
+              }
+            }
+          },
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "version",
+            "type": "u32"
+          },
+          {
+            "name": "item_type",
+            "type": {
+              "defined": {
+                "name": "ItemPartType"
+              }
+            }
+          },
+          {
+            "name": "item_type_variation",
+            "type": "u8"
+          },
+          {
+            "name": "health",
+            "type": "u8"
+          },
+          {
+            "name": "weight",
+            "type": "u8"
+          },
+          {
+            "name": "power",
+            "type": "u8"
+          },
+          {
+            "name": "energy",
+            "type": "u8"
+          },
+          {
+            "name": "energy_regen",
+            "type": "u8"
+          },
+          {
+            "name": "energy_rate",
+            "type": "u16"
+          },
+          {
+            "name": "armor",
+            "type": {
+              "array": [
+                "u8",
+                8
+              ]
+            }
+          },
+          {
+            "name": "_reserve",
+            "type": {
+              "array": [
+                "u8",
+                8
+              ]
+            }
+          },
+          {
+            "name": "conditions",
+            "type": {
+              "vec": "u32"
+            }
+          },
+          {
+            "name": "actions",
+            "type": {
+              "vec": "u32"
+            }
+          },
+          {
+            "name": "spawns",
+            "type": {
+              "vec": "u32"
+            }
+          },
+          {
+            "name": "effects",
+            "type": {
+              "vec": "u32"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "ItemPartType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Head"
+          },
+          {
+            "name": "Body"
+          },
+          {
+            "name": "Legs"
+          },
+          {
+            "name": "Main"
+          },
+          {
+            "name": "Offhand"
+          },
+          {
+            "name": "Back"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MatchCounter",
+      "docs": [
+        "Used to get realtime list of opponents onchain.",
+        "Updated when players deployed their characters (+1) / matched (-1)."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "band",
+            "docs": [
+              "Elo rating band, 1200 for instance, will update index position 12's counter.",
+              "Wraps around if exceeds 255."
+            ],
+            "type": {
+              "array": [
+                "u8",
+                64
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Spawn",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "id",
+            "type": "u32"
+          },
+          {
+            "name": "version",
+            "type": "u32"
+          },
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "ComponentState"
+              }
+            }
+          },
+          {
+            "name": "health_cap",
+            "type": "u8"
+          },
+          {
+            "name": "duration",
+            "type": "u16"
+          },
+          {
+            "name": "damage_base",
+            "type": "u8"
+          },
+          {
+            "name": "damage_range",
+            "type": "u8"
+          },
+          {
+            "name": "crit_chance",
+            "type": "u8"
+          },
+          {
+            "name": "crit_multiplier",
+            "type": "u8"
+          },
+          {
+            "name": "element",
+            "type": {
+              "defined": {
+                "name": "Element"
+              }
+            }
+          },
+          {
+            "name": "destroy_on_collision",
+            "type": "bool"
+          },
+          {
+            "name": "width",
+            "type": "u8"
+          },
+          {
+            "name": "height",
+            "type": "u8"
+          },
+          {
+            "name": "output_x",
+            "type": "u8"
+          },
+          {
+            "name": "output_y",
+            "type": "u8"
+          },
+          {
+            "name": "args",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "script",
+            "type": "bytes"
+          },
+          {
+            "name": "spawns",
+            "type": {
+              "vec": "u32"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateActionArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "ComponentState"
+              }
+            }
+          },
+          {
+            "name": "energy_cost",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "interval",
+            "type": {
+              "option": "u16"
+            }
+          },
+          {
+            "name": "duration",
+            "type": {
+              "option": "u16"
+            }
+          },
+          {
+            "name": "args",
+            "type": {
+              "option": {
+                "array": [
+                  "u8",
+                  4
+                ]
+              }
+            }
+          },
+          {
+            "name": "script",
+            "type": {
+              "option": "bytes"
+            }
+          },
+          {
+            "name": "spawns",
+            "type": {
+              "option": {
+                "vec": "u32"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateConditionArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "ComponentState"
+              }
+            }
+          },
+          {
+            "name": "energy_mul_num",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "energy_mul_den",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "args",
+            "type": {
+              "option": {
+                "array": [
+                  "u8",
+                  4
+                ]
+              }
+            }
+          },
+          {
+            "name": "script",
+            "type": {
+              "option": "bytes"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateItemPartArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "ComponentState"
+              }
+            }
+          },
+          {
+            "name": "item_type_variation",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "health",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "weight",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "power",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "energy",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "energy_regen",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "energy_rate",
+            "type": {
+              "option": "u16"
+            }
+          },
+          {
+            "name": "armor",
+            "type": {
+              "option": {
+                "array": [
+                  "u8",
+                  8
+                ]
+              }
+            }
+          },
+          {
+            "name": "conditions",
+            "type": {
+              "option": {
+                "vec": "u32"
+              }
+            }
+          },
+          {
+            "name": "actions",
+            "type": {
+              "option": {
+                "vec": "u32"
+              }
+            }
+          },
+          {
+            "name": "spawns",
+            "type": {
+              "option": {
+                "vec": "u32"
+              }
+            }
+          },
+          {
+            "name": "effects",
+            "type": {
+              "option": {
+                "vec": "u32"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateSpawnArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "state",
+            "type": {
+              "defined": {
+                "name": "ComponentState"
+              }
+            }
+          },
+          {
+            "name": "health_cap",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "duration",
+            "type": {
+              "option": "u16"
+            }
+          },
+          {
+            "name": "damage_base",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "damage_range",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "crit_chance",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "crit_multiplier",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "element",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "destroy_on_collision",
+            "type": {
+              "option": "bool"
+            }
+          },
+          {
+            "name": "width",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "height",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "output_x",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "output_y",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "args",
+            "type": {
+              "option": {
+                "array": [
+                  "u8",
+                  4
+                ]
+              }
+            }
+          },
+          {
+            "name": "script",
+            "type": {
+              "option": "bytes"
+            }
+          },
+          {
+            "name": "spawns",
+            "type": {
+              "option": {
+                "vec": "u32"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "VersionActionArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "energy_cost",
+            "type": "u8"
+          },
+          {
+            "name": "interval",
+            "type": "u16"
+          },
+          {
+            "name": "duration",
+            "type": "u16"
+          },
+          {
+            "name": "args",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "script",
+            "type": "bytes"
+          },
+          {
+            "name": "spawns",
+            "type": {
+              "vec": "u32"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "VersionConditionArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "energy_mul_num",
+            "type": "u8"
+          },
+          {
+            "name": "energy_mul_den",
+            "type": "u8"
+          },
+          {
+            "name": "args",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "script",
+            "type": "bytes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VersionItemPartArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "item_type_variation",
+            "type": "u8"
+          },
+          {
+            "name": "health",
+            "type": "u8"
+          },
+          {
+            "name": "weight",
+            "type": "u8"
+          },
+          {
+            "name": "power",
+            "type": "u8"
+          },
+          {
+            "name": "energy",
+            "type": "u8"
+          },
+          {
+            "name": "energy_regen",
+            "type": "u8"
+          },
+          {
+            "name": "energy_rate",
+            "type": "u16"
+          },
+          {
+            "name": "armor",
+            "type": {
+              "array": [
+                "u8",
+                8
+              ]
+            }
+          },
+          {
+            "name": "conditions",
+            "type": {
+              "vec": "u32"
+            }
+          },
+          {
+            "name": "actions",
+            "type": {
+              "vec": "u32"
+            }
+          },
+          {
+            "name": "spawns",
+            "type": {
+              "vec": "u32"
+            }
+          },
+          {
+            "name": "effects",
+            "type": {
+              "vec": "u32"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "VersionSpawnArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "health_cap",
+            "type": "u8"
+          },
+          {
+            "name": "duration",
+            "type": "u16"
+          },
+          {
+            "name": "damage_base",
+            "type": "u8"
+          },
+          {
+            "name": "damage_range",
+            "type": "u8"
+          },
+          {
+            "name": "crit_chance",
+            "type": "u8"
+          },
+          {
+            "name": "crit_multiplier",
+            "type": "u8"
+          },
+          {
+            "name": "element",
+            "type": "u8"
+          },
+          {
+            "name": "destroy_on_collision",
+            "type": "bool"
+          },
+          {
+            "name": "width",
+            "type": "u8"
+          },
+          {
+            "name": "height",
+            "type": "u8"
+          },
+          {
+            "name": "output_x",
+            "type": "u8"
+          },
+          {
+            "name": "output_y",
+            "type": "u8"
+          },
+          {
+            "name": "args",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "script",
+            "type": "bytes"
+          },
+          {
+            "name": "spawns",
+            "type": {
+              "vec": "u32"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

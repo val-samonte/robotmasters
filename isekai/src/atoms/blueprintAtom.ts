@@ -1,7 +1,7 @@
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { type BlueprintRecord, idbAtom } from './idbAtom'
-import { programAtom } from './programAtom'
+import { itemboxProgramAtom } from './itemboxProgramAtom'
 import type { IdlAccounts } from '@coral-xyz/anchor'
 import type { Itembox } from '../sdk/itembox'
 import { BatchCallback } from '../utils/BatchCallback'
@@ -23,7 +23,7 @@ type BatchResult = {
 }[]
 
 const batchFetcherAtom = atom((get) => {
-  const program = get(programAtom)
+  const program = get(itemboxProgramAtom)
 
   return new BatchCallback<BatchResult>(async (addresses) => {
     const result = await program.account.blueprint.fetchMultiple(addresses)
@@ -61,7 +61,7 @@ export const blueprintAtom = atomFamily((id: string) =>
         if (record) return
       }
 
-      const program = get(programAtom)
+      const program = get(itemboxProgramAtom)
 
       const fetcher = get(batchFetcherAtom)
 

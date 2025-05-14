@@ -1,7 +1,7 @@
 import { BN, type IdlAccounts } from '@coral-xyz/anchor'
 import type { Itembox } from '../sdk/itembox'
 import { atom } from 'jotai'
-import { programAtom } from './programAtom'
+import { itemboxProgramAtom } from './itemboxProgramAtom'
 import { BatchCallback } from '../utils/BatchCallback'
 import { atomFamily } from 'jotai/utils'
 import { idbAtom, type RecipeRecord } from './idbAtom'
@@ -20,7 +20,7 @@ type BatchResult = {
 }[]
 
 const batchFetcherAtom = atom((get) => {
-  const program = get(programAtom)
+  const program = get(itemboxProgramAtom)
 
   return new BatchCallback<BatchResult>(async (addresses) => {
     const result = await program.account.recipe.fetchMultiple(addresses)

@@ -1,6 +1,6 @@
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
-import { programAtom } from './programAtom'
+import { itemboxProgramAtom } from './itemboxProgramAtom'
 import { getDiscriminator } from '../utils/getDiscriminator'
 
 export const userBlueprintsBaseAtom = atomFamily((_: string) =>
@@ -14,7 +14,7 @@ export const userBlueprintsAtom = atomFamily((id: string) =>
       return get(userBlueprintsBaseAtom(id))
     },
     async (get, set) => {
-      const program = get(programAtom)
+      const program = get(itemboxProgramAtom)
 
       // todo: set new Promise to show suspense loading
       const blueprintDiscriminator = await getDiscriminator('Blueprint')
