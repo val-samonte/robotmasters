@@ -1,5 +1,6 @@
 pub mod action;
 pub mod admin;
+pub mod character;
 pub mod component_control;
 pub mod component_manager;
 pub mod condition;
@@ -12,6 +13,7 @@ pub mod spawn;
 
 pub use action::*;
 pub use admin::*;
+pub use character::*;
 pub use component_control::*;
 pub use component_manager::*;
 pub use condition::*;

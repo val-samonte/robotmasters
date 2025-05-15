@@ -6,6 +6,7 @@ use crate::{Admin, ComponentManager, MatchCounter};
 pub struct InitArgs {
     treasury: Pubkey,
     item_authority: Pubkey,
+    centralized_validator: Pubkey,
 }
 
 #[derive(Accounts)]
@@ -94,6 +95,7 @@ pub fn init_handler(ctx: Context<Init>, args: InitArgs) -> Result<()> {
     admin.bump = ctx.bumps.admin;
     admin.item_authority = args.item_authority;
     admin.treasury = args.treasury;
+    admin.centralized_validator = args.centralized_validator;
 
     match_counter.bump = ctx.bumps.match_counter;
     match_counter.band = [0; 64];

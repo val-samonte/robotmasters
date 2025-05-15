@@ -1309,6 +1309,7 @@ dependencies = [
  "bolt-lang",
  "ephemeral-rollups-sdk",
  "rmengine",
+ "session-keys",
 ]
 
 [[package]]
