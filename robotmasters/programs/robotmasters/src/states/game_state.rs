@@ -13,7 +13,7 @@ pub struct GameState {
     pub elo_changes: [i8; 3],
     pub len: u16,
     pub frame: u16,
-    pub data: Box<[u8; 3600]>,
+    pub data: Box<Vec<u8>>,
 }
 
 impl GameState {

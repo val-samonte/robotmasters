@@ -30,8 +30,7 @@ pub struct CreateGame<'info> {
     pub game_state: Box<Account<'info, GameState>>,
 
     #[account(
-        mut,
-        has_one = owner,
+        has_one = owner @ CreateGameError::Unauthorized,
     )]
     pub raider: Box<Account<'info, Character>>,
 
@@ -43,7 +42,10 @@ pub struct CreateGame<'info> {
     )]
     pub raider_match: Box<Account<'info, CharacterMatch>>,
 
-    #[account(mut)]
+    #[account(
+        constraint = defender.owner != Pubkey::default() @ CreateGameError::InvalidDefender,
+        constraint = defender.to_account_info().owner == &crate::ID @ CreateGameError::InvalidAccountOwner
+    )]
     pub defender: Box<Account<'info, Character>>,
 
     #[account(
@@ -67,9 +69,9 @@ pub fn create_game_handler(
 ) -> Result<()> {
 
     let game_state = &mut ctx.accounts.game_state;
-    let raider = &mut ctx.accounts.raider;
+    let raider = &ctx.accounts.raider;
     let raider_match = &mut ctx.accounts.raider_match;
-    let defender = &mut ctx.accounts.defender;
+    let defender = &ctx.accounts.defender;
     let defender_match = &mut ctx.accounts.defender_match;
 
     game_state.bump = ctx.bumps.game_state;
@@ -79,10 +81,7 @@ pub fn create_game_handler(
     game_state.defender = defender.key();
     game_state.defender_elo = defender_match.elo;
     game_state.elo_changes = compute_elo_changes(game_state.raider_elo, game_state.defender_elo);
-    game_state.frame = 0;
-    game_state.len = 0;
-    game_state.frame = 0;
-    game_state.data = Box::new([0u8; 3600]);
+    // game_state.data = Box::new([0u8; 3600]);
 
     raider_match.state = CharacterMatchState::Raider;
     defender_match.state = if defender_match.state == CharacterMatchState::Deployed {
@@ -114,6 +113,9 @@ pub fn create_game_handler(
     let spawn_disc = get_discriminator("Spawn");
 
     for account_info in ctx.remaining_accounts {
+        if account_info.owner != &crate::ID {
+            return Err(CreateGameError::InvalidAccountOwner.into());
+        }
         let data = account_info.data.borrow();
         if data.len() < 8 {
             continue;
@@ -165,10 +167,16 @@ pub fn create_game_handler(
         defender.serialize(1, 224, 192, 16, 32, false)
     ];
 
-    let mut character_behaviors: Vec<Vec<(ConditionId, ActionId)>> = vec![];
+    let mut character_behaviors: Vec<Vec<(ConditionId, ActionId)>> = vec![
+        vec![(0, 0); raider.behaviors.len()], // Initialize for raider
+        vec![(0, 0); defender.behaviors.len()] // Initialize for defender
+    ];
 
     // raider behaviors
     for (i, [cond, act]) in raider.behaviors.iter().enumerate() {
+        if !args.conditions.contains(cond) || !args.actions.contains(act) {
+            return Err(CreateGameError::InvalidArgs.into());
+        }
         character_behaviors[0][i] = (
             args.conditions.iter().position(|&id| id == *cond).unwrap(),
             args.actions.iter().position(|&id| id == *act).unwrap()
@@ -177,6 +185,9 @@ pub fn create_game_handler(
 
     // defender behaviors
     for (i, [cond, act]) in defender.behaviors.iter().enumerate() {
+        if !args.conditions.contains(cond) || !args.actions.contains(act) {
+            return Err(CreateGameError::InvalidArgs.into());
+        }
         character_behaviors[1][i] = (
             args.conditions.iter().position(|&id| id == *cond).unwrap(),
             args.actions.iter().position(|&id| id == *act).unwrap()
@@ -192,48 +203,46 @@ pub fn create_game_handler(
     }
 
     let mut action_def: Vec<Vec<u16>> = vec![];
-
     for action in action_accounts.iter() {
         if let Some(action) = action {
-            let mut action_args = [0u8; 4];
-            action_args.copy_from_slice(&action.args);
-            
-            for spawn_id in action.spawns.iter() {
-                let spawn_index = args.spawns
-                    .iter()
-                    .position(|&id| id == *spawn_id).unwrap();
-
-                for (arg_index, value) in action_args.iter().enumerate() {
-                    if *value == 0 {
-                        continue;
-                    }
-                    action_args[arg_index] = spawn_index as u8;
+            let mut action_args = action.args;
+            let none_indices: Vec<usize> = action_args
+                .iter()
+                .enumerate()
+                .filter(|&(_, opt)| opt.is_none())
+                .map(|(i, _)| i)
+                .collect();
+            for (i, spawn_id) in action.spawns.iter().enumerate() {
+                if i >= none_indices.len() {
                     break;
                 }
+                if !args.spawns.contains(spawn_id) {
+                    return Err(CreateGameError::InvalidArgs.into());
+                }
+                action_args[none_indices[i]] = Some(*spawn_id as u8);
             }
             action_def.push(action.serialize(action_args));
         }
     }
 
     let mut spawn_def: Vec<Vec<u16>> = vec![];
-    
     for spawn in spawn_accounts.iter() {
         if let Some(spawn) = spawn {
-            let mut spawn_args = [0u8; 4];
-            spawn_args.copy_from_slice(&spawn.args);
-            
-            for spawn_id in spawn.spawns.iter() {
-                let spawn_index = args.spawns
-                    .iter()
-                    .position(|&id| id == *spawn_id).unwrap();
-
-                for (arg_index, value) in spawn_args.iter().enumerate() {
-                    if *value == 0 {
-                        continue;
-                    }
-                    spawn_args[arg_index] = spawn_index as u8;
+            let mut spawn_args = spawn.args;
+            let none_indices: Vec<usize> = spawn_args
+                .iter()
+                .enumerate()
+                .filter(|&(_, opt)| opt.is_none())
+                .map(|(i, _)| i)
+                .collect();
+            for (i, spawn_id) in spawn.spawns.iter().enumerate() {
+                if i >= none_indices.len() {
                     break;
                 }
+                if !args.spawns.contains(spawn_id) {
+                    return Err(CreateGameError::InvalidArgs.into());
+                }
+                spawn_args[none_indices[i]] = Some(*spawn_id as u8);
             }
             spawn_def.push(spawn.serialize(spawn_args));
         }
@@ -266,13 +275,19 @@ pub fn create_game_handler(
 
     game_state.len = len as u16;
 	game_state.frame = game.game_state.frame;
-	game_state.data[..len].copy_from_slice(&state);
+    game_state.data = state.into();
 
     Ok(())
 }
 
 #[error_code]
 pub enum CreateGameError {
+    #[msg("Unauthorized: Signer does not own the character")]
+    Unauthorized,
+    #[msg("Invalid account owner")]
+    InvalidAccountOwner,
+    #[msg("Invalid defender account")]
+    InvalidDefender,
     #[msg("There are inconsistencies with the expected args against characters components.")]
     InvalidArgs,
     #[msg("There are missing accounts required.")]
@@ -295,10 +310,12 @@ pub fn compute_elo_changes(elo_a: u16, elo_b: u16) -> [i8; 3] {
         SCALE - (diff * SCALE / 400)
     };
 
-    // Calculate rating changes for Player A
-    let win_a = ((K * (SCALE - expected_a) + SCALE / 2) / SCALE) as i8;
-    let draw_a = ((K * (SCALE / 2 - expected_a) + SCALE / 2) / SCALE) as i8;
-    let loss_a = ((K * (0 - expected_a) + SCALE / 2) / SCALE) as i8;
+    let win_a = ((K * (SCALE - expected_a) + SCALE / 2) / SCALE)
+        .clamp(i8::MIN as i32, i8::MAX as i32) as i8;
+    let draw_a = ((K * (SCALE / 2 - expected_a) + SCALE / 2) / SCALE)
+        .clamp(i8::MIN as i32, i8::MAX as i32) as i8;
+    let loss_a = ((K * (0 - expected_a) + SCALE / 2) / SCALE)
+        .clamp(i8::MIN as i32, i8::MAX as i32) as i8;
 
     [win_a, draw_a, loss_a]
 }

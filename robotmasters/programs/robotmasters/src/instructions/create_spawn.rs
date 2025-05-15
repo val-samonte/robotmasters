@@ -16,7 +16,7 @@ pub struct CreateSpawnArgs {
     height: u8,
     output_x: u8,
     output_y: u8,
-	args: [u8; 4],
+	args: [Option<u8>; 4],
 	script: Vec<u8>,
 	spawns: Vec<u32>,
 }

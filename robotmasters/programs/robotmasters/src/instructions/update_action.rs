@@ -8,7 +8,7 @@ pub struct UpdateActionArgs {
     energy_cost: Option<u8>,
     interval: Option<u16>,
     duration: Option<u16>,
-    args: Option<[u8; 4]>,
+    args: Option<[Option<u8>; 4]>,
     script: Option<Vec<u8>>,
     spawns: Option<Vec<u32>>,
 }

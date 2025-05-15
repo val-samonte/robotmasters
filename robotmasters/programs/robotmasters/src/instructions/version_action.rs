@@ -7,7 +7,7 @@ pub struct VersionActionArgs {
     energy_cost: u8,
     interval: u16,
     duration: u16,
-    args: [u8; 4],
+    args: [Option<u8>; 4],
     script: Vec<u8>,
     spawns: Vec<u32>,
 }

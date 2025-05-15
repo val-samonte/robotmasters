@@ -21,7 +21,7 @@ pub struct Spawn {
     pub height: u8,
     pub output_x: u8,
     pub output_y: u8,
-    pub args: [u8; 4],
+    pub args: [Option<u8>; 4],
     pub script: Vec<u8>,
     pub spawns: Vec<u32>,
 }
@@ -45,12 +45,12 @@ impl Spawn {
         1 +  // height
         1 +  // output_x
         1 +  // output_y
-		4 +  // args
+		4 * (1 + 1) +  // args
 		(4 + script_len) +
 		(4 + (4 * spawns_len))
     }
 
-    pub fn serialize(&self, args: [u8; 4]) -> Vec<u16> {
+    pub fn serialize(&self, args: [Option<u8>; 4]) -> Vec<u16> {
         let output_len = 12 + 4 + self.script.len();
         let mut output = Vec::with_capacity(output_len);
 
@@ -66,7 +66,7 @@ impl Spawn {
         output.push(self.height as u16);
         output.push(self.output_x as u16);
         output.push(self.output_y as u16);
-        output.extend(args.iter().map(|&x| x as u16));
+        output.extend(args.iter().map(|opt| opt.unwrap_or(0) as u16));
         output.extend(self.script.iter().map(|&x| x as u16));
 
         output
