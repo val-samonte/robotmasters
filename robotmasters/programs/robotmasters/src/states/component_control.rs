@@ -20,7 +20,7 @@ impl ComponentControl {
     }
 }
 
-#[derive(Copy, Clone, AnchorSerialize, AnchorDeserialize)]
+#[derive(Copy, Clone, AnchorSerialize, AnchorDeserialize, PartialEq)]
 pub enum ComponentState {
     Draft,
     Pending,

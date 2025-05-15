@@ -1,4 +1,5 @@
 pub mod create_action;
+pub mod create_character;
 pub mod create_cond;
 pub mod create_item_part;
 pub mod create_spawn;
@@ -14,6 +15,7 @@ pub mod version_item_part;
 pub mod version_spawn;
 
 pub use create_action::*;
+pub use create_character::*;
 pub use create_cond::*;
 pub use create_item_part::*;
 pub use create_spawn::*;
