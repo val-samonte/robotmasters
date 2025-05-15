@@ -1,6 +1,6 @@
 use bolt_lang::prelude::*;
 
-use super::ComponentState;
+use super::{ComponentState, FromAccountInfo};
 
 #[account]
 pub struct Action {
@@ -31,3 +31,5 @@ impl Action {
 		(4 + (4 * spawns_len))
     }
 }
+
+impl FromAccountInfo for Action {}

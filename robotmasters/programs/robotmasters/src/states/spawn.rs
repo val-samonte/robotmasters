@@ -1,6 +1,6 @@
 use bolt_lang::prelude::*;
 
-use super::{ComponentState, Element};
+use super::{ComponentState, Element, FromAccountInfo};
 
 #[account]
 pub struct Spawn {
@@ -50,3 +50,5 @@ impl Spawn {
 		(4 + (4 * spawns_len))
     }
 }
+
+impl FromAccountInfo for Spawn {}

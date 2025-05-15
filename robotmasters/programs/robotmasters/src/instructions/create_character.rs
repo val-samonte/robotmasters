@@ -1,7 +1,8 @@
-
 use bolt_lang::*;
 
-use crate::{Character, ComponentControl, ComponentManager, ComponentState, ItemPart};
+use crate::{
+    Character, CharacterMatch, CharacterMatchState, ComponentControl, ComponentState, ItemPart,
+};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct CreateCharacterArgs {
@@ -20,13 +21,12 @@ pub struct CreateCharacterArgs {
 #[derive(Accounts)]
 #[instruction(args: CreateCharacterArgs)]
 pub struct CreateCharacter<'info> {
-
-	#[account(
+    #[account(
 		init,
 		payer = authority,
 		seeds = [
 			b"character",
-			&manager.counter.to_le_bytes()[..],
+			id.key().as_ref(),
 		],
 		bump,
 		space = Character::len(
@@ -37,14 +37,18 @@ pub struct CreateCharacter<'info> {
             args.effects_len,
         )
 	)]
-	pub character: Box<Account<'info, Character>>,
+    pub character: Box<Account<'info, Character>>,
 
     #[account(
-    	mut, 
-		seeds = [b"character_manager"], 
-		bump = manager.bump
+		init,
+		payer = authority,
+		seeds = [
+			b"character_match",
+		],
+		bump,
+		space = CharacterMatch::len()
 	)]
-    pub manager: Box<Account<'info, ComponentManager>>,
+    pub character_match: Box<Account<'info, CharacterMatch>>,
 
     #[account(
         seeds = [
@@ -122,14 +126,20 @@ pub struct CreateCharacter<'info> {
     )]
     pub main_control: Box<Account<'info, ComponentControl>>,
 
-	#[account(mut)]
-	pub authority: Signer<'info>,
+    pub id: Signer<'info>,
 
-	pub system_program: Program<'info, System>,
+    #[account(mut)]
+    pub authority: Signer<'info>,
+
+    pub system_program: Program<'info, System>,
 }
 
-pub fn create_character_handler(ctx: Context<CreateCharacter>, args: CreateCharacterArgs) -> Result<()> {
-	let character = &mut ctx.accounts.character;
+pub fn create_character_handler(
+    ctx: Context<CreateCharacter>,
+    args: CreateCharacterArgs,
+) -> Result<()> {
+    let character = &mut ctx.accounts.character;
+    let character_match = &mut ctx.accounts.character_match;
     let head = &ctx.accounts.head_part;
     let body = &ctx.accounts.body_part;
     let legs = &ctx.accounts.legs_part;
@@ -139,53 +149,65 @@ pub fn create_character_handler(ctx: Context<CreateCharacter>, args: CreateChara
     let body_control = &ctx.accounts.body_control;
     let legs_control = &ctx.accounts.legs_control;
     let main_control = &ctx.accounts.main_control;
-	
-	let manager = &mut ctx.accounts.manager;
 
-    if head.state != ComponentState::Published ||
-        body.state != ComponentState::Published ||
-        legs.state != ComponentState::Published ||
-        main.state != ComponentState::Published {
+    if head.state != ComponentState::Published
+        || body.state != ComponentState::Published
+        || legs.state != ComponentState::Published
+        || main.state != ComponentState::Published
+    {
         return Err(CreateCharacterError::InvalidPartState.into());
     }
 
-    if head.item_tier != 0 ||
-        body.item_tier != 0 ||
-        legs.item_tier != 0 ||
-        main.item_tier != 0 {
+    if head.item_tier != 0 || body.item_tier != 0 || legs.item_tier != 0 || main.item_tier != 0 {
         return Err(CreateCharacterError::InvalidTier.into());
     }
 
-    if head_control.active != head.id ||
-        body_control.active != body.id ||
-        legs_control.active != legs.id ||
-        main_control.active != main.id {
+    if head_control.active != head.id
+        || body_control.active != body.id
+        || legs_control.active != legs.id
+        || main_control.active != main.id
+    {
         return Err(CreateCharacterError::InvalidControlActive.into());
     }
 
-    let total_conditions_len = head.conditions.len() + body.conditions.len() + legs.conditions.len() + main.conditions.len();
-    let total_actions_len = head.actions.len() + body.actions.len() + legs.actions.len() + main.actions.len();
-    let total_spawns_len = head.spawns.len() + body.spawns.len() + legs.spawns.len() + main.spawns.len();
-    let total_effects_len = head.effects.len() + body.effects.len() + legs.effects.len() + main.effects.len();
+    let total_conditions_len = head.conditions.len()
+        + body.conditions.len()
+        + legs.conditions.len()
+        + main.conditions.len();
+    let total_actions_len =
+        head.actions.len() + body.actions.len() + legs.actions.len() + main.actions.len();
+    let total_spawns_len =
+        head.spawns.len() + body.spawns.len() + legs.spawns.len() + main.spawns.len();
+    let total_effects_len =
+        head.effects.len() + body.effects.len() + legs.effects.len() + main.effects.len();
 
-    if total_conditions_len != args.conditions_len ||
-        total_actions_len != args.actions_len ||
-        total_spawns_len != args.spawns_len ||
-        total_effects_len != args.effects_len {
+    if total_conditions_len != args.conditions_len
+        || total_actions_len != args.actions_len
+        || total_spawns_len != args.spawns_len
+        || total_effects_len != args.effects_len
+    {
         return Err(CreateCharacterError::InvalidVectorLengths.into());
     }
 
-	character.bump = ctx.bumps.character;
+    character_match.bump = ctx.bumps.character_match;
+    character_match.active_matches = 0;
+    character_match.character = character.key();
+    character_match.elo = 1200;
+    character_match.elo_seg = 12;
+    character_match.elo_sub = 0;
+    character_match.state = CharacterMatchState::Rest;
+
+    character.bump = ctx.bumps.character;
     character.owner = ctx.accounts.authority.key();
-	character.id = manager.counter;
+    character.id = ctx.accounts.id.key();
 
     if args.name.as_bytes().len() > 16 {
         return Err(CreateCharacterError::NameTooLong.into());
     }
-    
+
     character.name = [0u8; 16];
-    let bytes = args.name.as_bytes(); 
-    character.name[..bytes.len()].copy_from_slice(bytes); 
+    let bytes = args.name.as_bytes();
+    character.name[..bytes.len()].copy_from_slice(bytes);
 
     character.health_cap = 0;
     character.energy_cap = 0;
@@ -194,12 +216,12 @@ pub fn create_character_handler(ctx: Context<CreateCharacter>, args: CreateChara
     character.power = 0;
     character.weight = 0;
     character.armor = [100u8; 8];
-    
+
     character.head = args.head;
     character.body = args.body;
     character.legs = args.legs;
     character.main = args.main;
-    
+
     // head
     character.health_cap = character.health_cap.saturating_add(head.health);
     character.weight = character.weight.saturating_add(head.weight);
@@ -249,9 +271,7 @@ pub fn create_character_handler(ctx: Context<CreateCharacter>, args: CreateChara
     character.spawns.extend_from_slice(&main.spawns);
     character.effects.extend_from_slice(&main.effects);
 
-	manager.counter += 1;
-
-	Ok(())
+    Ok(())
 }
 
 #[error_code]
@@ -275,9 +295,7 @@ pub enum CreateCharacterError {
 fn apply_armor(current: [u8; 8], add: [u8; 8]) -> [u8; 8] {
     let mut result = [0u8; 8];
     for i in 0..8 {
-        result[i] = (current[i] as i8).saturating_add(
-            (add[i] as i8).saturating_sub(100)
-        ) as u8;
+        result[i] = (current[i] as i8).saturating_add((add[i] as i8).saturating_sub(100)) as u8;
     }
     result
 }

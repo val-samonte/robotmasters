@@ -4,7 +4,7 @@ use bolt_lang::prelude::*;
 pub struct Character {
     pub bump: u8,
     pub owner: Pubkey,
-    pub id: u32, // managed by character component_manager
+    pub id: Pubkey, 
     pub name: [u8; 16],
 
     // body part IDs
@@ -50,7 +50,7 @@ impl Character {
         8 +  // account discriminator
         1 +  // bump
         32 + // owner
-        4 +  // id
+        32 +  // id
         16 + // name
         4 +  // head
         4 +  // body

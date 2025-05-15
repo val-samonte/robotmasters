@@ -1,6 +1,6 @@
 use bolt_lang::prelude::*;
 
-use super::ComponentState;
+use super::{ComponentState, FromAccountInfo};
 
 #[account]
 pub struct Condition {
@@ -28,3 +28,5 @@ impl Condition {
 		script_len // actual script data
     }
 }
+
+impl FromAccountInfo for Condition {}
