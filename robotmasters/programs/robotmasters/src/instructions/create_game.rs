@@ -1,12 +1,10 @@
-// set match states
-// load character details
-
 use bolt_lang::*;
 
 extern crate alloc;
 use alloc::collections::BTreeSet;
+use rmengine::structs::{ActionId, ConditionId, Game};
 
-use crate::{Action, Character, CharacterMatch, CharacterMatchState, Condition, FromAccountInfo, GameState, GameStateState, Spawn};
+use crate::{tile_map, Action, Character, CharacterMatch, CharacterMatchState, Condition, FromAccountInfo, GameState, GameStateState, Spawn};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct CreateGameArgs {
@@ -160,14 +158,115 @@ pub fn create_game_handler(
         }
     }
 
-    // process behaviors (replace id)
-    
+    // TODO: dynamic maps and positioning
 
-    // process spawns
+    let character_def = vec![
+        raider.serialize(0, 16, 192, 16, 32, true),
+        defender.serialize(1, 224, 192, 16, 32, false)
+    ];
+
+    let mut character_behaviors: Vec<Vec<(ConditionId, ActionId)>> = vec![];
+
+    // raider behaviors
+    for (i, [cond, act]) in raider.behaviors.iter().enumerate() {
+        character_behaviors[0][i] = (
+            args.conditions.iter().position(|&id| id == *cond).unwrap(),
+            args.actions.iter().position(|&id| id == *act).unwrap()
+        );
+    }
+
+    // defender behaviors
+    for (i, [cond, act]) in defender.behaviors.iter().enumerate() {
+        character_behaviors[1][i] = (
+            args.conditions.iter().position(|&id| id == *cond).unwrap(),
+            args.actions.iter().position(|&id| id == *act).unwrap()
+        );
+    }
+
+    let mut cond_def: Vec<Vec<u16>> = vec![];
+
+    for cond in condition_accounts.iter() {
+        if let Some(cond) = cond {
+            cond_def.push(cond.serialize());
+        }
+    }
+
+    let mut action_def: Vec<Vec<u16>> = vec![];
+
+    for action in action_accounts.iter() {
+        if let Some(action) = action {
+            let mut action_args = [0u8; 4];
+            action_args.copy_from_slice(&action.args);
+            
+            for spawn_id in action.spawns.iter() {
+                let spawn_index = args.spawns
+                    .iter()
+                    .position(|&id| id == *spawn_id).unwrap();
+
+                for (arg_index, value) in action_args.iter().enumerate() {
+                    if *value == 0 {
+                        continue;
+                    }
+                    action_args[arg_index] = spawn_index as u8;
+                    break;
+                }
+            }
+            action_def.push(action.serialize(action_args));
+        }
+    }
+
+    let mut spawn_def: Vec<Vec<u16>> = vec![];
     
+    for spawn in spawn_accounts.iter() {
+        if let Some(spawn) = spawn {
+            let mut spawn_args = [0u8; 4];
+            spawn_args.copy_from_slice(&spawn.args);
+            
+            for spawn_id in spawn.spawns.iter() {
+                let spawn_index = args.spawns
+                    .iter()
+                    .position(|&id| id == *spawn_id).unwrap();
+
+                for (arg_index, value) in spawn_args.iter().enumerate() {
+                    if *value == 0 {
+                        continue;
+                    }
+                    spawn_args[arg_index] = spawn_index as u8;
+                    break;
+                }
+            }
+            spawn_def.push(spawn.serialize(spawn_args));
+        }
+    }
 
     // seed 
-    // let clock = Clock::get()?;
+    let clock = Clock::get()?;
+    let unix_timestamp = clock.unix_timestamp; // i64
+    let timestamp_bytes = unix_timestamp.to_le_bytes(); // [u8; 8]
+    let seed = u16::from_le_bytes([timestamp_bytes[0], timestamp_bytes[1]]);
+
+    let game = Game::init(
+		seed,
+		false,
+		tile_map(),
+		(1, 2),
+		character_def,
+		character_behaviors,
+		spawn_def,
+		action_def,
+		cond_def,
+		vec![],
+	);
+
+    let state = game.export_state().unwrap();
+	let len = state.len();
+	if len > 3600 {
+        return Err(CreateGameError::DataTooLarge.into());
+    }
+
+    game_state.len = len as u16;
+	game_state.frame = game.game_state.frame;
+	game_state.data[..len].copy_from_slice(&state);
 
     Ok(())
 }
@@ -178,6 +277,8 @@ pub enum CreateGameError {
     InvalidArgs,
     #[msg("There are missing accounts required.")]
     MissingAccount,
+    #[msg("Game state data is too large to store")]
+    DataTooLarge,
 }
 
 pub fn compute_elo_changes(elo_a: u16, elo_b: u16) -> [i8; 3] {

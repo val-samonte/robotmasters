@@ -11,7 +11,7 @@ pub struct CreateCharacterArgs {
     body: u32,
     legs: u32,
     main: u32,
-    behaviors: Vec<[u32; 2]>,
+    behaviors: Vec<Vec<u32>>,
     conditions_len: usize,
     actions_len: usize,
     spawns_len: usize,
@@ -228,6 +228,8 @@ pub fn create_character_handler(
     character.armor = apply_armor(character.armor, head.armor);
 
     // behavior sequence should match conditions ID
+    character.behaviors = vec![];
+
     if args.behaviors.len() != head.conditions.len() {
         return Err(CreateCharacterError::InvalidBehavior.into());
     }
@@ -235,8 +237,13 @@ pub fn create_character_handler(
         if args.behaviors[i][0] != head.conditions[i] {
             return Err(CreateCharacterError::InvalidBehavior.into());
         }
+        if args.behaviors[i].len() == 2 {
+            character
+                .behaviors
+                .push([args.behaviors[i][0], args.behaviors[i][1]]);
+        }
     }
-    character.behaviors = args.behaviors;
+
     character.conditions.extend_from_slice(&head.conditions);
     character.actions.extend_from_slice(&head.actions);
     character.spawns.extend_from_slice(&head.spawns);

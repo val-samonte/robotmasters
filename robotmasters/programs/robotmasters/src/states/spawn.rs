@@ -50,7 +50,7 @@ impl Spawn {
 		(4 + (4 * spawns_len))
     }
 
-    pub fn serialize(&self) -> Vec<u16> {
+    pub fn serialize(&self, args: [u8; 4]) -> Vec<u16> {
         let output_len = 12 + 4 + self.script.len();
         let mut output = Vec::with_capacity(output_len);
 
@@ -66,7 +66,7 @@ impl Spawn {
         output.push(self.height as u16);
         output.push(self.output_x as u16);
         output.push(self.output_y as u16);
-        output.extend(self.args.iter().map(|&x| x as u16));
+        output.extend(args.iter().map(|&x| x as u16));
         output.extend(self.script.iter().map(|&x| x as u16));
 
         output
