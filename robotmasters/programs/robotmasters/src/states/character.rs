@@ -72,4 +72,41 @@ impl Character {
         (4 + (4 * spawns_len)) + 
         (4 + (4 * effects_len))
     }
+
+    pub fn serialize(
+        &self, 
+        id: usize,
+        pos_x: u16,
+        pos_y: u16,
+        width: u16,
+        height: u16,
+        face_right: bool,
+    ) -> Vec<u16> {
+        let output_len = 21;
+        let mut output = Vec::with_capacity(output_len);
+          
+        output.push(id as u16); // character's game internal id
+        output.push(id as u16); // group, we can reuse the id since its battle royale
+        output.push(pos_x);
+        output.push(pos_y);
+        output.push(width);
+        output.push(height);
+        output.push((if face_right {1} else {0}) as u16);
+        output.push(self.health_cap as u16);
+        output.push(self.energy_cap as u16);
+        output.push(self.energy_regen as u16);
+        output.push(self.energy_rate);
+        output.push(self.power as u16);
+        output.push(self.weight as u16);
+        output.push(self.armor[0] as u16);
+        output.push(self.armor[1] as u16);
+        output.push(self.armor[2] as u16);
+        output.push(self.armor[3] as u16);
+        output.push(self.armor[4] as u16);
+        output.push(self.armor[5] as u16);
+        output.push(self.armor[6] as u16);
+        output.push(self.armor[7] as u16);
+
+        output
+    }
 }

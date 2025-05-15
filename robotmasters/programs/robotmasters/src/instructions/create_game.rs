@@ -161,6 +161,7 @@ pub fn create_game_handler(
     }
 
     // process behaviors (replace id)
+    
 
     // process spawns
     

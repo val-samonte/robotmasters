@@ -30,6 +30,19 @@ impl Action {
 		(4 + script_len) +
 		(4 + (4 * spawns_len))
     }
+
+    pub fn serialize(&self) -> Vec<u16> {
+        let output_len = 3 + 4 + self.script.len();
+        let mut output = Vec::with_capacity(output_len);
+
+        output.push(self.energy_cost as u16);
+        output.push(self.interval);
+        output.push(self.duration);
+        output.extend(self.args.iter().map(|&x| x as u16));
+        output.extend(self.script.iter().map(|&x| x as u16));
+
+        output
+    }
 }
 
 impl FromAccountInfo for Action {}
