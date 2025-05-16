@@ -9,17 +9,17 @@ export function UnderConstruction() {
           <SpriteText>UNDER CONSTRUCTION</SpriteText>
           <div className="flex flex-col justify-center items-center">
             <SpriteText>That's it for now!</SpriteText>
-            <SpriteText>For more updates, join us on Telegram!</SpriteText>
+            <SpriteText>For more updates, follow us on X!</SpriteText>
           </div>
           <a
-            href="https://t.me/+wJfd9xI0_vs1NWI1"
+            href="https://x.com/deezquest"
             target="_blank"
             rel="noreferrer noopener"
             className="cursor-pointer"
           >
             <Slice9 frameUrl={'/button.png'}>
               <div className="flex justify-center px-[0.125rem]">
-                <SpriteText>JOIN TELEGRAM</SpriteText>
+                <SpriteText>FOLLOW</SpriteText>
               </div>
             </Slice9>
           </a>
