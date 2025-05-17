@@ -2,7 +2,7 @@ use bolt_lang::*;
 use ephemeral_rollups_sdk::anchor::delegate;
 use ephemeral_rollups_sdk::cpi::DelegateConfig;
 
-use crate::GameState;
+use crate::{FromAccountInfo, GameState};
 
 #[delegate]
 #[derive(Accounts)]
@@ -11,26 +11,29 @@ pub struct DelegateGame<'info> {
     #[account(
         mut, 
         del,
-        // constraint = game_state.to_account_info().owner == &crate::ID @ DelegateGameError::InvalidAccountOwner,
-        // constraint = game_state.raider.key() == payer.key()
+        constraint = pda.to_account_info().owner == &crate::ID @ DelegateGameError::InvalidAccountOwner,
     )]
-    pub game_state: Box<Account<'info, GameState>>,
+    pub pda: AccountInfo<'info>,
 
     #[account(mut)]
     pub payer: Signer<'info>,
 }
 
 pub fn delegate_game_handler(ctx: Context<DelegateGame>) -> Result<()> {
-    // ctx.accounts
-    //     .delegate_pda(&ctx.accounts.payer, &[b"game_state"], DelegateConfig::default())?;
+    let game_state = &ctx.accounts.pda;
+    let info = GameState::from_account_info(&game_state.to_account_info())?;
     
+    ctx.accounts
+        .delegate_pda(
+            &ctx.accounts.payer, 
+            &[b"game_state", info.id.key().as_ref()], 
+            DelegateConfig::default()
+        )?;
     Ok(())
 }
 
 #[error_code]
 pub enum DelegateGameError {
-    #[msg("Unauthorized: Signer does not own the character")]
-    Unauthorized,
     #[msg("Invalid account owner")]
     InvalidAccountOwner,
 }

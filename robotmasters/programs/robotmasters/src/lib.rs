@@ -72,13 +72,13 @@ pub mod robotmasters {
         version_item_part_handler(ctx, args)
     }
 
-    // pub fn create_game(ctx: Context<CreateGame>) -> Result<()> {
-    //     create_game_handler(ctx)
-    // }
+    pub fn create_game(ctx: Context<CreateGame>, args: CreateGameArgs) -> Result<()> {
+        create_game_handler(ctx, args)
+    }
 
-    // pub fn delegate_game(ctx: Context<DelegateGame>) -> Result<()> {
-    //     delegate_game_handler(ctx)
-    // }
+    pub fn delegate_game(ctx: Context<DelegateGame>) -> Result<()> {
+        delegate_game_handler(ctx)
+    }
 
     // pub fn run_game(ctx: Context<RunGame>) -> Result<()> {
     //     run_game_handler(ctx)

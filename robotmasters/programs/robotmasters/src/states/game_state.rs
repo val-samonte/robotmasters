@@ -1,8 +1,11 @@
 use bolt_lang::*;
 
+use super::FromAccountInfo;
+
 #[account]
 pub struct GameState {
     pub bump: u8,
+    pub id: Pubkey,
     pub raider: Pubkey,
     pub defender: Pubkey,
     pub state: GameStateState,
@@ -20,6 +23,7 @@ impl GameState {
     pub fn len() -> usize {
         8 +  // discriminator
         1 +  // bump
+        32 + // id
         32 + // raider
         32 + // defender
         1 +  // state
@@ -28,7 +32,7 @@ impl GameState {
         3 +  // elo changes
         2 +  // len
         2 +  // drame
-        3600 // data
+        3200 // data
     }
 }
 
@@ -37,3 +41,5 @@ pub enum GameStateState {
     Pending,
     Concluded,
 }
+
+impl FromAccountInfo for GameState {}

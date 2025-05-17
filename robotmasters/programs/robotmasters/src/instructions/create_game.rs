@@ -75,6 +75,7 @@ pub fn create_game_handler(
     let defender_match = &mut ctx.accounts.defender_match;
 
     game_state.bump = ctx.bumps.game_state;
+    game_state.id = ctx.accounts.id.key();
     game_state.state = GameStateState::Pending;
     game_state.raider = raider.key();
     game_state.raider_elo = raider_match.elo;
@@ -269,7 +270,7 @@ pub fn create_game_handler(
 
     let state = game.export_state().unwrap();
 	let len = state.len();
-	if len > 3600 {
+	if len > 3200 {
         return Err(CreateGameError::DataTooLarge.into());
     }
 
