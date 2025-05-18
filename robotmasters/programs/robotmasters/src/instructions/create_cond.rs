@@ -1,6 +1,6 @@
 use bolt_lang::*;
 
-use crate::{ComponentControl, ComponentManager, ComponentState, Condition};
+use crate::{ComponentControl, ComponentManager, ComponentState, Condition, CONDITION_CONTROL_SEED, CONDITION_MANAGER_SEED, CONDITION_SEED};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct CreateConditionArgs {
@@ -18,7 +18,7 @@ pub struct CreateCondition<'info> {
 		init,
 		payer = authority,
 		seeds = [
-			b"cond",
+			CONDITION_SEED,
 			&manager.counter.to_le_bytes()[..],
 			&0_u32.to_le_bytes()[..],
 		],
@@ -31,7 +31,7 @@ pub struct CreateCondition<'info> {
 		init,
 		payer = authority,
 		seeds = [
-			b"cond_control",
+			CONDITION_CONTROL_SEED,
 			&manager.counter.to_le_bytes()[..],
 		],
 		bump,
@@ -41,7 +41,7 @@ pub struct CreateCondition<'info> {
 
     #[account(
     	mut, 
-		seeds = [b"cond_manager"], 
+		seeds = [CONDITION_MANAGER_SEED], 
 		bump = manager.bump
 	)]
     pub manager: Account<'info, ComponentManager>,

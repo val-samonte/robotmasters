@@ -2,6 +2,7 @@ use bolt_lang::*;
 
 use crate::{
     Character, CharacterMatch, CharacterMatchState, ComponentControl, ComponentState, ItemPart,
+    CHARACTER_MATCH_SEED, CHARACTER_SEED, ITEM_PART_CONTROL_SEED, ITEM_PART_SEED,
 };
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
@@ -25,7 +26,7 @@ pub struct CreateCharacter<'info> {
 		init,
 		payer = authority,
 		seeds = [
-			b"character",
+			CHARACTER_SEED,
 			id.key().as_ref(),
 		],
 		bump,
@@ -43,7 +44,7 @@ pub struct CreateCharacter<'info> {
 		init,
 		payer = authority,
 		seeds = [
-			b"character_match",
+			CHARACTER_MATCH_SEED,
 		],
 		bump,
 		space = CharacterMatch::len()
@@ -52,7 +53,7 @@ pub struct CreateCharacter<'info> {
 
     #[account(
         seeds = [
-			b"item_part",
+			ITEM_PART_SEED,
 			&args.head.to_le_bytes()[..],
             &head_control.active.to_be_bytes()[..],
 		],
@@ -62,7 +63,7 @@ pub struct CreateCharacter<'info> {
 
     #[account(
         seeds = [
-			b"item_part_control",
+			ITEM_PART_CONTROL_SEED,
 			&args.head.to_le_bytes()[..],
 		],
         bump = head_control.bump
@@ -71,7 +72,7 @@ pub struct CreateCharacter<'info> {
 
     #[account(
         seeds = [
-			b"item_part",
+			ITEM_PART_SEED,
 			&args.body.to_le_bytes()[..],
             &body_control.active.to_be_bytes()[..],
 		],
@@ -81,7 +82,7 @@ pub struct CreateCharacter<'info> {
 
     #[account(
         seeds = [
-			b"item_part_control",
+			ITEM_PART_CONTROL_SEED,
 			&args.body.to_le_bytes()[..],
 		],
         bump = body_control.bump
@@ -90,7 +91,7 @@ pub struct CreateCharacter<'info> {
 
     #[account(
         seeds = [
-			b"item_part",
+			ITEM_PART_SEED,
 			&args.legs.to_le_bytes()[..],
             &legs_control.active.to_be_bytes()[..],
 		],
@@ -100,7 +101,7 @@ pub struct CreateCharacter<'info> {
 
     #[account(
         seeds = [
-			b"item_part_control",
+			ITEM_PART_CONTROL_SEED,
 			&args.legs.to_le_bytes()[..],
 		],
         bump = legs_control.bump
@@ -109,7 +110,7 @@ pub struct CreateCharacter<'info> {
 
     #[account(
         seeds = [
-			b"item_part",
+			ITEM_PART_SEED,
 			&args.main.to_le_bytes()[..],
             &main_control.active.to_be_bytes()[..],
 		],
@@ -119,7 +120,7 @@ pub struct CreateCharacter<'info> {
 
     #[account(
         seeds = [
-			b"item_part_control",
+			ITEM_PART_CONTROL_SEED,
 			&args.main.to_le_bytes()[..],
 		],
         bump = main_control.bump

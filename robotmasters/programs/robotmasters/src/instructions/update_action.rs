@@ -1,6 +1,8 @@
 use bolt_lang::*;
 
-use crate::{Action, Admin, ComponentControl, ComponentState};
+use crate::{
+    Action, Admin, ComponentControl, ComponentState, ACTION_CONTROL_SEED, ACTION_SEED, ADMIN_SEED,
+};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct UpdateActionArgs {
@@ -19,7 +21,7 @@ pub struct UpdateAction<'info> {
     #[account(
 		mut,
 		seeds = [
-			b"action",
+			ACTION_SEED,
 			&action.id.to_le_bytes()[..],
 			&action.version.to_le_bytes()[..],
 		],
@@ -29,7 +31,7 @@ pub struct UpdateAction<'info> {
 
     #[account(
 		seeds = [
-			b"action_control",
+			ACTION_CONTROL_SEED,
 			&action.id.to_le_bytes()[..],
 		],
 		bump = control.bump
@@ -37,7 +39,7 @@ pub struct UpdateAction<'info> {
     pub control: Account<'info, ComponentControl>,
 
     #[account(
-		seeds = [b"admin"],
+		seeds = [ADMIN_SEED],
 		bump = admin.bump
 	)]
     pub admin: Account<'info, Admin>,

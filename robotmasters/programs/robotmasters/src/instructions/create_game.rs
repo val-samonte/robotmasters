@@ -4,7 +4,7 @@ extern crate alloc;
 use alloc::collections::BTreeSet;
 use rmengine::structs::{ActionId, ConditionId, Game};
 
-use crate::{tile_map, Action, Character, CharacterMatch, CharacterMatchState, Condition, FromAccountInfo, GameState, GameStateState, Spawn};
+use crate::{tile_map, Action, Character, CharacterMatch, CharacterMatchState, Condition, FromAccountInfo, GameState, GameStateState, Spawn, GAME_STATE_SEED};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct CreateGameArgs {
@@ -21,7 +21,7 @@ pub struct CreateGame<'info> {
         init,
         payer = owner,
         seeds = [
-            b"game_state",
+            GAME_STATE_SEED,
             id.key().as_ref(),
         ],
         bump,

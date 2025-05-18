@@ -1,6 +1,9 @@
 use bolt_lang::*;
 
-use crate::{Admin, ComponentControl, ComponentState, Element, Spawn};
+use crate::{
+    Admin, ComponentControl, ComponentState, Element, Spawn, ADMIN_SEED, SPAWN_CONTROL_SEED,
+    SPAWN_SEED,
+};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct VersionSpawnArgs {
@@ -28,7 +31,7 @@ pub struct VersionSpawn<'info> {
 		init,
 		payer = signer,
 		seeds = [
-			b"spawn",
+			SPAWN_SEED,
 			&control.id.to_le_bytes()[..],
 			&(control.counter + 1).to_le_bytes()[..],
 		],
@@ -39,7 +42,7 @@ pub struct VersionSpawn<'info> {
 
     #[account(
 		seeds = [
-			b"spawn",
+			SPAWN_SEED,
 			&control.id.to_le_bytes()[..],
 			&control.active.to_le_bytes()[..],
 		],
@@ -54,7 +57,7 @@ pub struct VersionSpawn<'info> {
     #[account(
 		mut,
 		seeds = [
-			b"spawn_control",
+			SPAWN_CONTROL_SEED,
 			&old_spawn.id.to_le_bytes()[..],
 		],
 		bump = control.bump
@@ -62,7 +65,7 @@ pub struct VersionSpawn<'info> {
     pub control: Account<'info, ComponentControl>,
 
     #[account(
-		seeds = [b"admin"],
+		seeds = [ADMIN_SEED],
 		bump = admin.bump
 	)]
     pub admin: Account<'info, Admin>,

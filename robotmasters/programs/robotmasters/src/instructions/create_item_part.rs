@@ -1,6 +1,6 @@
 use bolt_lang::*;
 
-use crate::{ComponentControl, ComponentManager, ComponentState, ItemBlueprintLink, ItemPart, ItemPartType};
+use crate::{ComponentControl, ComponentManager, ComponentState, ItemBlueprintLink, ItemPart, ItemPartType, ITEM_BLUEPRINT_LINK_SEED, ITEM_PART_CONTROL_SEED, ITEM_PART_MANAGER_SEED, ITEM_PART_SEED};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct CreateItemPartArgs {
@@ -31,7 +31,7 @@ pub struct CreateItemPart<'info> {
 		init,
 		payer = authority,
 		seeds = [
-			b"item_part",
+			ITEM_PART_SEED,
 			&manager.counter.to_le_bytes()[..],
 			&0_u32.to_le_bytes()[..],
 		],
@@ -49,7 +49,7 @@ pub struct CreateItemPart<'info> {
 		init,
 		payer = authority,
 		seeds = [
-			b"item_blueprint_link",
+			ITEM_BLUEPRINT_LINK_SEED,
 			blueprint.key().as_ref(),
 		],
 		bump,
@@ -64,7 +64,7 @@ pub struct CreateItemPart<'info> {
 		init,
 		payer = authority,
 		seeds = [
-			b"item_part_control",
+			ITEM_PART_CONTROL_SEED,
 			&manager.counter.to_le_bytes()[..],
 		],
 		bump,
@@ -74,7 +74,7 @@ pub struct CreateItemPart<'info> {
 
     #[account(
     	mut, 
-		seeds = [b"item_part_manager"], 
+		seeds = [ITEM_PART_MANAGER_SEED], 
 		bump = manager.bump
 	)]
     pub manager: Account<'info, ComponentManager>,

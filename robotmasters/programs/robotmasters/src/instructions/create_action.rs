@@ -1,6 +1,6 @@
 use bolt_lang::*;
 
-use crate::{Action, ComponentControl, ComponentManager, ComponentState};
+use crate::{Action, ComponentControl, ComponentManager, ComponentState, ACTION_CONTROL_SEED, ACTION_MANAGER_SEED, ACTION_SEED};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct CreateActionArgs {
@@ -20,7 +20,7 @@ pub struct CreateAction<'info> {
 		init,
 		payer = authority,
 		seeds = [
-			b"action",
+			ACTION_SEED,
 			&manager.counter.to_le_bytes()[..],
 			&0_u32.to_le_bytes()[..],
 		],
@@ -33,7 +33,7 @@ pub struct CreateAction<'info> {
 		init,
 		payer = authority,
 		seeds = [
-			b"action_control",
+			ACTION_CONTROL_SEED,
 			&manager.counter.to_le_bytes()[..],
 		],
 		bump,
@@ -43,7 +43,7 @@ pub struct CreateAction<'info> {
 
     #[account(
     	mut, 
-		seeds = [b"action_manager"], 
+		seeds = [ACTION_MANAGER_SEED], 
 		bump = manager.bump
 	)]
     pub manager: Account<'info, ComponentManager>,

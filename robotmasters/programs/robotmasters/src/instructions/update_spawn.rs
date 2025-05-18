@@ -2,7 +2,10 @@ use bolt_lang::*;
 
 // TODO: handle resizing
 
-use crate::{Admin, ComponentControl, ComponentState, Element, Spawn};
+use crate::{
+    Admin, ComponentControl, ComponentState, Element, Spawn, ADMIN_SEED, SPAWN_CONTROL_SEED,
+    SPAWN_SEED,
+};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct UpdateSpawnArgs {
@@ -30,7 +33,7 @@ pub struct UpdateSpawn<'info> {
     #[account(
 		mut,
 		seeds = [
-			b"spawn",
+			SPAWN_SEED,
 			&spawn.id.to_le_bytes()[..],
 			&spawn.version.to_le_bytes()[..],
 		],
@@ -40,7 +43,7 @@ pub struct UpdateSpawn<'info> {
 
     #[account(
 		seeds = [
-			b"spawn_control",
+			SPAWN_CONTROL_SEED,
 			&spawn.id.to_le_bytes()[..],
 		],
 		bump = control.bump
@@ -48,7 +51,7 @@ pub struct UpdateSpawn<'info> {
     pub control: Account<'info, ComponentControl>,
 
     #[account(
-		seeds = [b"admin"],
+		seeds = [ADMIN_SEED],
 		bump = admin.bump
 	)]
     pub admin: Account<'info, Admin>,

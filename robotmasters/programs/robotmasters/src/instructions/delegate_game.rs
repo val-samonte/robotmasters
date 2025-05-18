@@ -2,7 +2,7 @@ use bolt_lang::*;
 use ephemeral_rollups_sdk::anchor::delegate;
 use ephemeral_rollups_sdk::cpi::DelegateConfig;
 
-use crate::{FromAccountInfo, GameState};
+use crate::{FromAccountInfo, GameState, GAME_STATE_SEED};
 
 #[delegate]
 #[derive(Accounts)]
@@ -32,7 +32,7 @@ pub fn delegate_game_handler(ctx: Context<DelegateGame>) -> Result<()> {
     ctx.accounts
         .delegate_pda(
             authority, 
-            &[b"game_state", info.id.key().as_ref()], 
+            &[GAME_STATE_SEED, info.id.key().as_ref()], 
             DelegateConfig::default()
         )?;
     Ok(())

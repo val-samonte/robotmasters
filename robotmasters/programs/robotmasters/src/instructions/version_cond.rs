@@ -1,6 +1,9 @@
 use bolt_lang::*;
 
-use crate::{Admin, ComponentControl, ComponentState, Condition};
+use crate::{
+    Admin, ComponentControl, ComponentState, Condition, ADMIN_SEED, CONDITION_CONTROL_SEED,
+    CONDITION_SEED,
+};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct VersionConditionArgs {
@@ -17,7 +20,7 @@ pub struct VersionCondition<'info> {
 		init,
 		payer = signer,
 		seeds = [
-			b"cond",
+			CONDITION_SEED,
 			&control.id.to_le_bytes()[..],
 			&(control.counter + 1).to_le_bytes()[..],
 		],
@@ -28,7 +31,7 @@ pub struct VersionCondition<'info> {
 
     #[account(
 		seeds = [
-			b"cond",
+			CONDITION_SEED,
 			&control.id.to_le_bytes()[..],
 			&control.active.to_le_bytes()[..],
 		],
@@ -43,7 +46,7 @@ pub struct VersionCondition<'info> {
     #[account(
 		mut,
 		seeds = [
-			b"cond_control",
+			CONDITION_CONTROL_SEED,
 			&old_cond.id.to_le_bytes()[..],
 		],
 		bump = control.bump
@@ -51,7 +54,7 @@ pub struct VersionCondition<'info> {
     pub control: Account<'info, ComponentControl>,
 
     #[account(
-		seeds = [b"admin"],
+		seeds = [ADMIN_SEED],
 		bump = admin.bump
 	)]
     pub admin: Account<'info, Admin>,

@@ -1,6 +1,6 @@
 use bolt_lang::*;
 
-use crate::{ComponentControl, ComponentManager, ComponentState, Element, Spawn};
+use crate::{ComponentControl, ComponentManager, ComponentState, Element, Spawn, SPAWN_CONTROL_SEED, SPAWN_MANAGER_SEED, SPAWN_SEED};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct CreateSpawnArgs {
@@ -29,7 +29,7 @@ pub struct CreateSpawn<'info> {
 		init,
 		payer = authority,
 		seeds = [
-			b"spawn",
+			SPAWN_SEED,
 			&manager.counter.to_le_bytes()[..],
 			&0_u32.to_le_bytes()[..],
 		],
@@ -42,7 +42,7 @@ pub struct CreateSpawn<'info> {
 		init,
 		payer = authority,
 		seeds = [
-			b"spawn_control",
+			SPAWN_CONTROL_SEED,
 			&manager.counter.to_le_bytes()[..],
 		],
 		bump,
@@ -52,7 +52,7 @@ pub struct CreateSpawn<'info> {
 
     #[account(
     	mut, 
-		seeds = [b"spawn_manager"], 
+		seeds = [SPAWN_MANAGER_SEED], 
 		bump = manager.bump
 	)]
     pub manager: Account<'info, ComponentManager>,

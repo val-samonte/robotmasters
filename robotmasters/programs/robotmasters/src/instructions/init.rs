@@ -1,6 +1,9 @@
 use bolt_lang::*;
 
-use crate::{Admin, ComponentManager, MatchCounter};
+use crate::{
+    Admin, ComponentManager, MatchCounter, ACTION_MANAGER_SEED, ADMIN_SEED, CONDITION_MANAGER_SEED,
+    ITEM_PART_MANAGER_SEED, MATCH_COUNTER_SEED, SPAWN_MANAGER_SEED,
+};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct InitArgs {
@@ -16,7 +19,7 @@ pub struct Init<'info> {
 		init,
 		payer = payer,
 		seeds = [
-			b"admin",
+			ADMIN_SEED,
 		],
 		bump,
 		space = Admin::len()
@@ -27,7 +30,7 @@ pub struct Init<'info> {
 		init,
 		payer = payer,
 		seeds = [
-			b"match_counter",
+			MATCH_COUNTER_SEED,
 		],
 		bump,
 		space = MatchCounter::len()
@@ -38,7 +41,7 @@ pub struct Init<'info> {
 		init,
 		payer = payer,
 		seeds = [
-			b"item_part_manager",
+			ITEM_PART_MANAGER_SEED,
 		],
 		bump,
 		space = ComponentManager::len()
@@ -49,7 +52,7 @@ pub struct Init<'info> {
 		init,
 		payer = payer,
 		seeds = [
-			b"cond_manager",
+			CONDITION_MANAGER_SEED,
 		],
 		bump,
 		space = ComponentManager::len()
@@ -60,7 +63,7 @@ pub struct Init<'info> {
 		init,
 		payer = payer,
 		seeds = [
-			b"action_manager",
+			ACTION_MANAGER_SEED,
 		],
 		bump,
 		space = ComponentManager::len()
@@ -71,7 +74,7 @@ pub struct Init<'info> {
 		init,
 		payer = payer,
 		seeds = [
-			b"spawn_manager",
+			SPAWN_MANAGER_SEED,
 		],
 		bump,
 		space = ComponentManager::len()

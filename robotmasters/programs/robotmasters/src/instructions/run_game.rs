@@ -1,5 +1,5 @@
 // initialize a demo game
-use crate::states::GameState;
+use crate::{states::GameState, GAME_STATE_SEED};
 use bolt_lang::*;
 use rmengine::structs::Game;
 
@@ -8,7 +8,7 @@ pub struct RunGame<'info> {
     #[account(
 		mut,
         seeds = [
-            b"game_state", 
+            GAME_STATE_SEED, 
             game_state.id.key().as_ref()
         ],
         bump = game_state.bump,

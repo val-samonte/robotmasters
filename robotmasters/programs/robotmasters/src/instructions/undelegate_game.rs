@@ -1,4 +1,4 @@
-use crate::GameState;
+use crate::{GameState, GAME_STATE_SEED};
 use bolt_lang::*;
 use ephemeral_rollups_sdk::anchor::commit;
 use ephemeral_rollups_sdk::ephem::commit_and_undelegate_accounts;
@@ -9,7 +9,7 @@ pub struct UndelegateGame<'info> {
     #[account(
         mut, 
         seeds = [
-            b"game_state", 
+            GAME_STATE_SEED, 
             game_state.id.key().as_ref()
         ], 
         bump,

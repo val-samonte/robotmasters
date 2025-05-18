@@ -1,6 +1,9 @@
 use bolt_lang::*;
 
-use crate::{Admin, ComponentControl, ComponentState, ItemPart};
+use crate::{
+    Admin, ComponentControl, ComponentState, ItemPart, ADMIN_SEED, ITEM_PART_CONTROL_SEED,
+    ITEM_PART_SEED,
+};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct VersionItemPartArgs {
@@ -26,7 +29,7 @@ pub struct VersionItemPart<'info> {
 		init,
 		payer = signer,
 		seeds = [
-			b"item_part",
+			ITEM_PART_SEED,
 			&control.id.to_le_bytes()[..],
 			&(control.counter + 1).to_le_bytes()[..],
 		],
@@ -42,7 +45,7 @@ pub struct VersionItemPart<'info> {
 
     #[account(
 		seeds = [
-			b"item_part",
+			ITEM_PART_SEED,
 			&control.id.to_le_bytes()[..],
 			&control.active.to_le_bytes()[..],
 		],
@@ -57,7 +60,7 @@ pub struct VersionItemPart<'info> {
     #[account(
 		mut,
 		seeds = [
-			b"item_part_control",
+			ITEM_PART_CONTROL_SEED,
 			&old_item_part.id.to_le_bytes()[..],
 		],
 		bump = control.bump
@@ -65,7 +68,7 @@ pub struct VersionItemPart<'info> {
     pub control: Account<'info, ComponentControl>,
 
     #[account(
-		seeds = [b"admin"],
+		seeds = [ADMIN_SEED],
 		bump = admin.bump
 	)]
     pub admin: Account<'info, Admin>,
