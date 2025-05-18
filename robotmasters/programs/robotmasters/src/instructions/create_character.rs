@@ -13,10 +13,10 @@ pub struct CreateCharacterArgs {
     legs: u32,
     main: u32,
     behaviors: Vec<Vec<u32>>,
-    conditions_len: usize,
-    actions_len: usize,
-    spawns_len: usize,
-    effects_len: usize,
+    conditions_len: u16,
+    actions_len: u16,
+    spawns_len: u16,
+    effects_len: u16,
 }
 
 #[derive(Accounts)]
@@ -32,10 +32,10 @@ pub struct CreateCharacter<'info> {
 		bump,
 		space = Character::len(
             args.behaviors.len(),
-            args.conditions_len,
-            args.actions_len,
-            args.spawns_len,
-            args.effects_len,
+            args.conditions_len as usize,
+            args.actions_len as usize,
+            args.spawns_len as usize,
+            args.effects_len as usize,
         )
 	)]
     pub character: Box<Account<'info, Character>>,
@@ -182,10 +182,10 @@ pub fn create_character_handler(
     let total_effects_len =
         head.effects.len() + body.effects.len() + legs.effects.len() + main.effects.len();
 
-    if total_conditions_len != args.conditions_len
-        || total_actions_len != args.actions_len
-        || total_spawns_len != args.spawns_len
-        || total_effects_len != args.effects_len
+    if total_conditions_len != (args.conditions_len as usize)
+        || total_actions_len != (args.actions_len as usize)
+        || total_spawns_len != (args.spawns_len as usize)
+        || total_effects_len != (args.effects_len as usize)
     {
         return Err(CreateCharacterError::InvalidVectorLengths.into());
     }
