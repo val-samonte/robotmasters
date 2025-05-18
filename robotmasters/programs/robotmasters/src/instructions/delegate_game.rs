@@ -8,6 +8,7 @@ use crate::{FromAccountInfo, GameState};
 #[derive(Accounts)]
 pub struct DelegateGame<'info> {
     
+    /// CHECK: this is the game_state, validations in handler
     #[account(
         mut, 
         del,
@@ -16,16 +17,21 @@ pub struct DelegateGame<'info> {
     pub pda: AccountInfo<'info>,
 
     #[account(mut)]
-    pub payer: Signer<'info>,
+    pub authority: Signer<'info>,
 }
 
 pub fn delegate_game_handler(ctx: Context<DelegateGame>) -> Result<()> {
+    let authority = &ctx.accounts.authority;
     let game_state = &ctx.accounts.pda;
     let info = GameState::from_account_info(&game_state.to_account_info())?;
-    
+
+    if info.raider.key() != authority.key() {
+        return Err(DelegateGameError::Unauthorized.into());
+    }
+
     ctx.accounts
         .delegate_pda(
-            &ctx.accounts.payer, 
+            authority, 
             &[b"game_state", info.id.key().as_ref()], 
             DelegateConfig::default()
         )?;
@@ -34,6 +40,8 @@ pub fn delegate_game_handler(ctx: Context<DelegateGame>) -> Result<()> {
 
 #[error_code]
 pub enum DelegateGameError {
+    #[msg("Unauthorized: Signer does not own the character")]
+    Unauthorized,
     #[msg("Invalid account owner")]
     InvalidAccountOwner,
 }

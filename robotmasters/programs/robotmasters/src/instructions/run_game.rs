@@ -7,8 +7,13 @@ use rmengine::structs::Game;
 pub struct RunGame<'info> {
     #[account(
 		mut,
+        seeds = [
+            b"game_state", 
+            game_state.id.key().as_ref()
+        ],
+        bump = game_state.bump,
+        constraint = game_state.raider.key() == authority.key() @ RunGameError::Unauthorized,
         constraint = game_state.to_account_info().owner == &crate::ID @ RunGameError::InvalidAccountOwner,
-        constraint = game_state.raider.key() == authority.key()
 	)]
     pub game_state: Box<Account<'info, GameState>>,
 
@@ -47,8 +52,10 @@ pub fn run_game_handler(ctx: Context<RunGame>) -> Result<()> {
 
 #[error_code]
 pub enum RunGameError {
-    #[msg("Game state data is too large to store")]
-    DataTooLarge,
+    #[msg("Unauthorized: Signer does not own the character")]
+    Unauthorized,
     #[msg("Invalid account owner")]
     InvalidAccountOwner,
+    #[msg("Game state data is too large to store")]
+    DataTooLarge,
 }

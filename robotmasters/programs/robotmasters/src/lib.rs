@@ -3,10 +3,12 @@ use ephemeral_rollups_sdk::anchor::ephemeral;
 
 pub mod example;
 pub mod instructions;
+pub mod seeds;
 pub mod states;
 
 pub use example::*;
 pub use instructions::*;
+pub use seeds::*;
 pub use states::*;
 
 declare_id!("BSi1fEa8drVMVNTRhYV3fga467x9Rt5YteMEUHbebxLP");
@@ -80,13 +82,13 @@ pub mod robotmasters {
         delegate_game_handler(ctx)
     }
 
-    // pub fn run_game(ctx: Context<RunGame>) -> Result<()> {
-    //     run_game_handler(ctx)
-    // }
+    pub fn run_game(ctx: Context<RunGame>) -> Result<()> {
+        run_game_handler(ctx)
+    }
 
-    // pub fn undelegate_game_game(ctx: Context<UndelegateGame>) -> Result<()> {
-    //     undelegate_game_handler(ctx)
-    // }
+    pub fn undelegate_game_game(ctx: Context<UndelegateGame>) -> Result<()> {
+        undelegate_game_handler(ctx)
+    }
 }
 
 #[derive(Accounts)]
